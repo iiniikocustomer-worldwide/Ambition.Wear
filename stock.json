@@ -5,11 +5,10 @@
     "description": "Heavyweight Ambition graphic T-shirt",
     "features": ["Heavyweight tee", "Black graphic print", "New drop coming soon"],
     "sizes": ["S", "M", "L", "XL"],
-    "sizesConfirm": true,
     "fitNote": "Coming soon. Message us to check release timing and size availability.",
     "price": "350.00",
     "priceLabel": "R 350.00",
-    "image": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=800&q=85",
+    "image": "https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Screenshot_20261111_133607_WhatsApp.jpg",
     "status": "Coming soon",
     "badge": "New drop"
   },
@@ -19,9 +18,8 @@
     "description": "Ambition beanie with embellished details",
     "features": ["Black beanie", "Embellished detail", "One size — confirm availability"],
     "sizes": ["One size"],
-    "sizesConfirm": true,
     "price": "150.00",
-    "image": "https://images.unsplash.com/photo-1576871337622-98d48d1cf531?auto=format&fit=crop&w=800&q=85",
+    "image": "https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Screenshot_20261111_133613_WhatsApp.jpg",
     "status": "In stock",
     "badge": "Ambition Wear"
   },
@@ -31,9 +29,8 @@
     "description": "Signature Ambition skull cap",
     "features": ["Ambition embroidered logo", "Ask about fit", "Colour availability confirmed on WhatsApp"],
     "sizes": ["One size"],
-    "sizesConfirm": true,
     "price": "180.00",
-    "image": "https://images.unsplash.com/photo-1521369909029-2afed882baee?auto=format&fit=crop&w=800&q=85",
+    "image": "https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Screenshot_20261111_133800_WhatsApp.jpg",
     "status": "In stock",
     "badge": "Ambition Wear"
   },
@@ -44,7 +41,7 @@
     "features": ["Multiple styles and colourways", "Prices and sizes by request", "Message Ambition Wear to enquire"],
     "price": "",
     "priceLabel": "DM for prices and more sneakers",
-    "image": "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=800&q=85",
+    "image": "https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Screenshot_20261111_133811_WhatsApp.jpg",
     "status": "Enquire on WhatsApp",
     "badge": "DM for prices",
     "orderable": false
@@ -56,7 +53,7 @@
     "features": ["Campaign visuals", "Message us to enquire"],
     "price": "",
     "priceLabel": "Enquire on WhatsApp",
-    "image": "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=800&q=85",
+    "image": "https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Screenshot_20261111_133815_WhatsApp.jpg",
     "status": "Enquire",
     "badge": "Campaign",
     "orderable": false
@@ -67,9 +64,8 @@
     "description": "Ambition Wear Graphic T-Shirts",
     "features": ["Graphic T-shirt", "Ask about available prints", "Confirm your size with us"],
     "sizes": ["S", "M", "L", "XL"],
-    "sizesConfirm": true,
     "price": "450.00",
-    "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=85",
+    "image": "https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Screenshot_20261111_133821_WhatsApp.jpg",
     "status": "In stock",
     "badge": "Graphic series"
   },
@@ -79,9 +75,8 @@
     "description": "Ambition Wear Graphic T-Shirts · relaxed fit",
     "features": ["Relaxed-fit graphic T-shirt", "Ask about available colours", "Confirm your size with us"],
     "sizes": ["S", "M", "L", "XL"],
-    "sizesConfirm": true,
     "price": "400.00",
-    "image": "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=85",
+    "image": "https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Screenshot_20261111_133826_WhatsApp.jpg",
     "status": "In stock",
     "badge": "Relaxed fit"
   }
