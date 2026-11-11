@@ -1,1 +1,119 @@
-[]
+[
+  {
+    "name": "Air Jordan 1 Retro High OG",
+    "category": "Sneakers",
+    "size": "Sizes 5–10 · Royal Blue, Panda Black & White, Electro Orange",
+    "price": "R1900",
+    "image": "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=900&q=85",
+    "mark": "AJ1",
+    "status": "In stock"
+  },
+  {
+    "name": "Nike Dunk Low",
+    "category": "Sneakers",
+    "size": "Sizes 3–10 · 3-month lay-by · University Blue / Coast, University Red, Archeo Pink, Team Green, Syracuse Orange",
+    "price": "R1600 each",
+    "image": "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=85",
+    "mark": "DUNK",
+    "status": "In stock"
+  },
+  {
+    "name": "New Balance 550 · White / Green",
+    "category": "Sneakers",
+    "size": "Sizes 6–10",
+    "price": "R1600",
+    "image": "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=900&q=85",
+    "mark": "NB",
+    "status": "In stock"
+  },
+  {
+    "name": "Nike Air Force 1 '07 · Triple White",
+    "category": "Sneakers",
+    "size": "Sizes 6–10",
+    "price": "R1600",
+    "image": "https://images.unsplash.com/photo-160026-K?auto=format&fit=crop&w=900&q=85",
+    "mark": "AF1",
+    "status": "In stock"
+  },
+  {
+    "name": "Air Jordan 3 Retro · Blue Cement",
+    "category": "Sneakers",
+    "size": "Sizes 3–8",
+    "price": "R1800",
+    "image": "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&w=900&q=85",
+    "mark": "AJ3",
+    "status": "In stock"
+  },
+  {
+    "name": "Adidas Fear of God Athletics 86 Hi · Sesame",
+    "category": "Sneakers",
+    "size": "Sizes 5–10",
+    "price": "R1700",
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85",
+    "mark": "FOG",
+    "status": "In stock"
+  },
+  {
+    "name": "Nike Air Force 1 '07 Luxe · Leopard",
+    "category": "Sneakers",
+    "size": "Wolf Grey Leopard · Summit White Leopard",
+    "price": "R1500 each",
+    "image": "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?auto=format&fit=crop&w=900&q=85",
+    "mark": "AF1",
+    "status": "In stock"
+  },
+  {
+    "name": "New Balance 1000",
+    "category": "Sneakers",
+    "size": "Sizes 3–8 · Cranberry Red / Silver, Bubblegum Pink / Beige",
+    "price": "R1500 each",
+    "image": "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=900&q=85",
+    "mark": "NB",
+    "status": "In stock"
+  },
+  {
+    "name": "Nike P-6000 · White / Pure Platinum",
+    "category": "Sneakers",
+    "size": "Sizes 5–10",
+    "price": "R1700",
+    "image": "https://images.unsplash.com/photo-1495555961986-6d4c1ecb7be3?auto=format&fit=crop&w=900&q=85",
+    "mark": "P-6000",
+    "status": "In stock"
+  },
+  {
+    "name": "New Balance 9060",
+    "category": "Sneakers",
+    "size": "Sizes 4–9 · Grey / White, Black, Cream / Beige, Sea Salt / Moonbeam, Rain Cloud, Olive / Grey + more",
+    "price": "R1400 each",
+    "image": "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=900&q=85",
+    "mark": "NB",
+    "status": "Black Friday sale"
+  },
+  {
+    "name": "Nike Shox TL · Black / Anthracite",
+    "category": "Sneakers",
+    "size": "Sizes 3–10 · Black / Dark Grey / Silver · Other colourways available in video",
+    "price": "R1699",
+    "image": "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=85",
+    "mark": "SHOX",
+    "status": "Black Friday sale"
+  },
+  {
+    "name": "New Era 9FIFTY Snapback Caps",
+    "category": "Caps",
+    "size": "LA Lakers, NY Mets, Oakland A's, Boston Red Sox, Atlanta Braves, NY Yankees Washed Grey, Detroit Tigers Washed Grey, LA Dodgers Washed Grey, SF Giants",
+    "price": "R450 each",
+    "image": "https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=900&q=85",
+    "mark": "9FIFTY",
+    "status": "In stock"
+  },
+  {
+    "name": "Diesel Jeans · Dark Blue Denim",
+    "category": "Clothing",
+    "size": "Sizes 4–9",
+    "price": "R1400",
+    "image": "https://images.unsplash.com/photo-1542272604-787c3835535d?auto=format&fit=crop&w=900&q=85",
+    "mark": "DENIM",
+    "status": "In stock"
+  }
+]
