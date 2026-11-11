@@ -3,974 +3,154 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0c0d0b">
-  <meta name="description" content="Ambition.co — streetwear, sneakers and fresh drops built for the move.">
-  <title>Ambition.co — Wear your ambition</title>
+  <meta name="theme-color" content="#f6f7f4">
+  <meta name="description" content="Ambition Wear — bold streetwear, graphic tees, caps and sneaker drops. Browse the catalogue and order on WhatsApp.">
+  <title>Ambition Wear — Made to move</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
-    :root {
-      --bg: #0d0e0b;
-      --bg-soft: #151814;
-      --panel: #171b17;
-      --panel-2: #111511;
-      --paper: #f3f1ea;
-      --paper-2: #e8e6df;
-      --line: rgba(255,255,255,0.12);
-      --text: #f4f1eb;
-      --muted: #b7b7b0;
-      --muted-2: #7d7870;
-      --accent: #d8ff5a;
-      --accent-2: #9edb34;
-      --shadow: rgba(0,0,0,0.28);
-      --radius: 24px;
-      --max: 1200px;
-    }
-
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      line-height: 1.5;
-    }
-
-    img { max-width: 100%; display: block; }
-    a { color: inherit; text-decoration: none; }
-    button, input { font: inherit; }
-    .wrap { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; }
-
-    .topline {
-      background: var(--paper);
-      color: var(--bg);
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 10px 0;
-      text-align: center;
-      overflow: hidden;
-      white-space: nowrap;
-    }
-
-    .topline a {
-      font-weight: 700;
-      border-bottom: 1px solid rgba(0,0,0,0.4);
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      min-height: 90px;
-      gap: 20px;
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      background: rgba(13,14,11,0.82);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .logo {
-      display: inline-flex;
-      align-items: center;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(1.55rem, 2vw, 2.1rem);
-      font-weight: 700;
-      letter-spacing: -0.06em;
-      color: var(--paper);
-    }
-
-    .logo span { color: var(--accent); }
-
-    .navlinks {
-      display: flex;
-      align-items: center;
-      gap: 30px;
-      color: var(--muted);
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .navlinks a { transition: color .2s ease; }
-    .navlinks a:hover { color: var(--paper); }
-
-    .nav-cta,
-    .button,
-    .text-button,
-    .filter,
-    .cta-panel button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 14px 22px;
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      font-weight: 700;
-      transition: transform .2s ease, border-color .2s ease, background .2s ease;
-      cursor: pointer;
-    }
-
-    .nav-cta,
-    .button,
-    .cta-panel button {
-      background: var(--accent);
-      color: var(--bg);
-      border-color: transparent;
-      box-shadow: 0 10px 24px rgba(216,255,90,0.22);
-    }
-
-    .nav-cta:hover,
-    .button:hover,
-    .text-button:hover,
-    .filter:hover,
-    .cta-panel button:hover {
-      transform: translateY(-1px);
-    }
-
-    .button.secondary,
-    .text-button {
-      background: transparent;
-      color: var(--paper);
-      border-color: var(--line);
-      box-shadow: none;
-    }
-
-    .hero {
-      padding: 52px 0 42px;
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 40px;
-      align-items: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      font-size: 0.68rem;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-
-    .eyebrow::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 20px rgba(216,255,90,0.7);
-    }
-
-    h1 {
-      margin: 0;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(3.5rem, 7vw, 7rem);
-      line-height: 0.9;
-      letter-spacing: -0.08em;
-      text-transform: uppercase;
-    }
-
-    h1 em {
-      font-style: normal;
-      color: var(--accent);
-      display: inline-block;
-    }
-
-    .hero-copy {
-      max-width: 620px;
-      margin: 24px 0 30px;
-      font-size: 1.08rem;
-      color: var(--muted);
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 28px;
-    }
-
-    .hero-stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px 30px;
-      padding-top: 18px;
-      border-top: 1px solid var(--line);
-    }
-
-    .hero-stats div {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .hero-stats strong {
-      font-size: clamp(1.4rem, 2vw, 2.2rem);
-      letter-spacing: -0.06em;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    .hero-stats span {
-      color: var(--muted);
-      font-size: 0.73rem;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .hero-visual {
-      position: relative;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-      min-height: 680px;
-    }
-
-    .visual-card {
-      position: relative;
-      overflow: hidden;
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, #1d201d 0%, #10130f 100%);
-      border: 1px solid var(--line);
-      box-shadow: 0 30px 80px var(--shadow);
-    }
-
-    .visual-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: saturate(0.95) contrast(1.04);
-    }
-
-    .visual-card.large {
-      grid-row: span 2;
-      min-height: 680px;
-    }
-
-    .floating-badge {
-      position: absolute;
-      left: 24px;
-      bottom: 24px;
-      background: rgba(13,14,11,0.76);
-      border: 1px solid rgba(255,255,255,0.15);
-      backdrop-filter: blur(10px);
-      color: var(--paper);
-      font-size: 0.68rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      padding: 12px 14px;
-      border-radius: 16px;
-    }
-
-    .ticker {
-      background: var(--paper);
-      color: var(--bg);
-      overflow: hidden;
-      white-space: nowrap;
-      padding: 14px 0;
-      border-top: 1px solid rgba(0,0,0,0.2);
-      border-bottom: 1px solid rgba(0,0,0,0.2);
-    }
-
-    .ticker-inner {
-      display: inline-flex;
-      gap: 34px;
-      min-width: max-content;
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      font-weight: 700;
-      animation: tickerMove 18s linear infinite;
-    }
-
-    .ticker strong { color: var(--bg); }
-
-    @keyframes tickerMove {
-      from { transform: translateX(0); }
-      to { transform: translateX(-50%); }
-    }
-
-    .section {
-      padding: 90px 0;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 18px;
-      margin-bottom: 28px;
-    }
-
-    .kicker {
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      font-size: 0.7rem;
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
-
-    h2 {
-      margin: 0;
-      font-size: clamp(2.1rem, 4vw, 3.5rem);
-      letter-spacing: -0.07em;
-      font-family: 'Space Grotesk', sans-serif;
-      line-height: 0.94;
-    }
-
-    h2 .dot {
-      color: var(--accent);
-    }
-
-    .section-head a {
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--paper);
-      border-bottom: 1px solid rgba(255,255,255,0.35);
-      padding-bottom: 3px;
-    }
-
-    .collection-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 20px;
-    }
-
-    .collection-card {
-      position: relative;
-      border-radius: 26px;
-      overflow: hidden;
-      min-height: 400px;
-      border: 1px solid var(--line);
-      background: #111;
-    }
-
-    .collection-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: brightness(0.86) saturate(0.9);
-    }
-
-    .collection-card .overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(13,14,11,0.1), rgba(13,14,11,0.72));
-      display: flex;
-      flex-direction: column;
-      justify-content: end;
-      padding: 22px;
-    }
-
-    .collection-card .meta {
-      font-size: 0.68rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--paper);
-      opacity: 0.8;
-    }
-
-    .collection-card h3 {
-      margin: 12px 0 0;
-      font-size: clamp(1.4rem, 2vw, 2rem);
-      line-height: 1;
-      letter-spacing: -0.05em;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    .filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 22px;
-    }
-
-    .filter {
-      background: transparent;
-      color: var(--muted);
-      padding: 12px 16px;
-      border-color: var(--line);
-      font-size: 0.64rem;
-    }
-
-    .filter.active {
-      background: var(--paper);
-      color: var(--bg);
-      border-color: var(--paper);
-    }
-
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .product-card {
-      background: rgba(255,255,255,0.02);
-      border: 1px solid var(--line);
-      border-radius: 26px;
-      overflow: hidden;
-      transition: transform .2s ease, border-color .2s ease;
-    }
-
-    .product-card:hover {
-      transform: translateY(-3px);
-      border-color: rgba(255,255,255,0.26);
-    }
-
-    .product-media {
-      position: relative;
-      aspect-ratio: 0.92;
-      background: #141713;
-      overflow: hidden;
-    }
-
-    .product-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .status-pill {
-      position: absolute;
-      inset: 14px auto auto 14px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: rgba(13,14,11,0.82);
-      border: 1px solid rgba(255,255,255,0.14);
-      color: var(--paper);
-      font-size: 0.56rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      backdrop-filter: blur(8px);
-    }
-
-    .product-body {
-      padding: 16px 16px 18px;
-    }
-
-    .product-topline {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .mark {
-      display: inline-block;
-      color: var(--muted);
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .price {
-      font-size: 1.05rem;
-      font-weight: 800;
-      letter-spacing: -0.05em;
-      color: var(--paper);
-    }
-
-    .product-name {
-      margin: 0;
-      font-size: 1.18rem;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-      line-height: 1.1;
-    }
-
-    .product-size {
-      margin: 12px 0 14px;
-      color: var(--muted);
-      font-size: 0.76rem;
-      line-height: 1.6;
-    }
-
-    .product-card .product-action {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      background: transparent;
-      color: var(--paper);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 12px 16px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 0.64rem;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .manifesto {
-      padding: 0 0 90px;
-    }
-
-    .manifesto-shell {
-      background: linear-gradient(180deg, #dfe8d1, #d0dcc0);
-      color: #111611;
-      border-radius: 36px;
-      overflow: hidden;
-      border: 1px solid rgba(0,0,0,0.08);
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      min-height: 520px;
-    }
-
-    .manifesto-copy {
-      padding: clamp(28px, 4vw, 52px);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .manifesto-copy .kicker {
-      color: rgba(17,22,17,0.7);
-    }
-
-    .pull-quote {
-      margin: 0;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2.6rem, 5vw, 5.2rem);
-      line-height: 0.92;
-      letter-spacing: -0.09em;
-      text-transform: uppercase;
-      max-width: 560px;
-    }
-
-    .pull-quote span {
-      color: rgba(17,22,17,0.75);
-    }
-
-    .manifesto-copy p {
-      max-width: 540px;
-      margin: 22px 0 0;
-      color: rgba(17,22,17,0.8);
-      font-size: 1.08rem;
-    }
-
-    .manifesto-visual {
-      position: relative;
-      min-height: 100%;
-      background: #c4d0b0;
-    }
-
-    .manifesto-visual img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: grayscale(0.2) contrast(1.1) brightness(0.95);
-    }
-
-    .manifesto-badge {
-      position: absolute;
-      right: 26px;
-      bottom: 24px;
-      background: rgba(17,22,17,0.82);
-      color: #edf0e5;
-      padding: 14px 18px;
-      border-radius: 16px;
-      font-size: 0.68rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-
-    .cta-panel {
-      background: linear-gradient(180deg, #131613 0%, #0d0f0c 100%);
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: clamp(26px, 4vw, 42px);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .cta-panel h3 {
-      margin: 0;
-      font-size: clamp(2rem, 4vw, 3rem);
-      line-height: 0.96;
-      letter-spacing: -0.07em;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    .cta-panel p {
-      margin: 10px 0 0;
-      color: var(--muted);
-      max-width: 520px;
-    }
-
-    .signup {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .signup input {
-      width: min(360px, 80vw);
-      padding: 16px 18px;
-      border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.02);
-      color: var(--paper);
-      outline: none;
-    }
-
-    .signup input::placeholder { color: var(--muted-2); }
-
-    footer {
-      padding: 24px 0 56px;
-      color: var(--muted);
-    }
-
-    .footer-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
-      padding-top: 20px;
-      border-top: 1px solid var(--line);
-      flex-wrap: wrap;
-    }
-
-    .footer-links {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      flex-wrap: wrap;
-      font-size: 0.72rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
-
-    .error-note {
-      margin-top: 18px;
-      padding: 14px 16px;
-      background: rgba(255,255,255,0.05);
-      color: #f9c4bc;
-      border: 1px solid rgba(255,167,155,0.35);
-      border-radius: 14px;
-      display: none;
-    }
-
-    @media (max-width: 980px) {
-      .hero,
-      .manifesto-shell {
-        grid-template-columns: 1fr;
-      }
-
-      .collection-grid,
-      .product-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .hero-visual {
-        min-height: 540px;
-      }
-    }
-
-    @media (max-width: 720px) {
-      .navlinks { display: none; }
-      .nav { min-height: 72px; }
-      .nav-cta { padding: 11px 14px; }
-      .hero { padding-top: 28px; }
-      .hero-actions,
-      .signup,
-      .cta-panel {
-        width: 100%;
-      }
-
-      .button,
-      .nav-cta,
-      .text-button,
-      .signup input,
-      .signup button {
-        width: 100%;
-      }
-
-      .hero-stats {
-        gap: 14px 18px;
-      }
-
-      .collection-grid,
-      .product-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .section { padding: 72px 0; }
-      .topline { letter-spacing: 0.09em; }
-    }
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
+    :root{--ink:#171a1a;--paper:#fff;--canvas:#f6f7f4;--green:#14583f;--lime:#d8ff75;--muted:#6d7272;--line:#e7e9e6;--soft:#f4f4f2;--max:1180px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:90px}body{margin:0;background:var(--canvas);color:var(--ink);font:15px/1.5 'DM Sans',sans-serif}a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}button{cursor:pointer}img{display:block;max-width:100%}.wrap{width:min(var(--max),calc(100% - 44px));margin-inline:auto}
+    .announcement{background:#e4f2dc;color:#173c2d;text-align:center;padding:9px 16px;font-size:12px;font-weight:700;letter-spacing:.025em}.announcement a{text-decoration:underline;text-underline-offset:3px}
+    .header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.95);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}.nav{height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{font:700 25px/1 'Space Grotesk',sans-serif;letter-spacing:-1.7px}.brand span{color:var(--green)}.navlinks{display:flex;gap:28px;align-items:center;font-size:13px;font-weight:700}.navlinks a:hover,.footer-links a:hover{color:var(--green)}.nav-actions{display:flex;align-items:center;gap:10px}.cart-trigger,.menu-link{background:var(--ink);color:#fff;border:0;border-radius:999px;padding:11px 16px;font-size:12px;font-weight:700}.cart-trigger b{display:inline-grid;place-items:center;min-width:20px;height:20px;margin-left:6px;border-radius:50%;background:var(--lime);color:var(--ink);font-size:11px}.menu-link{display:none}
+    .hero{position:relative;overflow:hidden;min-height:450px;margin-top:24px;border-radius:25px;background:var(--green);color:white;display:grid;grid-template-columns:1.04fr .96fr;align-items:center}.hero-copy{padding:clamp(30px,6vw,72px)}.hero-kicker,.eyebrow{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.16em}.hero-kicker{display:inline-flex;align-items:center;gap:9px;color:#dcf4cc}.hero-kicker:before{content:'';width:8px;height:8px;border-radius:50%;background:var(--lime)}h1{font:700 clamp(46px,7vw,86px)/.91 'Space Grotesk',sans-serif;letter-spacing:-.08em;margin:19px 0 17px}h1 span{color:var(--lime)}.hero-copy p{max-width:450px;color:rgba(255,255,255,.8);font-size:16px;margin:0 0 24px}.hero-buttons{display:flex;flex-wrap:wrap;gap:10px}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:999px;padding:13px 19px;font-size:12px;font-weight:800}.btn.lime{background:var(--lime);color:#152117}.btn.outline{border-color:rgba(255,255,255,.42);color:white}.hero-art{height:100%;min-height:370px;position:relative;overflow:hidden;background:linear-gradient(135deg,#58816d,#d6e1d3 48%,#306b4e)}.hero-art:before,.hero-art:after{content:'';position:absolute;border-radius:50%;filter:blur(1px)}.hero-art:before{width:360px;height:360px;background:#104b37;right:9%;top:8%;opacity:.9}.hero-art:after{width:270px;height:340px;background:linear-gradient(140deg,#111,#343a32);right:27%;bottom:-115px;border-radius:46% 46% 12% 12%;box-shadow:0 0 0 12px rgba(255,255,255,.08)}.hero-stamp{position:absolute;z-index:1;right:20px;top:20px;background:var(--lime);color:var(--ink);border-radius:50%;width:86px;height:86px;display:grid;place-items:center;text-align:center;font-size:10px;font-weight:800;line-height:1.15;transform:rotate(9deg)}.art-word{position:absolute;z-index:2;bottom:22px;left:22px;color:white;font:700 clamp(42px,8vw,82px)/.8 'Space Grotesk',sans-serif;letter-spacing:-.09em;text-shadow:0 3px 20px #0005}.service-strip{margin:20px 0 0;padding:16px 18px;display:flex;justify-content:space-around;gap:12px;background:white;border:1px solid var(--line);border-radius:15px;color:#313837;font-size:12px;font-weight:700}.service-strip span{display:inline-flex;gap:8px;align-items:center}.service-strip b{color:var(--green);font-size:15px}
+    .catalogue{padding:76px 0 90px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:24px}.eyebrow{color:var(--green);font-size:10px}h2{font:700 clamp(32px,5vw,51px)/1 'Space Grotesk',sans-serif;letter-spacing:-.065em;margin:7px 0 0}.catalogue-intro{margin:10px 0 0;color:var(--muted);max-width:560px;font-size:14px}.catalogue-count{font-size:12px;color:var(--muted);white-space:nowrap}.filters{display:flex;gap:8px;overflow-x:auto;padding:2px 0 16px}.filter{border:1px solid var(--line);background:#fff;color:#5e6462;border-radius:999px;padding:9px 14px;white-space:nowrap;font-size:11px;font-weight:700}.filter.active{background:var(--ink);color:white;border-color:var(--ink)}.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.product-card{min-width:0;display:grid;grid-template-columns:112px minmax(0,1fr) 44px;align-items:center;gap:16px;padding:12px;background:white;border:1px solid var(--line);border-radius:17px;transition:box-shadow .2s,transform .2s}.product-card:hover{box-shadow:0 12px 30px #1521170d;transform:translateY(-2px)}.product-media{width:112px;height:112px;border-radius:13px;background:#eeefed;overflow:hidden;position:relative}.product-media img{width:100%;height:100%;object-fit:cover}.product-badge{position:absolute;left:6px;top:6px;background:var(--lime);color:var(--ink);padding:4px 6px;border-radius:5px;font-size:8px;line-height:1;font-weight:800;text-transform:uppercase}.product-info{min-width:0}.product-category{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--green);font-weight:800}.product-name{font-size:16px;font-weight:800;line-height:1.18;margin:5px 0 3px;letter-spacing:-.025em}.product-detail{font-size:11px;color:var(--muted);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.product-price{font-size:15px;font-weight:800;margin-top:4px}.product-price small{font-size:10px;color:var(--muted);font-weight:600}.add-button{width:42px;height:42px;border:0;border-radius:12px;background:var(--soft);color:var(--ink);font-size:25px;line-height:1;transition:background .2s,color .2s}.add-button:hover{background:var(--green);color:#fff}.product-card.unavailable .add-button{font-size:11px;font-weight:800;padding:4px}.empty{grid-column:1/-1;padding:26px;background:#fff;border:1px solid var(--line);border-radius:14px;color:var(--muted)}
+    .story{padding:0 0 78px}.story-box{display:grid;grid-template-columns:1fr 1fr;overflow:hidden;border-radius:22px;background:#e8f0e2}.story-copy{padding:clamp(26px,5vw,56px);align-self:center}.story-copy h2{max-width:550px}.story-copy p{color:#59645b;max-width:530px;margin:17px 0 22px}.story-art{position:relative;min-height:330px;background:linear-gradient(145deg,#134b37,#c9d8bd 58%,#8ca18d);overflow:hidden}.story-art:before{content:'AMBITION';position:absolute;right:-20px;bottom:13px;color:#fff8;font:700 clamp(52px,8vw,100px)/1 'Space Grotesk',sans-serif;letter-spacing:-.09em}.story-art:after{content:'';position:absolute;width:190px;height:270px;left:30%;bottom:-70px;border-radius:48% 48% 9% 9%;background:linear-gradient(140deg,#161816 10%,#343a34 50%,#090a09);box-shadow:35px -130px 0 -18px #301e17}
+    .order-info{padding:0 0 74px}.order-box{background:var(--ink);color:#fff;border-radius:20px;padding:clamp(24px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:24px}.order-box h2{font-size:clamp(28px,4vw,43px)}.order-box p{color:#c3c6c2;margin:8px 0 0;max-width:550px;font-size:14px}.order-steps{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.step{font-size:11px;color:#e5e8e2;display:flex;gap:8px;align-items:center}.step b{width:23px;height:23px;display:grid;place-items:center;background:var(--lime);color:var(--ink);border-radius:50%}.order-box .btn{flex:none}
+    footer{background:white;border-top:1px solid var(--line)}.footer-inner{padding:24px 0;display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}.footer-copy{color:var(--muted);font-size:12px}.footer-links{display:flex;gap:19px;font-size:11px;font-weight:700}.footer-links a{padding:5px 0}
+    .drawer-backdrop{position:fixed;inset:0;background:#0007;z-index:40;opacity:0;visibility:hidden;transition:.2s}.drawer-backdrop.open{opacity:1;visibility:visible}.cart-drawer{position:fixed;z-index:41;top:0;right:0;width:min(470px,100%);height:100dvh;background:#fff;transform:translateX(105%);transition:transform .28s ease;display:flex;flex-direction:column;box-shadow:-15px 0 50px #0002}.cart-drawer.open{transform:translateX(0)}.drawer-head{display:flex;justify-content:space-between;align-items:center;padding:20px 22px;border-bottom:1px solid var(--line)}.drawer-head h2{font-size:25px;margin:0}.close-drawer{background:var(--soft);border:0;width:38px;height:38px;border-radius:50%;font-size:21px}.cart-items{padding:14px 22px;overflow:auto;flex:1}.cart-empty{text-align:center;color:var(--muted);padding:44px 10px}.cart-line{display:grid;grid-template-columns:60px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.cart-line img{width:60px;height:60px;object-fit:cover;border-radius:9px;background:var(--soft)}.cart-line strong{display:block;font-size:13px;line-height:1.25}.cart-line small{color:var(--muted);font-size:11px}.quantity{display:flex;align-items:center;gap:9px}.quantity button{width:27px;height:27px;border:1px solid var(--line);border-radius:50%;background:#fff}.drawer-bottom{padding:18px 22px 24px;border-top:1px solid var(--line)}.cart-total{display:flex;justify-content:space-between;font-weight:800;margin-bottom:12px}.cart-note{font-size:11px;color:var(--muted);margin:0 0 12px}.checkout-button{width:100%;border:0;border-radius:999px;background:var(--green);color:white;padding:15px;font-weight:800}.checkout-button:disabled{opacity:.45;cursor:not-allowed}.modal-layer{position:fixed;inset:0;z-index:50;background:#0008;display:none;place-items:center;padding:18px}.modal-layer.open{display:grid}.checkout-modal{width:min(510px,100%);max-height:90dvh;overflow:auto;background:white;border-radius:19px;padding:24px}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}.modal-head h2{font-size:25px;margin:0}.checkout-form{display:grid;gap:12px}.checkout-form label{font-size:11px;font-weight:800;display:grid;gap:5px}.checkout-form input,.checkout-form select,.checkout-form textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;background:#fff;color:var(--ink);font-size:14px}.checkout-form textarea{min-height:74px;resize:vertical}.checkout-form .btn{border:0;background:var(--green);color:white;width:100%;margin-top:5px}.fine-print{font-size:11px;color:var(--muted);margin:0}.track-box{padding:20px;border:1px solid var(--line);border-radius:15px;margin-top:15px}.track-box h3{margin:0 0 4px;font-size:17px}.track-box p{font-size:12px;color:var(--muted);margin:0 0 12px}.track-form{display:flex;gap:8px}.track-form input{flex:1;min-width:0;padding:11px;border:1px solid var(--line);border-radius:9px}.track-form button{border:0;background:var(--ink);color:white;padding:0 13px;border-radius:9px;font-size:11px;font-weight:800}.toast{position:fixed;z-index:60;bottom:22px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:var(--ink);color:white;border-radius:999px;padding:12px 18px;font-size:12px;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+    @media(max-width:850px){.hero{grid-template-columns:1fr}.hero-art{min-height:315px}.product-grid{grid-template-columns:1fr}.story-box{grid-template-columns:1fr}.story-art{min-height:260px}.order-box{align-items:flex-start;flex-direction:column}}
+    @media(max-width:560px){.wrap{width:calc(100% - 28px)}.announcement{font-size:10px}.nav{height:64px}.brand{font-size:22px}.navlinks{display:none}.menu-link{display:inline-block}.cart-trigger{padding:9px 12px}.hero{margin-top:14px;border-radius:17px;min-height:unset}.hero-copy{padding:28px 23px 24px}.hero-copy p{font-size:14px}.hero-art{min-height:240px}.hero-stamp{width:70px;height:70px;font-size:9px}.service-strip{margin-top:12px;padding:13px 10px;justify-content:flex-start;overflow:auto;white-space:nowrap;font-size:10px}.catalogue{padding:55px 0 60px}.section-head{align-items:flex-start}.catalogue-count{font-size:10px;padding-top:20px}.product-card{grid-template-columns:88px minmax(0,1fr) 38px;gap:11px;padding:9px;border-radius:14px}.product-media{width:88px;height:88px;border-radius:10px}.product-name{font-size:14px}.product-detail{font-size:10px}.product-price{font-size:14px}.add-button{width:36px;height:36px;border-radius:10px}.story{padding-bottom:54px}.story-art{min-height:220px}.order-info{padding-bottom:52px}.footer-inner{padding:20px 0}.footer-links{gap:13px}.checkout-modal{padding:19px}.track-form button{padding:0 10px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
   </style>
 </head>
 <body>
-  <div class="topline">New stock &amp; drop alerts — <a href="https://chat.whatsapp.com/CLmKQVmMfluLv4ytFzldBP?s=cl&amp;p=a&amp;iam=2" target="_blank" rel="noopener">join the WhatsApp group ↗</a></div>
-
-  <header class="wrap nav">
-    <a href="#home" class="logo" aria-label="Ambition.co home">Ambition<span>.</span>co</a>
-    <nav class="navlinks" aria-label="Main navigation">
-      <a href="#stock">Latest stock</a>
-      <a href="#story">Our mindset</a>
-      <a href="#drops">Drops</a>
-    </nav>
-    <a class="nav-cta" href="https://chat.whatsapp.com/CLmKQVmMfluLv4ytFzldBP?s=cl&amp;p=a&amp;iam=2" target="_blank" rel="noopener">Get drop alerts ↗</a>
-  </header>
-
-  <main>
-    <section class="wrap hero" id="home">
-      <div>
-        <div class="eyebrow">Streetwear drop / sneakers</div>
-        <h1>Wear your<br><em>ambition.</em></h1>
-        <p class="hero-copy">Clean silhouettes, strong energy, and fresh stock for the city. Discover bold essentials and limited releases built to move with purpose.</p>
-
-        <div class="hero-actions">
-          <a class="button" href="#stock">Explore the stock <span>↘</span></a>
-          <a class="button secondary" href="https://chat.whatsapp.com/CLmKQVmMfluLv4ytFzldBP?s=cl&amp;p=a&amp;iam=2" target="_blank" rel="noopener">Join the group</a>
-        </div>
-
-        <div class="hero-stats">
-          <div>
-            <strong>24h</strong>
-            <span>Drop rhythm</span>
-          </div>
-          <div>
-            <strong>100+</strong>
-            <span>Fresh pieces</span>
-          </div>
-          <div>
-            <strong>Street</strong>
-            <span>Built for movement</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="hero-visual" aria-label="Ambition streetwear lifestyle imagery">
-        <div class="visual-card large">
-          <img src="https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=1000&q=80" alt="Model in streetwear outfit">
-          <div class="floating-badge">Independent style / 001</div>
-        </div>
-        <div class="visual-card">
-          <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=900&q=80" alt="Sneaker close-up">
-        </div>
-        <div class="visual-card">
-          <img src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=900&q=80" alt="Streetwear lookbook">
-        </div>
-      </div>
+  <div class="announcement">New drop loading — <a href="https://wa.me/27672364114?text=Hi%20Ambition%20Wear%2C%20please%20add%20me%20to%20the%20drop%20updates." target="_blank" rel="noopener">get drop updates on WhatsApp ↗</a></div>
+  <header class="header"><div class="wrap nav">
+    <a class="brand" href="#home" aria-label="Ambition Wear home">AMBITION<span>.</span></a>
+    <nav class="navlinks" aria-label="Main navigation"><a href="#catalogue">Catalogue</a><a href="#story">Our brand</a><a href="#orders">Orders &amp; tracking</a></nav>
+    <div class="nav-actions"><a class="menu-link" href="#catalogue">Shop</a><button class="cart-trigger" id="open-cart" type="button" aria-label="Open shopping bag">Bag <b id="cart-count">0</b></button></div>
+  </div></header>
+  <main id="home">
+    <section class="wrap hero">
+      <div class="hero-copy"><div class="hero-kicker">Ambition Wear / South Africa</div><h1>Wear it.<br><span>Own it.</span></h1><p>Streetwear for the ones going somewhere. Graphic tees, caps, beanies and sneaker heat — made to move with you.</p><div class="hero-buttons"><a class="btn lime" href="#catalogue">Shop the catalogue <span>↘</span></a><a class="btn outline" href="https://wa.me/27672364114?text=Hi%20Ambition%20Wear%2C%20I%20have%20a%20question%20about%20your%20collection." target="_blank" rel="noopener">Chat with us</a></div></div>
+      <div class="hero-art" role="img" aria-label="Ambition Wear campaign artwork"><div class="hero-stamp">MADE<br>TO MOVE</div><div class="art-word">AMBITION<br>WEAR</div></div>
     </section>
+    <div class="wrap service-strip" aria-label="Shopping highlights"><span><b>✳</b> Local streetwear</span><span><b>✳</b> Order direct on WhatsApp</span><span><b>✳</b> Order updates available</span></div>
 
-    <div class="ticker" aria-hidden="true">
-      <div class="ticker-inner">
-        <span>Move with purpose</span>
-        <strong>✦</strong>
-        <span>Neck-up energy</span>
-        <strong>✦</strong>
-        <span>Streetwear &amp; sneakers</span>
-        <strong>✦</strong>
-        <span>Ambition looks good on you</span>
-        <strong>✦</strong>
-        <span>Move with purpose</span>
-        <strong>✦</strong>
-        <span>Neck-up energy</span>
-        <strong>✦</strong>
-        <span>Streetwear &amp; sneakers</span>
-        <strong>✦</strong>
-        <span>Ambition looks good on you</span>
-      </div>
-    </div>
-
-    <section class="wrap section" id="drops">
-      <div class="section-head">
-        <div>
-          <div class="kicker">Fresh edit / 001</div>
-          <h2>Curated for the <span class="dot">move.</span></h2>
-        </div>
-        <a href="#stock">Shop the edit</a>
-      </div>
-
-      <div class="collection-grid">
-        <article class="collection-card">
-          <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?auto=format&fit=crop&w=900&q=80" alt="Sneaker drop collection">
-          <div class="overlay">
-            <div class="meta">New arrivals</div>
-            <h3>Sneakers</h3>
-          </div>
-        </article>
-
-        <article class="collection-card">
-          <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=900&q=80" alt="Streetwear collection">
-          <div class="overlay">
-            <div class="meta">Limited run</div>
-            <h3>Outerwear</h3>
-          </div>
-        </article>
-
-        <article class="collection-card">
-          <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=900&q=80" alt="Caps and accessories collection">
-          <div class="overlay">
-            <div class="meta">Accessories</div>
-            <h3>Caps</h3>
-          </div>
-        </article>
-
-        <article class="collection-card">
-          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80" alt="Essentials collection">
-          <div class="overlay">
-            <div class="meta">Everyday fit</div>
-            <h3>Essentials</h3>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="wrap section" id="stock">
-      <div class="section-head">
-        <div>
-          <div class="kicker">The current rotation / 001</div>
-          <h2>Latest stock<span class="dot">.</span></h2>
-        </div>
-        <div class="stock-meta" id="stock-count" aria-live="polite">Loading stock…</div>
-      </div>
-
-      <div class="filters" id="filters" aria-label="Filter stock"></div>
+    <section class="wrap catalogue" id="catalogue">
+      <div class="section-head"><div><div class="eyebrow">The Ambition catalogue</div><h2>Wear the ambition.</h2><p class="catalogue-intro">The pieces behind the name. Pick your favourites and add them to your bag to start an order.</p></div><div class="catalogue-count" id="stock-count" aria-live="polite">Loading catalogue…</div></div>
+      <div class="filters" id="filters" aria-label="Filter catalogue"></div>
       <div class="product-grid" id="product-grid" aria-live="polite"></div>
-      <div id="load-error" class="error-note">Stock could not be loaded. Please try again later.</div>
     </section>
 
-    <section class="manifesto" id="story">
-      <div class="wrap manifesto-shell">
-        <div class="manifesto-copy">
-          <div class="kicker">Our mindset</div>
-          <blockquote class="pull-quote">Not just what you wear.<br><span>How you move.</span></blockquote>
-          <p>We build around confidence, style, and quality basics that last beyond the trend cycle. Every drop is shaped for people who want their pieces to feel like an extension of their ambition.</p>
-        </div>
-        <div class="manifesto-visual">
-          <img src="https://images.unsplash.com/photo-1529139574466-a303027c1d8b?auto=format&fit=crop&w=1200&q=80" alt="Fashion model standing in a city street">
-          <div class="manifesto-badge">Built for motion</div>
-        </div>
-      </div>
-    </section>
+    <section class="wrap story" id="story"><div class="story-box"><div class="story-copy"><div class="eyebrow">The brand</div><h2>Ambition is a way of moving.</h2><p>Built for everyday confidence and the next big move. Ambition Wear brings bold graphics and street-ready essentials together — made for people who show up as themselves.</p><a class="btn" style="background:var(--green);color:white" href="#catalogue">Find your next piece ↗</a></div><div class="story-art" role="img" aria-label="Ambition Wear campaign graphic"></div></div></section>
 
-    <section class="wrap section">
-      <div class="cta-panel">
-        <div>
-          <h3>Join the drop list.</h3>
-          <p>Get first access to the next release and the latest product alerts before the rest of the city catches up.</p>
-        </div>
-
-        <div class="signup">
-          <input type="email" placeholder="you@example.com" aria-label="Email address">
-          <button type="button">Sign up</button>
-        </div>
-      </div>
+    <section class="wrap order-info" id="orders"><div class="order-box"><div><div class="eyebrow" style="color:var(--lime)">Easy ordering</div><h2>From the bag to your door.</h2><p>Build your order here, then send it to us on WhatsApp. We’ll confirm availability, payment and delivery details directly with you.</p><div class="order-steps"><span class="step"><b>1</b> Add pieces</span><span class="step"><b>2</b> Send your order</span><span class="step"><b>3</b> Get updates</span></div></div><a class="btn lime" href="https://wa.me/27672364114?text=Hi%20Ambition%20Wear%2C%20I%27d%20like%20an%20update%20on%20my%20order." target="_blank" rel="noopener">Ask about an order ↗</a></div>
+      <div class="track-box"><h3>Already placed an order?</h3><p>Enter your order reference to ask us for a tracking update on WhatsApp. Tracking details are provided by the Ambition team after dispatch.</p><form class="track-form" id="track-form"><input id="tracking-reference" type="text" placeholder="Order reference" aria-label="Order reference" required><button type="submit">Request update ↗</button></form></div>
     </section>
   </main>
+  <footer><div class="wrap footer-inner"><a class="brand" href="#home">AMBITION<span>.</span></a><span class="footer-copy">© <span id="year"></span> Ambition Wear · South Africa</span><div class="footer-links"><a href="#catalogue">Catalogue</a><a href="#orders">Order tracking</a><a href="https://wa.me/27672364114" target="_blank" rel="noopener">WhatsApp</a></div></div></footer>
 
-  <footer class="wrap">
-    <div class="footer-inner">
-      <a href="#home" class="logo" aria-label="Ambition.co home">Ambition<span>.</span>co</a>
-      <span>Streetwear drop &amp; sneakers</span>
-      <div class="footer-links">
-        <a href="#stock">Stock</a>
-        <a href="#story">Mindset</a>
-        <a href="https://chat.whatsapp.com/CLmKQVmMfluLv4ytFzldBP?s=cl&amp;p=a&amp;iam=2" target="_blank" rel="noopener">WhatsApp</a>
-      </div>
-    </div>
-  </footer>
+  <div class="drawer-backdrop" id="drawer-backdrop"></div>
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Shopping bag" aria-hidden="true"><div class="drawer-head"><h2>Your bag <span id="drawer-count">(0)</span></h2><button type="button" class="close-drawer" id="close-cart" aria-label="Close bag">×</button></div><div class="cart-items" id="cart-items"></div><div class="drawer-bottom"><div class="cart-total"><span>Estimated total</span><span id="cart-total">R0</span></div><p class="cart-note">Final availability, delivery fees and payment are confirmed with you on WhatsApp. Items without a listed price are quoted by message.</p><button class="checkout-button" id="checkout-start" type="button" disabled>Continue to order</button></div></aside>
+
+  <div class="modal-layer" id="checkout-modal" role="dialog" aria-modal="true" aria-labelledby="checkout-title"><div class="checkout-modal"><div class="modal-head"><h2 id="checkout-title">Order details</h2><button type="button" class="close-drawer" id="close-checkout" aria-label="Close order form">×</button></div><form class="checkout-form" id="checkout-form"><label>Your name<input name="name" autocomplete="name" required placeholder="Name and surname"></label><label>Contact number<input name="phone" type="tel" autocomplete="tel" required placeholder="e.g. 071 234 5678"></label><label>Delivery or collection<select name="fulfilment" required><option value="">Choose an option</option><option>Delivery (confirm fee on WhatsApp)</option><option>Collection (arrange on WhatsApp)</option></select></label><label>Delivery area / order notes<textarea name="notes" placeholder="Suburb, preferred sizes, colour or other details"></textarea></label><p class="fine-print">Selecting continue opens WhatsApp with your order details. Your order is only confirmed once Ambition Wear replies.</p><button class="btn" type="submit">Send order on WhatsApp ↗</button></form></div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
+    const WHATSAPP_NUMBER = '27672364114';
     const grid = document.querySelector('#product-grid');
     const filters = document.querySelector('#filters');
     const count = document.querySelector('#stock-count');
-    const errorNote = document.querySelector('#load-error');
-
+    const drawer = document.querySelector('#cart-drawer');
+    const backdrop = document.querySelector('#drawer-backdrop');
+    const cartItems = document.querySelector('#cart-items');
+    const checkoutButton = document.querySelector('#checkout-start');
     let stock = [];
     let active = 'All';
+    let cart = readCart();
 
-    const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[char]));
-
+    function readCart() {
+      try { return JSON.parse(localStorage.getItem('ambition-cart') || '[]'); }
+      catch { return []; }
+    }
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    function numericPrice(value) {
+      const match = String(value || '').replace(/,/g, '.').match(/(?:R\s*)?(\d+(?:\.\d{1,2})?)/i);
+      return match ? Number(match[1]) : 0;
+    }
+    function saveCart() {
+      localStorage.setItem('ambition-cart', JSON.stringify(cart));
+      renderCart();
+    }
     function renderFilters() {
       const categories = ['All', ...new Set(stock.map(item => item.category).filter(Boolean))];
-      filters.innerHTML = categories.map(category => `
-        <button class="filter ${active === category ? 'active' : ''}" type="button" data-category="${esc(category)}">
-          ${esc(category)}
-        </button>
-      `).join('');
-
-      filters.querySelectorAll('.filter').forEach(button => {
-        button.addEventListener('click', () => {
-          active = button.dataset.category;
-          render();
-        });
-      });
+      if (!categories.includes(active)) active = 'All';
+      filters.innerHTML = categories.map(category => `<button class="filter ${active === category ? 'active' : ''}" type="button" data-category="${esc(category)}">${esc(category)}</button>`).join('');
+      filters.querySelectorAll('button').forEach(button => button.addEventListener('click', () => { active = button.dataset.category; render(); }));
     }
-
     function renderProducts() {
-      const filtered = active === 'All' ? stock : stock.filter(item => item.category === active);
-      count.textContent = `${filtered.length} item${filtered.length === 1 ? '' : 's'} in the rotation`;
-
-      if (!filtered.length) {
-        grid.innerHTML = '<div class="product-card" style="grid-column:1/-1;padding:22px 18px;color:var(--muted);">No items in this category yet.</div>';
-        return;
-      }
-
-      grid.innerHTML = filtered.map(item => `
-        <article class="product-card">
-          <div class="product-media">
-            <img src="${esc(item.image)}" alt="${esc(item.name)}" loading="lazy">
-            <span class="status-pill">${esc(item.status || 'In stock')}</span>
-          </div>
-          <div class="product-body">
-            <div class="product-topline">
-              <span class="mark">${esc(item.mark || item.category || 'drop')}</span>
-              <span class="price">${esc(item.price || 'R0')}</span>
-            </div>
-            <h3 class="product-name">${esc(item.name)}</h3>
-            <div class="product-size">${esc(item.size || '')}</div>
-            <button class="product-action" type="button">Enquire now</button>
-          </div>
-        </article>
-      `).join('');
+      const products = active === 'All' ? stock : stock.filter(item => item.category === active);
+      count.textContent = `${products.length} ${products.length === 1 ? 'piece' : 'pieces'} in the catalogue`;
+      if (!products.length) { grid.innerHTML = '<div class="empty">No products in this category just yet.</div>'; return; }
+      grid.innerHTML = products.map((item, index) => {
+        const canOrder = item.orderable !== false;
+        return `<article class="product-card ${canOrder ? '' : 'unavailable'}"><div class="product-media"><img src="${esc(item.image)}" alt="${esc(item.name)}" loading="lazy"><span class="product-badge">${esc(item.badge || item.status || 'Ambition Wear')}</span></div><div class="product-info"><div class="product-category">${esc(item.category || 'Ambition Wear')}</div><h3 class="product-name">${esc(item.name)}</h3><div class="product-detail">${esc(item.size || item.description || '')}</div><div class="product-price">${esc(item.price || 'DM for price')}${item.price ? ' <small>each</small>' : ''}</div></div><button class="add-button" type="button" data-product="${index}" aria-label="${canOrder ? 'Add ' + esc(item.name) + ' to bag' : 'Ask for sneaker prices on WhatsApp'}">${canOrder ? '+' : 'DM'}</button></article>`;
+      }).join('');
+      grid.querySelectorAll('[data-product]').forEach(button => button.addEventListener('click', () => {
+        const item = products[Number(button.dataset.product)];
+        if (item.orderable === false) { window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(`Hi Ambition Wear, please send me sneaker prices and available options.`)}`, '_blank', 'noopener'); return; }
+        addToCart(item);
+      }));
     }
-
-    function render() {
-      renderFilters();
-      renderProducts();
+    function render() { renderFilters(); renderProducts(); }
+    function addToCart(item) {
+      const existing = cart.find(line => line.name === item.name);
+      if (existing) existing.quantity += 1;
+      else cart.push({name:item.name, price:item.price || '', image:item.image || '', quantity:1});
+      saveCart(); showToast(`${item.name} added to your bag`);
     }
-
-    fetch('./stock.json')
-      .then(response => {
-        if (!response.ok) throw new Error('stock unavailable');
-        return response.json();
-      })
-      .then(data => {
-        stock = Array.isArray(data) ? data : [];
-        render();
-      })
-      .catch(() => {
-        errorNote.style.display = 'block';
-        count.textContent = 'Stock unavailable';
-      });
+    function renderCart() {
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      document.querySelector('#cart-count').textContent = totalItems;
+      document.querySelector('#drawer-count').textContent = `(${totalItems})`;
+      checkoutButton.disabled = totalItems === 0;
+      const total = cart.reduce((sum, item) => sum + numericPrice(item.price) * item.quantity, 0);
+      document.querySelector('#cart-total').textContent = `R${total.toLocaleString('en-ZA')}${cart.some(item => !numericPrice(item.price)) ? ' + quote' : ''}`;
+      cartItems.innerHTML = cart.length ? cart.map((item, index) => `<div class="cart-line"><img src="${esc(item.image)}" alt=""><div><strong>${esc(item.name)}</strong><small>${esc(item.price || 'Price to confirm')}</small></div><div class="quantity"><button type="button" data-minus="${index}" aria-label="Remove one">−</button><span>${item.quantity}</span><button type="button" data-plus="${index}" aria-label="Add one">+</button></div></div>`).join('') : '<div class="cart-empty">Your bag is waiting for its first piece.</div>';
+      cartItems.querySelectorAll('[data-minus]').forEach(button => button.addEventListener('click', () => { const i = Number(button.dataset.minus); cart[i].quantity -= 1; if (cart[i].quantity <= 0) cart.splice(i, 1); saveCart(); }));
+      cartItems.querySelectorAll('[data-plus]').forEach(button => button.addEventListener('click', () => { cart[Number(button.dataset.plus)].quantity += 1; saveCart(); }));
+    }
+    function openDrawer() { drawer.classList.add('open'); backdrop.classList.add('open'); drawer.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }
+    function closeDrawer() { drawer.classList.remove('open'); backdrop.classList.remove('open'); drawer.setAttribute('aria-hidden','true'); document.body.style.overflow=''; }
+    document.querySelector('#open-cart').addEventListener('click', openDrawer);
+    document.querySelector('#close-cart').addEventListener('click', closeDrawer);
+    backdrop.addEventListener('click', closeDrawer);
+    document.querySelector('#checkout-start').addEventListener('click', () => { if (!cart.length) return; closeDrawer(); document.querySelector('#checkout-modal').classList.add('open'); });
+    document.querySelector('#close-checkout').addEventListener('click', () => document.querySelector('#checkout-modal').classList.remove('open'));
+    document.querySelector('#checkout-modal').addEventListener('click', event => { if (event.target.id === 'checkout-modal') event.currentTarget.classList.remove('open'); });
+    document.querySelector('#checkout-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const form = new FormData(event.currentTarget);
+      const lines = cart.map(item => `• ${item.name} × ${item.quantity} — ${item.price || 'price to confirm'}`).join('\n');
+      const total = cart.reduce((sum,item) => sum + numericPrice(item.price)*item.quantity, 0);
+      const message = `Hi Ambition Wear! I'd like to place an order.\n\n${lines}\n\nEstimated total: R${total.toLocaleString('en-ZA')}${cart.some(item => !numericPrice(item.price)) ? ' + quote' : ''}\nName: ${form.get('name')}\nContact: ${form.get('phone')}\nFulfilment: ${form.get('fulfilment')}\nNotes / area: ${form.get('notes') || 'Not specified'}\n\nPlease confirm stock, payment and delivery details.`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+      document.querySelector('#checkout-modal').classList.remove('open');
+    });
+    document.querySelector('#track-form').addEventListener('submit', event => {
+      event.preventDefault();
+      const reference = document.querySelector('#tracking-reference').value.trim();
+      if (!reference) return;
+      const message = `Hi Ambition Wear, please check the status / tracking for order ${reference}.`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
+    });
+    let toastTimer;
+    function showToast(message) { const toast = document.querySelector('#toast'); toast.textContent = message; toast.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('show'), 2200); }
+    document.querySelector('#year').textContent = new Date().getFullYear();
+    renderCart();
+    fetch('./stock.json').then(response => { if (!response.ok) throw new Error('catalogue unavailable'); return response.json(); }).then(data => { stock = Array.isArray(data) ? data : []; render(); }).catch(() => { count.textContent = 'Catalogue unavailable'; grid.innerHTML = '<div class="empty">We could not load the catalogue. Please try again later or message us on WhatsApp.</div>'; });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape') { closeDrawer(); document.querySelector('#checkout-modal').classList.remove('open'); } });
   </script>
 </body>
 </html>
