@@ -1,5 +1,24 @@
 [
   {
+    "name": "AMBITION WEAR",
+    "category": "Tees",
+    "description": "Premium oversized cotton T-shirt — black and white statement essentials.",
+    "features": [
+      "Premium oversized cotton T-shirt",
+      "Black and White colourways",
+      "Available in S, M, L, XL, XXL",
+      "Stock: 10 units",
+      "WEAR WHAT DRIVES YOU."
+    ],
+    "sizes": ["S", "M", "L", "XL", "XXL"],
+    "price": "",
+    "priceLabel": "Enquire on WhatsApp",
+    "image": "https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/IMG-20261111-WA0076.jpg",
+    "status": "In stock",
+    "badge": "10 units",
+    "orderable": false
+  },
+  {
     "name": "Ambition Heavy T",
     "category": "Tees",
     "description": "Heavyweight Ambition graphic T-shirt",
