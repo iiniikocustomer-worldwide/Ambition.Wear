@@ -62,7 +62,7 @@
   }
   function prepareProducts(items) {
     return (Array.isArray(items) ? items : []).map(normalizedProduct).filter(Boolean)
-      .filter((item) => item.name !== 'Ambition Cap' && item.name !== 'Ambition Lifestyle');
+      .filter((item) => item.name !== 'Ambition Lifestyle');
   }
   const galleryFor = (item) => item.gallery?.length ? item.gallery : (item.image ? [item.image] : []);
   const visibleProducts = () => activeCategory === 'All' ? products : products.filter((item) => item.category === activeCategory);
@@ -108,8 +108,8 @@
     const colours = item.colours || [];
     const root = document.createElement('div');
     root.className = 'product-modal-root';
-    root.innerHTML = `<div class="modal-backdrop" data-dismiss-product><section class="product-modal" role="dialog" aria-modal="true" aria-label="${esc(item.name)} options">
-      <button class="modal-close" type="button" data-dismiss-product aria-label="Close product details">×</button>
+    root.innerHTML = `<div class="modal-backdrop"><section class="product-modal" role="dialog" aria-modal="true" aria-label="${esc(item.name)} options">
+      <button class="modal-close" type="button" aria-label="Close product details">×</button>
       <div class="product-modal__gallery"><div class="product-modal__main"><img data-main-photo class="product-modal__photo is-visible" src="${esc(imageList[0])}" alt="${esc(item.name)} photo 1"></div>
         <div class="product-modal__thumbs" aria-label="Choose a product photo">${imageList.map((src, index) => `<button type="button" class="product-modal__thumb ${index === 0 ? 'is-active' : ''}" data-thumb-index="${index}" aria-label="View photo ${index + 1} of ${imageList.length}"><img src="${esc(src)}" alt=""></button>`).join('')}</div>
         <p class="product-photo-count" aria-live="polite">${imageList.length} ${imageList.length === 1 ? 'photo' : 'photos'} · Select a photo to view</p></div>
@@ -121,7 +121,7 @@
     document.body.appendChild(root);
     const modal = $('.product-modal', root);
     root.addEventListener('click', (event) => {
-      if (event.target.closest('[data-dismiss-product]')) { root.remove(); return; }
+      if (event.target.classList.contains('modal-backdrop') || event.target.closest('.modal-close')) { root.remove(); return; }
       const thumb = event.target.closest('[data-thumb-index]');
       if (thumb) {
         const index = Number(thumb.dataset.thumbIndex);
@@ -164,7 +164,7 @@
   function injectBag() {
     if ($('#bag-drawer')) return;
     document.body.insertAdjacentHTML('beforeend', `<div class="drawer-backdrop"></div><aside class="bag-drawer" id="bag-drawer" role="dialog" aria-modal="true" aria-label="Shopping bag" aria-hidden="true"><div class="drawer-header"><h2>Your bag</h2><button class="drawer-close" type="button" aria-label="Close bag">×</button></div><div class="cart-items"></div>
-      <form class="checkout-options"><label>Your name<input name="customer-name" autocomplete="name" required></label><label>Delivery address<input name="customer-address" autocomplete="street-address" placeholder="Required for delivery"></label><label>Delivery option<select name="delivery-option"><option>Delivery (1–5 business days)</option><option>Collection</option></select></label><label>Payment option<select name="payment-option"><option>EFT</option><option>Cash on collection</option><option>Other — confirm by DM</option></select></label></form>
+      <form class="checkout-options"><label>Your name<input name="customer-name" autocomplete="name" required></label><label>Email<input name="customer-email" type="email" autocomplete="email" placeholder="you@example.com" required></label><label>Delivery address<input name="customer-address" autocomplete="street-address" placeholder="Required for delivery"></label><label>Delivery option<select name="delivery-option"><option>Delivery (1–5 business days)</option><option>Collection</option></select></label><label>Payment option<select name="payment-option"><option>EFT</option><option>Cash on collection</option><option>Other — confirm by DM</option></select></label></form>
       <div class="bag-summary"><div class="bag-row"><span>Subtotal</span><strong class="bag-subtotal">R0</strong></div><p class="checkout-note">Payment and delivery are confirmed with you before dispatch.</p><button class="primary-action" id="send-invoice" type="button">Place order via WhatsApp</button></div></aside>`);
     $('.drawer-backdrop').addEventListener('click', closeBag);
     $('.drawer-close').addEventListener('click', closeBag);
@@ -199,13 +199,14 @@
     const form = $('.checkout-options');
     if (!form.reportValidity()) return;
     const name = form.elements['customer-name'].value.trim();
+    const email = form.elements['customer-email'].value.trim();
     const address = form.elements['customer-address'].value.trim();
     const delivery = form.elements['delivery-option'].value;
     const payment = form.elements['payment-option'].value;
     if (delivery.startsWith('Delivery') && !address) return toast('Please enter your delivery address');
     const lines = cart.map((item) => `${item.name}${item.colour ? ` — ${item.colour}` : ''}${item.size ? ` (${item.size})` : ''} x ${item.quantity} — ${money(item.price * item.quantity)}`);
     const subtotal = cart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
-    const message = ['Hello Ambition Wear, I would like to place this order:', '', ...lines, '', `Name: ${name}`, `Delivery: ${delivery}`, ...(address ? [`Address: ${address}`] : []), `Payment: ${payment}`, `Subtotal: ${money(subtotal)}`, 'Please confirm the final total and payment instructions.'].join('\n');
+    const message = ['Hello Ambition Wear, I would like to place this order:', '', ...lines, '', `Client name: ${name}`, `Client email: ${email}`, `Delivery: ${delivery}`, ...(address ? [`Address: ${address}`] : []), `Payment: ${payment}`, `Subtotal: ${money(subtotal)}`, 'Please confirm the final total and payment instructions.'].join('\n');
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
   }
 
@@ -245,7 +246,7 @@
       .product-card{animation:ambition-rise .55s both;animation-delay:calc(var(--card-index,0)*45ms);transition:transform .25s ease,box-shadow .25s ease;cursor:pointer}.product-card:hover{transform:translateY(-5px);box-shadow:0 15px 35px #00000014}.product-card__slide{transition:opacity .25s ease,transform .45s ease}.product-card:hover .product-card__slide{transform:scale(1.025)}
       .product-modal-root{z-index:10000}.product-modal{animation:ambition-pop .25s ease-out}.product-modal__thumb{transition:border-color .2s,transform .2s}.product-modal__thumb:hover{transform:translateY(-3px)}
       .story-hero.has-story-film{position:relative;min-height:min(90vh,900px);overflow:hidden;background:#111}.story-film-background,.story-film-shade{position:absolute;inset:0;width:100%;height:100%}.story-film-background{object-fit:cover}.story-film-shade{background:linear-gradient(90deg,rgba(0,0,0,.72),rgba(0,0,0,.2))}.story-hero .wrap{position:relative;z-index:1}.story-hero .eyebrow,.story-hero h1,.story-hero p{color:#fff}
-      .story-lifestyle-gallery{padding-top:clamp(42px,8vw,100px);padding-bottom:clamp(48px,8vw,110px)}.story-gallery-heading{margin-bottom:28px}.story-gallery-heading h2{font-size:clamp(28px,5vw,56px);line-height:1.04}.story-gallery-heading h2 span{color:#777}.story-gallery-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.story-gallery-card{margin:0;overflow:hidden;background:#f1efeb;animation:ambition-rise .7s both;animation-delay:calc(var(--gallery-index,0)*55ms)}.story-gallery-card:nth-child(4n+1){grid-row:span 2}.story-gallery-card img{display:block;width:100%;height:100%;min-height:180px;aspect-ratio: .78;object-fit:cover;transition:transform .5s ease}.story-gallery-card:hover img{transform:scale(1.05)}.story-gallery-card figcaption{padding:10px;font-size:10px;letter-spacing:.14em}
+      .story-lifestyle-gallery{padding-top:clamp(42px,8vw,100px);padding-bottom:clamp(48px,8vw,110px)}.story-gallery-heading{margin-bottom:28px}.story-gallery-heading h2{font-size:clamp(28px,5vw,56px);line-height:1.04}.story-gallery-heading h2 span{color:#777}.story-gallery-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.story-gallery-card{margin:0;overflow:hidden;background:#f1efeb;animation:ambition-rise .7s both;animation-delay:calc(var(--gallery-index,0)*55ms)}.story-gallery-card:nth-child(4n+1){grid-row:span 2}.story-gallery-card img{display:block;width:100%;height:100%;min-height:180px;aspect-ratio:.78;object-fit:cover;transition:transform .5s ease}.story-gallery-card:hover img{transform:scale(1.05)}.story-gallery-card figcaption{padding:10px;font-size:10px;letter-spacing:.14em}
       .checkout-options{display:grid;gap:12px;padding:18px 22px}.checkout-options label{display:grid;gap:6px;font-size:12px;font-weight:700}.checkout-options input,.checkout-options select{width:100%;min-height:42px;padding:9px 10px;border:1px solid #ddd;background:#fff;color:#111;font:inherit}.checkout-note{padding:0 22px;font-size:12px;color:#666}
       @keyframes ambition-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}@keyframes ambition-pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
       @media(max-width:850px){.story-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.story-gallery-card:nth-child(4n+1){grid-row:auto}}
