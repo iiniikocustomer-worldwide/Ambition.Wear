@@ -152,3 +152,24 @@ img {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Replace the lime accent with a high-contrast black-and-white treatment. */
+::selection { color: #fff; background: #111; }
+.announcement { background: #111; color: #fff; }
+.hero-copy h1 span,
+.page-hero h1 span { color: #fff; }
+.button,
+.button-dark,
+.primary-action {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+.button:hover,
+.button-dark:hover,
+.primary-action:hover { background: #333; border-color: #333; }
+.product-card__badge { background: #111; color: #fff; }
+.nav-links a:hover,
+.nav-links a.active {
+  text-decoration-color: #111;
+}
