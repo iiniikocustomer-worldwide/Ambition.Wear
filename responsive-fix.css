@@ -1,5 +1,6 @@
 @import url("editorial-refresh.css");
 @import url("product-shopping.css");
+@import url("bag-drawer-fix.css");
 
 /* Shared responsive layout and Ambition brand styling. */
 html, body { width: 100%; max-width: 100%; overflow-x: clip; }
