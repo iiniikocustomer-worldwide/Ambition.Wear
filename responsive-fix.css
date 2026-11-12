@@ -1,3 +1,5 @@
+@import url("editorial-refresh.css");
+
 /* Keep the storefront inside the phone viewport and constrain the current product-card markup. */
 html,
 body {
