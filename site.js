@@ -91,11 +91,33 @@
   }
 
   function resolveCatalogUrl() {
-    try {
-      return new URL('stock.json', window.location.href);
-    } catch (_) {
-      return new URL('stock.json', document.baseURI || 'https://example.com/');
-    }
+    const repoRawBase = 'https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/';
+    const localCandidates = [
+      new URL('stock.json', window.location.href),
+      new URL('./stock.json', document.baseURI || window.location.href),
+      new URL('stock.json', 'https://recordingsabantu.github.io/Ambition.co/'),
+      new URL(repoRawBase + 'stock.json')
+    ];
+
+    return localCandidates.filter((candidate, index, array) => array.findIndex((next) => next.href === candidate.href) === index);
+  }
+
+  function fetchCatalog() {
+    const catalogUrls = resolveCatalogUrl();
+    return fetch(catalogUrls[0].href)
+      .then((response) => {
+        if (!response.ok) throw new Error('Catalog unavailable');
+        return response.json();
+      })
+      .catch(() => {
+        const fallbackUrl = catalogUrls.find((url) => url.origin === 'https://raw.githubusercontent.com');
+        if (!fallbackUrl) throw new Error('Catalog unavailable');
+        return fetch(fallbackUrl.href)
+          .then((response) => {
+            if (!response.ok) throw new Error('Catalog unavailable in raw repo fallback');
+            return response.json();
+          });
+      });
   }
 
   let products = [];
@@ -147,12 +169,12 @@
     const images = gallery.length ? gallery : [''];
     return `<article class="product-card interactive-product" data-product-index="${index}" tabindex="0" role="button" aria-label="View ${esc(item.name)} details">
       <div class="product-card__visual">
-        <div class="product-card__slides">${images.map((src, i) => `<img src="${esc(src)}" alt="${esc(item.name)}${images.length > 1 ? ` view ${i + 1}` : ''}" class="product-card__slide ${i === 0 ? 'is-visible' : ''}"></div>`).join('')}
+        <div class="product-card__slides">${images.map((src, i) => `<img src="${esc(src)}" alt="${esc(item.name)}${images.length > 1 ? ` view ${i + 1}` : ''}" class="product-card__slide ${i === 0 ? 'is-visible' : ''}"></div>
         <span class="product-card__badge">10 available items</span>
         ${images.length > 1 ? `<button type="button" class="product-slide-next" aria-label="Show next ${esc(item.name)} image">›</button><span class="product-slide-count">1 / ${images.length}</span>` : ''}
       </div>
       <div class="product-card__meta"><div><p class="product-card__category">${esc(item.category || 'Collection')}</p><h3>${esc(item.name)}</h3></div><span class="product-card__price">${esc(price)}</span></div>
-      <div class="product-card__info"><p>${esc(item.description || 'Premium Ambition essentials.')}</p><div class="product-card__footer"><span class="stock-pill">${esc(item.status || 'In stock')}</span><button type="button" class="mini-btn" data-open-bag>Bag</button></div></div>
+      <div class="product-card__info"><p>${esc(item.description || 'Premium Ambition essentials.')}</p><div class="product-card__footer"><span class="stock-pill">${esc(item.status || 'In stock')}</span><button type="button" class="secondary-action" data-open-bag>View bag</button></div></div>
     </article>`;
   }
 
@@ -201,7 +223,7 @@
       <section class="product-modal" role="dialog" aria-modal="true" aria-label="${esc(item.name)} details">
         <button class="modal-close" type="button" data-dismiss-product aria-label="Close">×</button>
         <div class="product-modal__gallery">
-          <div class="product-modal__main">${images.map((src, i) => `<img src="${esc(src)}" alt="${esc(item.name)} view ${i + 1}" class="product-modal__photo ${i === 0 ? 'is-visible' : ''}"></div>`).join('')}
+          <div class="product-modal__main">${images.map((src, i) => `<img src="${esc(src)}" alt="${esc(item.name)} view ${i + 1}" class="product-modal__photo ${i === 0 ? 'is-visible' : ''}"></div>
           <div class="product-modal__thumbs">${images.map((src, i) => `<button type="button" class="product-modal__thumb ${i === 0 ? 'is-active' : ''}" data-thumb-index="${i}" aria-label="Show image ${i + 1}"><img src="${esc(src)}" alt="${esc(item.name)} thumbnail ${i + 1}"></button>`).join('')}</div>
         </div>
         <div class="product-modal__details"><p class="eyebrow">${esc(item.category || 'AMBITION')}</p><h2>${esc(item.name)}</h2>
@@ -209,7 +231,7 @@
           <p class="product-modal__desc">${esc(item.description || 'Premium style built to move with you.')}</p>
           ${item.colours?.length ? `<p class="product-colours"><b>Colour:</b> ${item.colours.map(esc).join(' / ')}</p>` : ''}
           <div class="variant-block"><div class="variant-label-row"><span>Select size</span><span class="meta-note">10 available items</span></div><div class="size-options">${sizes.map((size, i) => `<button type="button" class="size-chip ${i === 0 ? 'is-selected' : ''}" data-size="${esc(size)}" aria-pressed="${i === 0}">${esc(size)}</button>`).join('')}</div></div>
-          <div class="variant-block"><div class="variant-label-row"><span>Quantity</span></div><div class="qty-picker"><button type="button" data-qty="-1" aria-label="Decrease quantity">−</button><input class="product-quantity" type="number" min="1" max="10" value="1" inputmode="numeric"><button type="button" data-qty="1" aria-label="Increase quantity">+</button></div></div>
+          <div class="variant-block"><div class="variant-label-row"><span>Quantity</span></div><div class="qty-picker"><button type="button" data-qty="-1" aria-label="Decrease quantity">−</button><input class="product-quantity" type="number" min="1" max="10" value="1" readonly><button type="button" data-qty="1" aria-label="Increase quantity">+</button></div></div>
           <button type="button" class="primary-action" data-add-to-bag>Add to bag</button>
         </div>
       </section></div>`;
@@ -254,25 +276,7 @@
 
   function injectBag() {
     if ($('#bag-drawer')) return;
-    document.body.insertAdjacentHTML('beforeend', `<div class="drawer-backdrop"></div><aside class="bag-drawer" id="bag-drawer" role="dialog" aria-modal="true" aria-label="Shopping bag" aria-hidden="true">
-      <div class="bag-drawer__header"><div><p class="eyebrow">Your bag</p><h3>Selected pieces</h3></div><button class="drawer-close" type="button" aria-label="Close bag">×</button></div>
-      <div class="bag-drawer__body"><div class="cart-items"></div><section class="checkout-panel" aria-label="Invoice options">
-        <h4>Before we invoice you</h4>
-        <fieldset class="checkout-block"><legend class="checkout-label">Payment option</legend>
-          <label class="radio-option"><input type="radio" name="payment-method" value="EFT" checked> EFT / bank transfer</label>
-          <label class="radio-option"><input type="radio" name="payment-method" value="Card"> Card (payment link)</label>
-          <label class="radio-option"><input type="radio" name="payment-method" value="Cash"> Cash on collection</label>
-          <label class="radio-option"><input type="radio" name="payment-method" value="Payfast"> PayFast (payment link)</label>
-        </fieldset>
-        <fieldset class="checkout-block"><legend class="checkout-label">Delivery option</legend>
-          <label class="radio-option"><input type="radio" name="delivery-method" value="Local delivery" checked> Local delivery (confirm fee)</label>
-          <label class="radio-option"><input type="radio" name="delivery-method" value="Courier"> Courier (confirm fee)</label>
-          <label class="radio-option"><input type="radio" name="delivery-method" value="Collection"> Collection</label>
-        </fieldset>
-        <div class="checkout-form"><label>Name<input id="checkout-name" type="text" autocomplete="name" placeholder="Your name" required></label><label>Email<input id="checkout-email" type="email" autocomplete="email" placeholder="you@example.com" required></label><label>Delivery address<input id="checkout-address" type="text" autocomplete="street-address" placeholder="Your address (if needed)"></label></div>
-        <div class="summary-row"><span>Subtotal</span><strong class="bag-subtotal">R0</strong></div><p class="delivery-note">Delivery fee and final total will be confirmed on your invoice.</p>
-        <button type="button" class="primary-action" id="send-invoice">Request invoice on WhatsApp</button>
-      </section></div></aside>`);
+    document.body.insertAdjacentHTML('beforeend', `<div class="drawer-backdrop"></div><aside class="bag-drawer" id="bag-drawer" role="dialog" aria-modal="true" aria-label="Shopping bag" aria-hidden="true"><div class="bag-drawer__header"><div><p class="eyebrow">Your bag</p><h3>Selected pieces</h3></div><button class="drawer-close" type="button" aria-label="Close bag">×</button></div><div class="bag-drawer__body"><div class="cart-items"></div><section class="checkout-panel" aria-label="Invoice options"><h4>Before we invoice you</h4><fieldset class="checkout-block"><legend class="checkout-label">Payment option</legend><label class="radio-option"><input type="radio" name="payment-method" value="EFT" checked> EFT / bank transfer</label><label class="radio-option"><input type="radio" name="payment-method" value="Card"> Card (payment link)</label><label class="radio-option"><input type="radio" name="payment-method" value="Cash"> Cash on collection</label><label class="radio-option"><input type="radio" name="payment-method" value="Payfast"> PayFast (payment link)</label></fieldset><fieldset class="checkout-block"><legend class="checkout-label">Delivery option</legend><label class="radio-option"><input type="radio" name="delivery-method" value="Local delivery" checked> Local delivery (confirm fee)</label><label class="radio-option"><input type="radio" name="delivery-method" value="Courier"> Courier (confirm fee)</label><label class="radio-option"><input type="radio" name="delivery-method" value="Collection"> Collection</label></fieldset><div class="checkout-form"><label>Name<input id="checkout-name" type="text" autocomplete="name" placeholder="Your name" required></label><label>Email<input id="checkout-email" type="email" autocomplete="email" placeholder="you@example.com" required></label><label>Delivery address<input id="checkout-address" type="text" autocomplete="street-address" placeholder="Street, suburb, city"></label></div><div class="summary-row"><span>Subtotal</span><strong class="bag-subtotal">R0</strong></div><p class="delivery-note">Delivery fee and final total will be confirmed on your invoice.</p><button type="button" class="primary-action" id="send-invoice">Request invoice on WhatsApp</button></section></div></aside>`);
     $('.drawer-backdrop').addEventListener('click', closeBag);
     $('#bag-drawer .drawer-close').addEventListener('click', closeBag);
     $('#send-invoice').addEventListener('click', sendInvoice);
@@ -280,7 +284,7 @@
 
   function drawCart() {
     const target = $('.cart-items');
-    if (target) target.innerHTML = cart.length ? cart.map((item, index) => `<article class="cart-item"><img src="${esc(item.image)}" alt="${esc(item.name)}"><div class="cart-item__info"><div class="cart-item__top"><h4>${esc(item.name)}</h4><button type="button" class="remove-item" data-remove="${index}" aria-label="Remove ${esc(item.name)}">×</button></div><p>${esc(item.size || 'One size')} × ${item.quantity}</p><strong>${esc(Number(item.price) ? money(Number(item.price) * Number(item.quantity)) : 'Price to confirm')}</strong></div></article>`).join('') : '<p class="empty-cart">Your bag is empty.</p>';
+    if (target) target.innerHTML = cart.length ? cart.map((item, index) => `<article class="cart-item"><img src="${esc(item.image)}" alt="${esc(item.name)}"><div class="cart-item__info"><div class="cart-item__meta"><h4>${esc(item.name)}</h4><span>${esc(item.size || 'One size')}</span></div><div class="cart-item__controls"><button type="button" class="qty-minus" data-qty="-1" data-index="${index}" aria-label="Decrease quantity">−</button><span>${Number(item.quantity || 0)}</span><button type="button" class="qty-plus" data-qty="1" data-index="${index}" aria-label="Increase quantity">+</button></div></div><button type="button" class="cart-remove" data-remove="${index}" aria-label="Remove ${esc(item.name)}">Remove</button></article>`).join('') : '<p class="empty-state">Your bag is empty.</p>';
     const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0), 0);
     const subtotalEl = $('.bag-subtotal');
     if (subtotalEl) subtotalEl.textContent = money(subtotal);
@@ -357,6 +361,16 @@
       saveCart();
       return;
     }
+    const qtyControl = event.target.closest('[data-qty]');
+    if (qtyControl && qtyControl.dataset.index !== undefined) {
+      const index = Number(qtyControl.dataset.index);
+      const delta = Number(qtyControl.dataset.qty || 0);
+      if (!cart[index]) return;
+      cart[index].quantity = Math.max(1, (Number(cart[index].quantity) || 1) + delta);
+      if (Number(cart[index].quantity) <= 0) cart.splice(index, 1);
+      saveCart();
+      return;
+    }
     if (event.target.closest('.bag-open, [data-open-bag], .bag-count')) openBag();
   });
 
@@ -381,8 +395,7 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
   else init();
 
-  fetch(resolveCatalogUrl())
-    .then((response) => { if (!response.ok) throw new Error('Catalog unavailable'); return response.json(); })
+  fetchCatalog()
     .then((items) => {
       if (!Array.isArray(items)) throw new Error('Invalid catalog');
       products = prepareProducts(items);
