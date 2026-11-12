@@ -49,6 +49,7 @@
       status: item.status || 'In stock', orderable: item.orderable !== false
     };
   }
+
   function fetchCatalog() {
     const primary = new URL('stock.json', siteBaseUrl());
     const fallback = new URL('https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/stock.json');
@@ -60,10 +61,12 @@
       return response.json();
     }));
   }
+
   function prepareProducts(items) {
     return (Array.isArray(items) ? items : []).map(normalizedProduct).filter(Boolean)
       .filter((item) => item.name !== 'Ambition Lifestyle');
   }
+
   const galleryFor = (item) => item.gallery?.length ? item.gallery : (item.image ? [item.image] : []);
   const visibleProducts = () => activeCategory === 'All' ? products : products.filter((item) => item.category === activeCategory);
 
@@ -73,6 +76,7 @@
     const categories = ['All', ...new Set(products.map((item) => item.category).filter(Boolean))];
     wrapper.innerHTML = categories.map((category) => `<button type="button" class="filter-pill ${category === activeCategory ? 'is-active' : ''}" data-filter="${esc(category)}" aria-pressed="${category === activeCategory}">${esc(category)}</button>`).join('');
   }
+
   function productCard(item, index) {
     const image = galleryFor(item)[0] || '';
     const price = Number(item.price) > 0 ? money(item.price) : item.priceLabel;
@@ -82,6 +86,7 @@
       <div class="product-card__meta"><div><p class="product-card__category">${esc(item.category)}</p><h3>${esc(item.name)}</h3></div><span class="product-card__price">${esc(price)}</span></div>
       <div class="product-card__info"><p>${esc(item.description)}</p><div class="product-card__footer"><span class="stock-pill">${esc(item.status)}</span><span class="text-link">View item →</span></div></div></article>`;
   }
+
   function render() {
     const grid = $('#shop-products, #shop-grid');
     if (grid) {
@@ -100,6 +105,7 @@
       button.setAttribute('aria-pressed', String(selected));
     });
   }
+
   function openProduct(item) {
     $('.product-modal-root')?.remove();
     const images = galleryFor(item);
@@ -121,7 +127,6 @@
     document.body.appendChild(root);
     const modal = $('.product-modal', root);
     root.addEventListener('click', (event) => {
-      // Do not treat clicks inside the dialog (including photo thumbnails) as backdrop clicks.
       if (event.target.classList.contains('modal-backdrop') || event.target.closest('.modal-close')) { root.remove(); return; }
       const thumb = event.target.closest('[data-thumb-index]');
       if (thumb) {
@@ -145,7 +150,7 @@
       const quantityButton = event.target.closest('[data-product-qty]');
       if (quantityButton) {
         const input = $('.product-quantity', modal);
-        input.value = Math.max(1, Math.min(10, Number(input.value || 1) + Number(quantityButton.dataset.productQty)));
+        input.value = Math.max(1, Math.min(10, Number(input.value || 1) + Number(quantityButton.dataset.productQty))); 
         return;
       }
       if (event.target.closest('[data-add-to-bag]') && item.orderable) {
@@ -165,12 +170,19 @@
   function injectBag() {
     if ($('#bag-drawer')) return;
     document.body.insertAdjacentHTML('beforeend', `<div class="drawer-backdrop"></div><aside class="bag-drawer" id="bag-drawer" role="dialog" aria-modal="true" aria-label="Shopping bag" aria-hidden="true"><div class="drawer-header"><h2>Your bag</h2><button class="drawer-close" type="button" aria-label="Close bag">×</button></div><div class="cart-items"></div>
-      <form class="checkout-options"><label>Your name<input name="customer-name" autocomplete="name" required></label><label>Delivery address<input name="customer-address" autocomplete="street-address" placeholder="Required for delivery"></label><label>Delivery option<select name="delivery-option"><option>Delivery (1–5 business days)</option><option>Collection</option></select></label><label>Payment option<select name="payment-option"><option>EFT</option><option>Cash on collection</option><option>Other — confirm by DM</option></select></label></form>
+      <form class="checkout-options">
+        <label>Your name<input name="customer-name" autocomplete="name" required></label>
+        <label>Email<input name="customer-email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+        <label>Delivery address<input name="customer-address" autocomplete="street-address" placeholder="Required for delivery"></label>
+        <label>Delivery option<select name="delivery-option"><option>Delivery (1–5 business days)</option><option>Collection</option></select></label>
+        <label>Payment option<select name="payment-option"><option>EFT</option><option>Cash on collection</option><option>Other — confirm by DM</option></select></label>
+      </form>
       <div class="bag-summary"><div class="bag-row"><span>Subtotal</span><strong class="bag-subtotal">R0</strong></div><p class="checkout-note">Payment and delivery are confirmed with you before dispatch.</p><button class="primary-action" id="send-invoice" type="button">Place order via WhatsApp</button></div></aside>`);
     $('.drawer-backdrop').addEventListener('click', closeBag);
     $('.drawer-close').addEventListener('click', closeBag);
     $('#send-invoice').addEventListener('click', sendInvoice);
   }
+
   function drawCart() {
     const target = $('.cart-items');
     if (target) target.innerHTML = cart.length ? cart.map((item, index) => `<article class="cart-item"><img src="${esc(item.image)}" alt="${esc(item.name)}"><div class="cart-item__info"><div class="cart-item__top"><h3>${esc(item.name)}</h3><button type="button" data-remove="${index}" aria-label="Remove ${esc(item.name)}">×</button></div><p>${esc([item.colour, item.size].filter(Boolean).join(' · '))} · ${money(item.price)}</p><div class="qty-picker cart-qty"><button type="button" data-qty="-1" data-index="${index}" aria-label="Decrease quantity">−</button><span>${Number(item.quantity)}</span><button type="button" data-qty="1" data-index="${index}" aria-label="Increase quantity">+</button></div></div></article>`).join('') : '<p class="empty-cart">Your bag is empty.</p>';
@@ -178,41 +190,67 @@
     if ($('.bag-subtotal')) $('.bag-subtotal').textContent = money(subtotal);
     document.querySelectorAll('.bag-count').forEach((element) => { element.textContent = cart.reduce((sum, item) => sum + Number(item.quantity || 0), 0); });
   }
+
   function saveCart() {
     try { localStorage.setItem(CART_KEY, JSON.stringify(cart)); } catch (_) { /* storage may be unavailable */ }
     drawCart();
   }
+
   function openBag() {
     injectBag(); $('.bag-drawer')?.classList.add('is-open'); $('.drawer-backdrop')?.classList.add('is-open');
     $('.bag-drawer')?.setAttribute('aria-hidden', 'false'); document.body.classList.add('drawer-open'); drawCart();
   }
+
   function closeBag() {
     $('.bag-drawer')?.classList.remove('is-open'); $('.drawer-backdrop')?.classList.remove('is-open');
     $('.bag-drawer')?.setAttribute('aria-hidden', 'true'); document.body.classList.remove('drawer-open');
   }
+
   function toast(message) {
     const element = $('.toast'); if (!element) return;
     element.textContent = message; element.classList.add('show'); clearTimeout(toast.timer);
     toast.timer = setTimeout(() => element.classList.remove('show'), 2600);
   }
+
   function sendInvoice() {
     if (!cart.length) return toast('Your bag is empty');
     const form = $('.checkout-options');
-    if (!form.reportValidity()) return;
-    const name = form.elements['customer-name'].value.trim();
-    const address = form.elements['customer-address'].value.trim();
-    const delivery = form.elements['delivery-option'].value;
-    const payment = form.elements['payment-option'].value;
+    if (!form || !form.reportValidity()) return;
+
+    const name = String(form.elements['customer-name']?.value || '').trim();
+    const email = String(form.elements['customer-email']?.value || '').trim();
+    const address = String(form.elements['customer-address']?.value || '').trim();
+    const delivery = String(form.elements['delivery-option']?.value || 'Delivery (1–5 business days)');
+    const payment = String(form.elements['payment-option']?.value || 'EFT');
+
+    if (!name) return toast('Please enter your name');
+    if (!email) return toast('Please enter your email');
     if (delivery.startsWith('Delivery') && !address) return toast('Please enter your delivery address');
+
     const lines = cart.map((item) => `${item.name}${item.colour ? ` — ${item.colour}` : ''}${item.size ? ` (${item.size})` : ''} x ${item.quantity} — ${money(item.price * item.quantity)}`);
     const subtotal = cart.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
-    const message = ['Hello Ambition Wear, I would like to place this order:', '', ...lines, '', `Name: ${name}`, `Delivery: ${delivery}`, ...(address ? [`Address: ${address}`] : []), `Payment: ${payment}`, `Subtotal: ${money(subtotal)}`, 'Please confirm the final total and payment instructions.'].join('\n');
+
+    const message = [
+      'Hello Ambition Wear, I would like to place this order:',
+      '',
+      ...lines,
+      '',
+      `Client name: ${name}`,
+      `Client email: ${email}`,
+      `Delivery: ${delivery}`,
+      ...(address ? [`Address: ${address}`] : []),
+      `Payment: ${payment}`,
+      `Subtotal: ${money(subtotal)}`,
+      'Please confirm the final total and payment instructions.'
+    ].join('\n');
+
     window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`, '_blank', 'noopener,noreferrer');
   }
 
   function lifestyleFileUrl(file) {
     return assetUrl(`Ambition%20Wear/Ambition%20Lifestyle/${encodeURIComponent(file)}`);
   }
+
   function addStoryExperience() {
     const hero = $('.story-hero');
     if (!hero) return;
@@ -239,6 +277,7 @@
     if (story) story.insertAdjacentElement('afterend', gallery);
     else hero.insertAdjacentElement('afterend', gallery);
   }
+
   function addMotionStyles() {
     if ($('#ambition-motion-styles')) return;
     const style = document.createElement('style'); style.id = 'ambition-motion-styles';
@@ -284,6 +323,7 @@
     }
     if (event.target.closest('.bag-open, [data-open-bag], .bag-count')) openBag();
   });
+
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') { closeBag(); $('.product-modal-root')?.remove(); }
     const card = event.target.closest?.('.product-card[data-product-index]');
@@ -300,6 +340,7 @@
     document.querySelectorAll('.year').forEach((element) => { element.textContent = new Date().getFullYear(); });
     addMotionStyles(); addStoryExperience();
   }
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
   else init();
 
