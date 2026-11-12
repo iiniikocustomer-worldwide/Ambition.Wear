@@ -3,11 +3,100 @@
 
   const WHATSAPP = '27672364114';
   const CART_KEY = 'ambition-wear-cart';
+  const FALLBACK_PRODUCTS = [
+    {
+      name: 'Ambition Bjeweled Beanies',
+      category: 'Headwear',
+      description: 'A statement beanie with the edge of the Ambition brand.',
+      sizes: ['One size'],
+      colours: ['Black', 'White'],
+      price: '120',
+      priceLabel: 'R120',
+      image: 'https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Ambition%20Wear/Ambition%20Bjeweled%20Beanies/Screenshot_20261111_133815_WhatsApp.jpg',
+      gallery: [
+        'https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Ambition%20Wear/Ambition%20Bjeweled%20Beanies/Screenshot_20261111_133815_WhatsApp.jpg',
+        'https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Ambition%20Wear/Ambition%20Bjeweled%20Beanies/Screenshot_20261111_133821_WhatsApp.jpg',
+        'https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Ambition%20Wear/Ambition%20Bjeweled%20Beanies/Screenshot_20261111_133826_WhatsApp.jpg'
+      ],
+      status: 'In stock',
+      orderable: true
+    },
+    {
+      name: 'Ambition Relaxed Hoodie',
+      category: 'Hoodies',
+      description: 'Relaxed-fit Ambition hoodie.',
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      colours: ['As pictured'],
+      price: '380',
+      priceLabel: 'R380',
+      image: 'https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Ambition%20Wear/Ambition%20Relaxed%20Hoodie%20R380/Ambition%20Relaxed%20Hoodie%20R380.jpeg',
+      gallery: ['https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Ambition%20Wear/Ambition%20Relaxed%20Hoodie%20R380/Ambition%20Relaxed%20Hoodie%20R380.jpeg'],
+      status: 'In stock',
+      orderable: true
+    },
+    {
+      name: 'Ambition Oversized T-shirt',
+      category: 'T-shirts',
+      description: 'Everyday oversized Ambition fit.',
+      sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+      colours: ['Black', 'White'],
+      price: '250',
+      priceLabel: 'R250',
+      image: 'https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Ambition%20Wear/Ambition%20Oversized%20T-shirt/Ambition%20Oversized%20T-shirt%20-R250.jpeg',
+      gallery: ['https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Ambition%20Wear/Ambition%20Oversized%20T-shirt/Ambition%20Oversized%20T-shirt%20-R250.jpeg'],
+      status: 'In stock',
+      orderable: true
+    }
+  ];
+
   const $ = (selector, root = document) => root.querySelector(selector);
   const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[char]));
   const money = (value) => `R${Number(value || 0).toLocaleString('en-ZA', { maximumFractionDigits: 0 })}`;
+
+  function normalizeImageUrl(value) {
+    if (!value) return '';
+    const candidate = String(value).trim();
+    if (!candidate) return '';
+    if (/^https?:\/\//i.test(candidate) || /^data:/i.test(candidate)) return candidate;
+    try {
+      return new URL(candidate, window.location.href).toString();
+    } catch (_) {
+      return candidate;
+    }
+  }
+
+  function normalizeProduct(item) {
+    if (!item || typeof item !== 'object' || !item.name) return null;
+    const gallery = Array.isArray(item.gallery)
+      ? item.gallery.filter(Boolean).map(normalizeImageUrl)
+      : [];
+    const primaryImage = normalizeImageUrl(item.image || gallery[0] || '');
+    const priceValue = Number(item.price);
+    return {
+      ...item,
+      name: String(item.name),
+      category: item.category || 'Collection',
+      description: item.description || 'Premium Ambition essentials.',
+      sizes: Array.isArray(item.sizes) && item.sizes.length ? item.sizes : ['One size'],
+      colours: Array.isArray(item.colours) ? item.colours : [],
+      image: primaryImage,
+      gallery: gallery.length ? gallery : primaryImage ? [primaryImage] : [],
+      price: Number.isFinite(priceValue) ? String(priceValue) : '',
+      priceLabel: item.priceLabel || (Number.isFinite(priceValue) ? `R${priceValue}` : 'Ask for price'),
+      status: item.status || 'In stock',
+      orderable: item.orderable !== false
+    };
+  }
+
+  function resolveCatalogUrl() {
+    try {
+      return new URL('stock.json', window.location.href);
+    } catch (_) {
+      return new URL('stock.json', document.baseURI || 'https://example.com/');
+    }
+  }
 
   let products = [];
   let cart = [];
@@ -18,26 +107,24 @@
   } catch (_) { cart = []; }
 
   function prepareProducts(items) {
-    const catalog = items.filter((item) => item && item.name && item.name !== 'Ambition Cap');
+    const catalog = (Array.isArray(items) ? items : [])
+      .map(normalizeProduct)
+      .filter(Boolean)
+      .filter((item) => item.name !== 'Ambition Cap');
+
     if (!catalog.some((item) => /bjeweled/i.test(item.name))) {
-      catalog.push({
-        name: 'Ambition Bjeweled Beanies', category: 'Headwear',
-        description: 'A statement beanie with the edge of the Ambition brand.',
-        sizes: ['One size'], colours: ['Black', 'White'], price: '120', priceLabel: 'R120',
-        image: 'https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Ambition%20Wear/Ambition%20Bjeweled%20Beanies/Screenshot_20261111_133815_WhatsApp.jpg',
-        gallery: [
-          'https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Ambition%20Wear/Ambition%20Bjeweled%20Beanies/Screenshot_20261111_133815_WhatsApp.jpg',
-          'https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Ambition%20Wear/Ambition%20Bjeweled%20Beanies/Screenshot_20261111_133821_WhatsApp.jpg',
-          'https://raw.githubusercontent.com/recordingsabantu/Ambition.co/main/Ambition%20Wear/Ambition%20Bjeweled%20Beanies/Screenshot_20261111_133826_WhatsApp.jpg'
-        ], status: 'In stock', orderable: true
+      FALLBACK_PRODUCTS.forEach((fallback) => {
+        const normalized = normalizeProduct(fallback);
+        if (normalized) catalog.push(normalized);
       });
     }
+
     return catalog;
   }
 
   function galleryFor(item) {
-    const images = Array.isArray(item.gallery) ? item.gallery.filter(Boolean) : [];
-    if (!images.length && item.image) images.push(item.image);
+    const images = Array.isArray(item.gallery) ? item.gallery.filter(Boolean).map(normalizeImageUrl) : [];
+    if (!images.length && item.image) images.push(normalizeImageUrl(item.image));
     return images;
   }
 
@@ -60,12 +147,12 @@
     const images = gallery.length ? gallery : [''];
     return `<article class="product-card interactive-product" data-product-index="${index}" tabindex="0" role="button" aria-label="View ${esc(item.name)} details">
       <div class="product-card__visual">
-        <div class="product-card__slides">${images.map((src, i) => `<img src="${esc(src)}" alt="${esc(item.name)}${images.length > 1 ? ` view ${i + 1}` : ''}" class="product-card__slide ${i === 0 ? 'is-visible' : ''}" loading="lazy">`).join('')}</div>
+        <div class="product-card__slides">${images.map((src, i) => `<img src="${esc(src)}" alt="${esc(item.name)}${images.length > 1 ? ` view ${i + 1}` : ''}" class="product-card__slide ${i === 0 ? 'is-visible' : ''}"></div>`).join('')}
         <span class="product-card__badge">10 available items</span>
         ${images.length > 1 ? `<button type="button" class="product-slide-next" aria-label="Show next ${esc(item.name)} image">›</button><span class="product-slide-count">1 / ${images.length}</span>` : ''}
       </div>
       <div class="product-card__meta"><div><p class="product-card__category">${esc(item.category || 'Collection')}</p><h3>${esc(item.name)}</h3></div><span class="product-card__price">${esc(price)}</span></div>
-      <div class="product-card__info"><p>${esc(item.description || 'Premium Ambition essentials.')}</p><div class="product-card__footer"><span class="stock-pill">${esc(item.status || 'In stock')}</span><button class="mini-action" type="button" data-action="view-product">View sizes & details</button></div></div>
+      <div class="product-card__info"><p>${esc(item.description || 'Premium Ambition essentials.')}</p><div class="product-card__footer"><span class="stock-pill">${esc(item.status || 'In stock')}</span><button type="button" class="mini-btn" data-open-bag>Bag</button></div></div>
     </article>`;
   }
 
@@ -114,15 +201,15 @@
       <section class="product-modal" role="dialog" aria-modal="true" aria-label="${esc(item.name)} details">
         <button class="modal-close" type="button" data-dismiss-product aria-label="Close">×</button>
         <div class="product-modal__gallery">
-          <div class="product-modal__main">${images.map((src, i) => `<img src="${esc(src)}" alt="${esc(item.name)} view ${i + 1}" class="product-modal__photo ${i === 0 ? 'is-visible' : ''}">`).join('')}</div>
-          <div class="product-modal__thumbs">${images.map((src, i) => `<button type="button" class="product-modal__thumb ${i === 0 ? 'is-active' : ''}" data-thumb-index="${i}" aria-label="Show image ${i + 1}"><img src="${esc(src)}" alt=""></button>`).join('')}</div>
+          <div class="product-modal__main">${images.map((src, i) => `<img src="${esc(src)}" alt="${esc(item.name)} view ${i + 1}" class="product-modal__photo ${i === 0 ? 'is-visible' : ''}"></div>`).join('')}
+          <div class="product-modal__thumbs">${images.map((src, i) => `<button type="button" class="product-modal__thumb ${i === 0 ? 'is-active' : ''}" data-thumb-index="${i}" aria-label="Show image ${i + 1}"><img src="${esc(src)}" alt="${esc(item.name)} thumbnail ${i + 1}"></button>`).join('')}</div>
         </div>
         <div class="product-modal__details"><p class="eyebrow">${esc(item.category || 'AMBITION')}</p><h2>${esc(item.name)}</h2>
           <div class="product-modal__price-row"><strong>${esc(Number(item.price) > 0 ? money(item.price) : item.priceLabel || 'Ask for price')}</strong><span>${esc(item.status || 'In stock')}</span></div>
           <p class="product-modal__desc">${esc(item.description || 'Premium style built to move with you.')}</p>
           ${item.colours?.length ? `<p class="product-colours"><b>Colour:</b> ${item.colours.map(esc).join(' / ')}</p>` : ''}
           <div class="variant-block"><div class="variant-label-row"><span>Select size</span><span class="meta-note">10 available items</span></div><div class="size-options">${sizes.map((size, i) => `<button type="button" class="size-chip ${i === 0 ? 'is-selected' : ''}" data-size="${esc(size)}" aria-pressed="${i === 0}">${esc(size)}</button>`).join('')}</div></div>
-          <div class="variant-block"><div class="variant-label-row"><span>Quantity</span></div><div class="qty-picker"><button type="button" data-qty="-1" aria-label="Decrease quantity">−</button><input class="product-quantity" type="number" min="1" max="10" value="1" aria-label="Quantity"><button type="button" data-qty="1" aria-label="Increase quantity">＋</button></div></div>
+          <div class="variant-block"><div class="variant-label-row"><span>Quantity</span></div><div class="qty-picker"><button type="button" data-qty="-1" aria-label="Decrease quantity">−</button><input class="product-quantity" type="number" min="1" max="10" value="1" inputmode="numeric"><button type="button" data-qty="1" aria-label="Increase quantity">+</button></div></div>
           <button type="button" class="primary-action" data-add-to-bag>Add to bag</button>
         </div>
       </section></div>`;
@@ -182,7 +269,7 @@
           <label class="radio-option"><input type="radio" name="delivery-method" value="Courier"> Courier (confirm fee)</label>
           <label class="radio-option"><input type="radio" name="delivery-method" value="Collection"> Collection</label>
         </fieldset>
-        <div class="checkout-form"><label>Name<input id="checkout-name" type="text" autocomplete="name" placeholder="Your name" required></label><label>Email<input id="checkout-email" type="email" autocomplete="email" placeholder="you@example.com" required></label><label>Delivery address <textarea id="checkout-address" rows="2" placeholder="Required for delivery; leave blank for collection"></textarea></label></div>
+        <div class="checkout-form"><label>Name<input id="checkout-name" type="text" autocomplete="name" placeholder="Your name" required></label><label>Email<input id="checkout-email" type="email" autocomplete="email" placeholder="you@example.com" required></label><label>Delivery address<input id="checkout-address" type="text" autocomplete="street-address" placeholder="Your address (if needed)"></label></div>
         <div class="summary-row"><span>Subtotal</span><strong class="bag-subtotal">R0</strong></div><p class="delivery-note">Delivery fee and final total will be confirmed on your invoice.</p>
         <button type="button" class="primary-action" id="send-invoice">Request invoice on WhatsApp</button>
       </section></div></aside>`);
@@ -193,7 +280,7 @@
 
   function drawCart() {
     const target = $('.cart-items');
-    if (target) target.innerHTML = cart.length ? cart.map((item, index) => `<article class="cart-item"><img src="${esc(item.image)}" alt="${esc(item.name)}"><div class="cart-item__info"><div class="cart-item__top"><h4>${esc(item.name)}</h4><button type="button" class="cart-remove" data-remove="${index}" aria-label="Remove ${esc(item.name)}">×</button></div><p>Size: ${esc(item.size || 'One size')} · Qty ${Number(item.quantity)}</p><strong>${esc(Number(item.price) > 0 ? money(Number(item.price) * Number(item.quantity)) : 'Price to confirm')}</strong></div></article>`).join('') : '<div class="empty-cart"><p>Your bag is empty.</p><span>Choose a garment to get started.</span></div>';
+    if (target) target.innerHTML = cart.length ? cart.map((item, index) => `<article class="cart-item"><img src="${esc(item.image)}" alt="${esc(item.name)}"><div class="cart-item__info"><div class="cart-item__top"><h4>${esc(item.name)}</h4><button type="button" class="remove-item" data-remove="${index}" aria-label="Remove ${esc(item.name)}">×</button></div><p>${esc(item.size || 'One size')} × ${item.quantity}</p><strong>${esc(Number(item.price) ? money(Number(item.price) * Number(item.quantity)) : 'Price to confirm')}</strong></div></article>`).join('') : '<p class="empty-cart">Your bag is empty.</p>';
     const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0), 0);
     const subtotalEl = $('.bag-subtotal');
     if (subtotalEl) subtotalEl.textContent = money(subtotal);
@@ -294,7 +381,7 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
   else init();
 
-  fetch(new URL('stock.json', document.baseURI))
+  fetch(resolveCatalogUrl())
     .then((response) => { if (!response.ok) throw new Error('Catalog unavailable'); return response.json(); })
     .then((items) => {
       if (!Array.isArray(items)) throw new Error('Invalid catalog');
@@ -303,7 +390,13 @@
       render();
     })
     .catch(() => {
+      products = prepareProducts(FALLBACK_PRODUCTS);
       const grid = $('#shop-products, #shop-grid');
-      if (grid) grid.innerHTML = '<p class="loading">We could not load the collection. Please try again shortly.</p>';
+      if (grid) {
+        drawFilters();
+        render();
+      } else {
+        console.warn('Ambition catalog failed to load and fallback products were used.');
+      }
     });
 })();
