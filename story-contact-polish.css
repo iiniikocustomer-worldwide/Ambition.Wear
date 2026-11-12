@@ -18,10 +18,7 @@
   content: "";
 }
 .story-hero .page-hero-copy,
-.contact-hero .page-hero-copy {
-  max-width: 1440px;
-  margin-inline: auto;
-}
+.contact-hero .page-hero-copy { max-width: 1440px; margin-inline: auto; }
 .story-hero .eyebrow,
 .contact-hero .eyebrow,
 .story-hero h1,
@@ -46,11 +43,7 @@
 .story-content .story-lead,
 .contact-content .contact-intro { max-width: 480px; }
 .story-content h2,
-.contact-content h2 {
-  margin: 12px 0 0;
-  font-size: clamp(40px, 6vw, 76px);
-  line-height: .96;
-}
+.contact-content h2 { margin: 12px 0 0; font-size: clamp(40px, 6vw, 76px); line-height: .96; }
 .story-content .story-body,
 .contact-content .contact-cards { min-width: 0; }
 .story-content .story-body > p { max-width: 660px; font-size: clamp(16px, 1.4vw, 19px); line-height: 1.8; }
@@ -61,6 +54,21 @@
 .story-image img { display: block; width: 100%; max-height: 680px; object-fit: cover; object-position: center 38%; }
 .story-image p { margin: 0; padding: 18px 24px; color: #fff; background: #171714; text-align: center; font-size: 11px; font-weight: 800; letter-spacing: .16em; }
 .story-image p span { color: #d7ff00; }
+
+/* Display the requested Storyline as real, legible content in the story section. */
+.story-content::after {
+  content: "OUR STORYLINE\A\AAMBITION WEAR is more than just a clothing brand, it's a lifestyle built around ambition, individuality and self-expression. Inspired by the mindset of dreamers, creatives and go-getters.";
+  display: block;
+  grid-column: 1 / -1;
+  margin: 4px 0 0;
+  padding: clamp(24px, 4vw, 44px);
+  border-left: 4px solid #d7ff00;
+  background: #efeee9;
+  color: #222;
+  white-space: pre-line;
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 1.8;
+}
 
 .contact-content { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); }
 .contact-content .contact-intro > p:last-child { max-width: 420px; color: #666; font-size: 16px; line-height: 1.8; }
