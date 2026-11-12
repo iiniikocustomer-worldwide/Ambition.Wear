@@ -1,4 +1,5 @@
 @import url("editorial-refresh.css");
+@import url("product-shopping.css");
 
 /* Responsive storefront layout. */
 html, body { width: 100%; max-width: 100%; overflow-x: clip; }
@@ -37,40 +38,19 @@ img { max-width: 100%; }
 @media(max-width:850px){.brand{width:160px;height:78px}}
 @media(max-width:560px){.brand{width:135px;height:68px}}
 
-/* Use the open lower-page areas for useful, consistent brand and contact details. */
+/* Helpful footer and story information. */
 .site-footer::before {
-  content: "AMBITION WEAR  ·  STREETWEAR | FASHION | OUTFITS\\A\\AEmail: djvocalistbookings@gmail.com\\AAddress: 09 Orange Street Blackburn\\AContact: 0672364124\\AInstagram: @wear_ambition\\ADeliveries: 1–5 business days";
-  display: block;
-  white-space: pre-line;
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 34px 24px;
-  border-top: 1px solid #333;
-  color: #d7d7d7;
-  font-size: 13px;
-  line-height: 1.9;
-  letter-spacing: .025em;
+  content: "AMBITION WEAR  ·  STREETWEAR | FASHION | OUTFITS\A\AEmail: djvocalistbookings@gmail.com\AAddress: 09 Orange Street Blackburn\AContact: 0672364124\AInstagram: @wear_ambition\ADeliveries: 1–5 business days";
+  display: block; white-space: pre-line; max-width: 1320px; margin: 0 auto; padding: 34px 24px;
+  border-top: 1px solid #333; color: #d7d7d7; font-size: 13px; line-height: 1.9; letter-spacing: .025em;
 }
 .story-content::after {
-  content: "OUR STORYLINE\\AAMBITION WEAR is more than just a clothing brand, it's a lifestyle built around ambition, individuality and self-expression. Inspired by the mindset of dreamers, creatives and go-getters.";
-  display: block;
-  margin: 30px 0 42px;
-  padding: clamp(24px, 5vw, 48px);
-  background: #f4f4f4;
-  color: #222;
-  white-space: pre-line;
-  font-size: clamp(16px, 2vw, 21px);
-  line-height: 1.8;
+  content: "OUR STORYLINE\AAMBITION WEAR is more than just a clothing brand, it's a lifestyle built around ambition, individuality and self-expression. Inspired by the mindset of dreamers, creatives and go-getters.";
+  display: block; margin: 30px 0 42px; padding: clamp(24px, 5vw, 48px); background: #f4f4f4; color: #222;
+  white-space: pre-line; font-size: clamp(16px, 2vw, 21px); line-height: 1.8;
 }
 .contact-content::after {
-  content: "CONTACT AMBITION WEAR\\AEmail: djvocalistbookings@gmail.com\\AAddress: 09 Orange Street Blackburn\\APhone: 0672364124\\AInstagram: @wear_ambition\\AOrders through DM · Deliveries in 1–5 business days";
-  display: block;
-  margin: 32px 0;
-  padding: clamp(24px, 5vw, 44px);
-  background: #f4f4f4;
-  color: #222;
-  white-space: pre-line;
-  font-size: 15px;
-  line-height: 2;
+  content: "CONTACT AMBITION WEAR\AEmail: djvocalistbookings@gmail.com\AAddress: 09 Orange Street Blackburn\APhone: 0672364124\AInstagram: @wear_ambition\AOrders through DM · Deliveries in 1–5 business days";
+  display: block; margin: 32px 0; padding: clamp(24px, 5vw, 44px); background: #f4f4f4; color: #222;
+  white-space: pre-line; font-size: 15px; line-height: 2;
 }
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
