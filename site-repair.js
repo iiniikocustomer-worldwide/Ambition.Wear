@@ -9,17 +9,28 @@
     const path = ['Ambition Wear', 'Ambition Lifestyle', filename]
       .map((part) => encodeURIComponent(part))
       .join('/');
+    const mediaUrl = new URL(path, document.baseURI).href;
+
+    const fallbackMessage = 'The campaign video could not be loaded. Please try again later.';
+    const showFallback = () => {
+      const caption = video.parentElement?.querySelector('p');
+      if (caption) caption.textContent = fallbackMessage;
+      video.setAttribute('poster', 'IMG-20261111-WA0079.jpg');
+      video.removeAttribute('src');
+      video.querySelectorAll('source').forEach((source) => source.remove());
+    };
 
     video.dataset.localSourceReady = 'true';
-    video.removeAttribute('src');
-    video.querySelectorAll('source').forEach((source) => source.remove());
-    video.src = new URL(path, document.baseURI).href;
-    video.load();
 
-    video.addEventListener('error', () => {
-      const caption = video.parentElement?.querySelector('p');
-      if (caption) caption.textContent = 'The campaign video could not be loaded. Please try again later.';
-    }, { once: true });
+    try {
+      video.src = mediaUrl;
+      video.load();
+    } catch (error) {
+      showFallback();
+      return;
+    }
+
+    video.addEventListener('error', showFallback, { once: true });
   }
 
   if (document.readyState === 'loading') {
