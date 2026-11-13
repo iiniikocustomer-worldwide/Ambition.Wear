@@ -1,9 +1,90 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
-.studio-page{--studio-ink:#171814;--studio-paper:#f6f5f0;--studio-line:#dcdcd4;--studio-muted:#73746d;--studio-lime:#d7ff00;background:var(--studio-paper);color:var(--studio-ink);font-family:'DM Sans',Arial,sans-serif;letter-spacing:-.02em}
-.studio-page *{box-sizing:border-box}.studio-page a{color:inherit}.studio-topline{height:34px;background:#171814;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 5.2%;font-size:9px;font-weight:800;letter-spacing:.16em}.studio-topline i,.studio-footer i{font-style:normal;color:var(--studio-lime)}
-.studio-header{height:88px;padding:0 5.2%;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--studio-line);background:rgba(246,245,240,.96)}.studio-brand{width:142px;height:60px;display:flex;align-items:center}.studio-brand img{max-width:100%;max-height:100%;object-fit:contain}.studio-header nav{display:flex;gap:34px;align-items:center}.studio-header nav a,.studio-back{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;text-decoration:none}.studio-header nav a:hover,.studio-header nav .studio-nav-active{text-decoration:underline;text-decoration-color:#9eb800;text-decoration-thickness:3px;text-underline-offset:8px}.studio-back span{font-size:16px;margin-left:6px}
-.studio-hero{min-height:510px;padding:64px max(5.2%,calc((100vw - 1320px)/2));display:grid;grid-template-columns:1.04fr .96fr;align-items:center;gap:40px;overflow:hidden;background:linear-gradient(115deg,#f6f5f0 54%,#eeede6 54%)}.studio-hero-copy{max-width:690px;position:relative;z-index:1}.studio-eyebrow{font-size:9px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}.studio-eyebrow span{display:inline-block;width:8px;height:8px;border-radius:50%;background:#a6c500;margin-right:8px}.studio-hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(64px,8.5vw,118px);line-height:.84;letter-spacing:-.09em;text-transform:uppercase;margin:25px 0}.studio-hero h1 em{font-style:normal;color:#819500}.studio-intro{font-size:15px;line-height:1.75;color:#62635c;max-width:490px}.studio-proof{display:flex;gap:20px;flex-wrap:wrap;margin-top:35px;font-size:9px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}.studio-proof span{border-top:1px solid #bdbdb4;padding-top:10px}.studio-art{min-height:380px;position:relative;display:grid;place-items:center}.art-orbit{position:absolute;width:min(34vw,390px);aspect-ratio:1;border:1px solid rgba(23,24,20,.14);border-radius:50%}.art-card{width:min(330px,80%);aspect-ratio:1/1.12;background:#171814;color:#fff;padding:22px;display:flex;flex-direction:column;justify-content:space-between;position:relative;transform:rotate(5deg);box-shadow:18px 22px 0 rgba(23,24,20,.09)}.art-card-brand,.art-card-footer{font-size:8px;font-weight:800;letter-spacing:.15em}.art-card-brand b{color:var(--studio-lime);float:right}.art-card-kicker{font-size:8px;letter-spacing:.2em;color:var(--studio-lime);font-weight:800;margin-bottom:-20px}.art-card strong{font-family:'Space Grotesk',sans-serif;font-size:clamp(37px,5vw,65px);line-height:.8;letter-spacing:-.09em}.art-card-offer{font-size:13px;font-weight:800}.art-card-offer b{font-size:32px;color:var(--studio-lime)}.art-card-footer{border-top:1px solid #555;padding-top:12px}.art-side-note{position:absolute;right:4%;top:20%;writing-mode:vertical-rl;font-size:8px;font-weight:800;letter-spacing:.18em}
-.studio-workspace{max-width:1320px;margin:0 auto;padding:86px 32px 98px}.workspace-heading{display:flex;justify-content:space-between;align-items:end;gap:35px;margin-bottom:32px}.workspace-heading h2{font-family:'Space Grotesk',sans-serif;font-size:clamp(34px,5vw,58px);letter-spacing:-.07em;line-height:.95;margin:14px 0 0}.workspace-heading>p{max-width:340px;color:var(--studio-muted);font-size:13px;line-height:1.75;margin:0}.studio-columns{display:grid;grid-template-columns:minmax(290px,.78fr) minmax(0,1.5fr);gap:18px;align-items:start}.studio-panel{border:1px solid var(--studio-line);background:#fbfaf7;padding:clamp(22px,3vw,38px)}.panel-number{font-size:9px;font-weight:800;letter-spacing:.14em;color:#81827b}.panel-number span{color:var(--studio-ink);margin-left:8px}.studio-panel h3{font-family:'Space Grotesk',sans-serif;font-size:25px;letter-spacing:-.05em;margin:28px 0 7px}.panel-copy{font-size:12px;line-height:1.7;color:var(--studio-muted);margin:0 0 25px}.studio-panel form>label,.card-controls>label{display:block;font-size:10px;font-weight:800;margin:15px 0 7px}.studio-panel input:not([type=radio]),.studio-panel select{width:100%;min-height:44px;background:white;border:1px solid #d6d6ce;padding:0 12px;color:var(--studio-ink);font:500 12px 'DM Sans',sans-serif;border-radius:0}.studio-panel input:focus,.studio-panel select:focus{outline:2px solid #b4d400;outline-offset:1px}.studio-button,.save-button{min-height:46px;padding:0 17px;border:1px solid var(--studio-ink);background:var(--studio-ink);color:#fff;font:800 9px 'DM Sans',sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}.studio-button span{font-size:16px;margin-left:14px}.studio-button:hover{background:#35362f}.account-panel form>.studio-button{width:100%;margin-top:22px}.privacy-note{font-size:10px;line-height:1.6;color:var(--studio-muted);margin:17px 0 0}.privacy-note span{color:#819500}.builder-layout{display:grid;grid-template-columns:minmax(190px,.88fr) minmax(220px,1fr);gap:26px;align-items:start}.card-controls>label{margin-top:12px}.optional{float:right;color:#888;font-size:8px;letter-spacing:.1em}.discount-input{position:relative}.discount-input input{padding-right:36px!important}.discount-input span{position:absolute;right:12px;top:13px;color:#809200}.theme-options{border:0;padding:0;margin:20px 0 0;display:flex;gap:16px;flex-wrap:wrap}.theme-options legend{font-size:9px;font-weight:800;margin-bottom:12px}.theme-options label{display:flex;gap:6px;align-items:center;font-size:9px;font-weight:700;cursor:pointer}.theme-options input{accent-color:#809200}.theme-swatch{width:14px;height:14px;border:1px solid #aaa;display:inline-block}.theme-swatch.lime{background:#d7ff00}.theme-swatch.mono{background:#171814}.theme-swatch.red{background:#e34434}.builder-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}.save-button{background:transparent;color:var(--studio-ink)}.save-button:hover{background:#eeede6}.builder-status{font-size:10px;min-height:15px;color:#586900;margin:10px 0 0}.preview-label{display:flex;justify-content:space-between;font-size:8px;font-weight:800;letter-spacing:.13em;margin:0 0 10px}.preview-label span{color:#898a82}.deal-card{aspect-ratio:1/1;max-width:390px;width:100%;margin:0 auto;padding:clamp(15px,2.4vw,25px);display:flex;flex-direction:column;justify-content:space-between;background:#171814;color:white;overflow:hidden;position:relative;isolation:isolate}.deal-card:before{content:'';position:absolute;z-index:-1;width:90%;aspect-ratio:1;border:1px solid rgba(255,255,255,.15);border-radius:50%;right:-42%;top:12%}.deal-card.theme-lime{--card-accent:#d7ff00;--card-bg:#171814;--card-text:#fff;background:var(--card-bg);color:var(--card-text)}.deal-card.theme-mono{--card-accent:#fff;--card-bg:#e9e8e2;--card-text:#171814;background:var(--card-bg);color:var(--card-text)}.deal-card.theme-red{--card-accent:#ff5948;--card-bg:#421b18;--card-text:#fff;background:var(--card-bg);color:var(--card-text)}.deal-card-top,.deal-card-bottom{display:flex;justify-content:space-between;gap:8px;font-size:clamp(7px,.75vw,9px);font-weight:800;letter-spacing:.14em}.deal-card-top span:last-child{color:var(--card-accent)}.deal-card-center{padding:9% 0}.deal-type{font-size:8px;font-weight:800;letter-spacing:.18em;color:var(--card-accent);margin:0 0 12px}.deal-card-center h4{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,4vw,45px);line-height:.87;letter-spacing:-.08em;margin:0 0 15px;overflow-wrap:anywhere}.deal-offer{display:inline-block;padding:8px 11px;background:var(--card-accent);color:#171814;font-family:'Space Grotesk',sans-serif;font-size:clamp(14px,2.3vw,24px);font-weight:700;letter-spacing:-.05em}.deal-card-bottom{border-top:1px solid currentColor;padding-top:10px;font-size:clamp(6px,.65vw,8px)}.deal-card-bottom span:first-child{color:var(--card-accent)}.deal-card-bottom span:empty{display:none}.preview-hint{text-align:center;color:#81827b;font-size:9px;margin:11px 0}.studio-note{min-height:84px;padding:22px max(5.2%,calc((100vw - 1320px)/2));background:#e9e8e2;display:flex;align-items:center;justify-content:space-between;gap:20px}.studio-note>span,.studio-note a{font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}.studio-note a{text-decoration:none}.studio-note b{font-size:15px;margin-left:8px}.studio-footer{min-height:92px;padding:24px 5.2%;display:flex;align-items:center;justify-content:space-between;gap:16px;background:#171814;color:#fff}.studio-footer a,.studio-footer span{font-size:8px;font-weight:800;letter-spacing:.13em;text-decoration:none}.studio-footer>a:first-child{font-family:'Space Grotesk',sans-serif;font-size:12px}
-@media(max-width:900px){.studio-hero{grid-template-columns:1fr .8fr;padding-top:55px;padding-bottom:55px}.studio-columns{grid-template-columns:1fr}.account-panel{max-width:none}.builder-layout{grid-template-columns:minmax(190px,.9fr) minmax(220px,1fr)}}
-@media(max-width:620px){.studio-topline{padding:0 16px;font-size:8px}.studio-header{height:70px;padding:0 16px}.studio-brand{width:105px;height:48px}.studio-header nav{gap:12px}.studio-header nav a,.studio-back{font-size:8px}.studio-back{display:none}.studio-hero{grid-template-columns:1fr;padding:48px 22px 36px;gap:16px;background:linear-gradient(155deg,#f6f5f0 58%,#eeede6 58%)}.studio-hero h1{font-size:clamp(62px,17vw,92px)}.studio-intro{font-size:13px}.studio-proof{gap:12px;font-size:8px}.studio-art{min-height:290px}.art-orbit{width:260px}.art-card{width:235px;padding:17px}.art-card strong{font-size:48px}.studio-workspace{padding:62px 16px}.workspace-heading{display:block}.workspace-heading>p{margin-top:16px}.studio-panel{padding:22px 17px}.builder-layout{grid-template-columns:1fr}.preview-wrap{max-width:340px;margin:0 auto;width:100%}.deal-card{max-width:340px}.deal-card-center h4{font-size:38px}.deal-offer{font-size:22px}.deal-card-top,.deal-card-bottom{font-size:8px}.studio-note{padding:22px 16px;align-items:flex-start;flex-direction:column}.studio-footer{padding:23px 16px;flex-wrap:wrap}.studio-footer span{order:3;width:100%}}
-@media(prefers-reduced-motion:reduce){.studio-page *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+(() => {
+  'use strict';
+  const $ = (selector) => document.querySelector(selector);
+  const accountForm = $('#account-form');
+  const cardForm = $('#card-form');
+  const card = $('#deal-card');
+  const status = $('#builder-status');
+  const fields = {
+    campaign: $('#campaign-type'), headline: $('#offer-title'), discount: $('#discount'),
+    code: $('#promo-code'), note: $('#card-note')
+  };
+  const safe = (value) => String(value || '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
+
+  function updatePreview() {
+    const campaign = fields.campaign.value;
+    $('#preview-headline').innerHTML = safe(fields.headline.value.trim() || 'YOUR BIG\nOFFER').replace(/\n/g, '<br>');
+    $('#preview-discount').textContent = fields.discount.value.trim() || 'YOUR OFFER';
+    $('#preview-code').textContent = fields.code.value.trim() ? `CODE: ${fields.code.value.trim().toUpperCase()}` : '';
+    $('#preview-note').textContent = fields.note.value.trim() || 'SHOP THE DROP';
+    $('.deal-type').textContent = campaign === 'SALE' ? 'SEASONAL SALE' : campaign;
+    const theme = $('input[name="theme"]:checked')?.value || 'mono';
+    card.className = `deal-card theme-${theme}`;
+  }
+
+  accountForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    if (!accountForm.reportValidity()) return;
+    const name = $('#client-name').value.trim();
+    status.textContent = `Welcome, ${name.split(/\s+/)[0]} — your profile is ready in this demo.`;
+    $('#account-panel').classList.add('profile-ready');
+    $('#workspace-title').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  cardForm.addEventListener('input', updatePreview);
+  cardForm.addEventListener('change', updatePreview);
+  $('#save-card').addEventListener('click', () => {
+    const draft = {
+      campaign: fields.campaign.value, headline: fields.headline.value,
+      discount: fields.discount.value, code: fields.code.value, note: fields.note.value,
+      theme: $('input[name="theme"]:checked')?.value || 'mono'
+    };
+    try {
+      localStorage.setItem('ambition-client-card-draft', JSON.stringify(draft));
+      status.textContent = 'Draft saved in this browser.';
+    } catch (_) {
+      status.textContent = 'Browser storage is unavailable. You can still download your card.';
+    }
+  });
+
+  try {
+    const draft = JSON.parse(localStorage.getItem('ambition-client-card-draft') || 'null');
+    if (draft) {
+      fields.campaign.value = draft.campaign || 'SALE';
+      fields.headline.value = draft.headline || '';
+      fields.discount.value = draft.discount || '';
+      fields.code.value = draft.code || '';
+      fields.note.value = draft.note || '';
+      const themeOption = $(`input[name="theme"][value="${draft.theme}"]`);
+      if (themeOption) themeOption.checked = true;
+    }
+  } catch (_) { /* Ignore invalid or unavailable local drafts. */ }
+
+  $('#download-card').addEventListener('click', () => {
+    const theme = $('input[name="theme"]:checked')?.value || 'mono';
+    const colors = {
+      mono: { bg:'#f7f5f1', fg:'#111111', accent:'#111111' },
+      black: { bg:'#111111', fg:'#ffffff', accent:'#ffffff' }
+    }[theme] || { bg:'#f7f5f1', fg:'#111111', accent:'#111111' };
+    const headline = fields.headline.value.trim() || 'YOUR BIG OFFER';
+    const lines = headline.split(/\s*\n\s*|\s*\.\s*/).filter(Boolean).slice(0, 3);
+    const code = fields.code.value.trim() ? `CODE: ${fields.code.value.trim().toUpperCase()}` : '';
+    const xml = (value) => safe(value);
+    const headlineSvg = lines.map((line, index) => `<text x="80" y="${390 + index * 92}" fill="${colors.fg}" font-family="Arial,sans-serif" font-size="78" font-weight="800" letter-spacing="-5">${xml(line)}</text>`).join('');
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080"><rect width="1080" height="1080" fill="${colors.bg}"/><circle cx="1030" cy="150" r="360" fill="${colors.accent}" opacity=".08"/><rect x="80" y="90" width="920" height="940" rx="0" fill="none" stroke="${colors.accent}" stroke-width="3"/><text x="80" y="188" fill="${colors.fg}" font-family="Arial,sans-serif" font-size="28" font-weight="700" letter-spacing="8">AMBITION WEAR</text><text x="80" y="255" fill="${colors.fg}" font-family="Arial,sans-serif" font-size="26" font-weight="700">${xml(campaignText(fields.campaign.value))}</text>${headlineSvg}<text x="80" y="760" fill="${colors.fg}" font-family="Arial,sans-serif" font-size="34" font-weight="700">${xml(code)}</text><text x="80" y="842" fill="${colors.fg}" font-family="Arial,sans-serif" font-size="30" font-weight="700">${xml(fields.note.value.trim() || 'SHOP THE DROP')}</text><text x="80" y="950" fill="${colors.fg}" font-family="Arial,sans-serif" font-size="28" font-weight="700">${xml(fields.discount.value.trim() || 'YOUR OFFER')}</text></svg>`;
+    const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = 'ambition-deal-card.svg';
+    document.body.appendChild(anchor); anchor.click(); anchor.remove();
+    URL.revokeObjectURL(url);
+    status.textContent = 'Your deal card has been downloaded as an SVG.';
+  });
+
+  function campaignText(value) {
+    return value === 'SALE' ? 'SEASONAL SALE' : value;
+  }
+
+  updatePreview();
+})();

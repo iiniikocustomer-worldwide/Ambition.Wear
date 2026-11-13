@@ -1,82 +1,59 @@
-(() => {
-  'use strict';
-  const $ = (selector) => document.querySelector(selector);
-  const accountForm = $('#account-form');
-  const cardForm = $('#card-form');
-  const card = $('#deal-card');
-  const status = $('#builder-status');
-  const fields = {
-    campaign: $('#campaign-type'), headline: $('#offer-title'), discount: $('#discount'),
-    code: $('#promo-code'), note: $('#card-note')
-  };
-  const safe = (value) => String(value || '').replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
-
-  function updatePreview() {
-    const campaign = fields.campaign.value;
-    $('#preview-headline').innerHTML = safe(fields.headline.value.trim() || 'YOUR BIG\nOFFER').replace(/\n/g, '<br>');
-    $('#preview-discount').textContent = fields.discount.value.trim() || 'YOUR OFFER';
-    $('#preview-code').textContent = fields.code.value.trim() ? `CODE: ${fields.code.value.trim().toUpperCase()}` : '';
-    $('#preview-note').textContent = fields.note.value.trim() || 'SHOP THE DROP';
-    $('.deal-type').textContent = campaign === 'SALE' ? 'SEASONAL SALE' : campaign;
-    const theme = $('input[name="theme"]:checked')?.value || 'lime';
-    card.className = `deal-card theme-${theme}`;
-  }
-
-  accountForm.addEventListener('submit', (event) => {
-    event.preventDefault();
-    if (!accountForm.reportValidity()) return;
-    const name = $('#client-name').value.trim();
-    status.textContent = `Welcome, ${name.split(/\s+/)[0]} — your profile is ready in this demo.`;
-    $('#account-panel').classList.add('profile-ready');
-    $('#workspace-title').scrollIntoView({ behavior: 'smooth', block: 'center' });
-  });
-
-  cardForm.addEventListener('input', updatePreview);
-  cardForm.addEventListener('change', updatePreview);
-  $('#save-card').addEventListener('click', () => {
-    const draft = {
-      campaign: fields.campaign.value, headline: fields.headline.value,
-      discount: fields.discount.value, code: fields.code.value, note: fields.note.value,
-      theme: $('input[name="theme"]:checked')?.value || 'lime'
-    };
-    try {
-      localStorage.setItem('ambition-client-card-draft', JSON.stringify(draft));
-      status.textContent = 'Draft saved in this browser.';
-    } catch (_) {
-      status.textContent = 'Browser storage is unavailable. You can still download your card.';
-    }
-  });
-
-  try {
-    const draft = JSON.parse(localStorage.getItem('ambition-client-card-draft') || 'null');
-    if (draft) {
-      fields.campaign.value = draft.campaign || 'SALE';
-      fields.headline.value = draft.headline || '';
-      fields.discount.value = draft.discount || '';
-      fields.code.value = draft.code || '';
-      fields.note.value = draft.note || '';
-      const themeOption = $(`input[name="theme"][value="${draft.theme}"]`);
-      if (themeOption) themeOption.checked = true;
-    }
-  } catch (_) { /* Ignore invalid or unavailable local drafts. */ }
-
-  $('#download-card').addEventListener('click', () => {
-    const theme = $('input[name="theme"]:checked')?.value || 'lime';
-    const colors = { lime: { bg:'#171814', fg:'#ffffff', accent:'#d7ff00' }, mono:{ bg:'#e9e8e2', fg:'#171814', accent:'#171814' }, red:{ bg:'#421b18', fg:'#ffffff', accent:'#ff5948' } }[theme];
-    const headline = fields.headline.value.trim() || 'YOUR BIG OFFER';
-    const lines = headline.split(/\s*\n\s*|\s*\.\s*/).filter(Boolean).slice(0, 3);
-    const code = fields.code.value.trim() ? `CODE: ${fields.code.value.trim().toUpperCase()}` : '';
-    const xml = (value) => safe(value);
-    const headlineSvg = lines.map((line, index) => `<text x="80" y="${390 + index * 92}" fill="${colors.fg}" font-family="Arial,sans-serif" font-size="78" font-weight="800" letter-spacing="-5">${xml(line)}</text>`).join('');
-    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080"><rect width="1080" height="1080" fill="${colors.bg}"/><circle cx="1030" cy="150" r="360" fill="none" stroke="${colors.fg}" stroke-opacity=".14" stroke-width="2"/><text x="80" y="92" fill="${colors.fg}" font-family="Arial,sans-serif" font-size="27" font-weight="700" letter-spacing="5">AMBITION WEAR</text><text x="80" y="260" fill="${colors.accent}" font-family="Arial,sans-serif" font-size="24" font-weight="700" letter-spacing="5">${xml(fields.campaign.value === 'SALE' ? 'SEASONAL SALE' : fields.campaign.value)}</text>${headlineSvg}<rect x="80" y="690" width="480" height="100" fill="${colors.accent}"/><text x="105" y="758" fill="${theme === 'mono' ? '#fff' : '#171814'}" font-family="Arial,sans-serif" font-size="48" font-weight="800">${xml(fields.discount.value.trim() || 'YOUR OFFER')}</text><text x="80" y="900" fill="${colors.accent}" font-family="Arial,sans-serif" font-size="25" font-weight="700" letter-spacing="2">${xml(code)}</text><line x1="80" y1="940" x2="1000" y2="940" stroke="${colors.fg}" stroke-opacity=".5"/><text x="80" y="990" fill="${colors.fg}" font-family="Arial,sans-serif" font-size="20" font-weight="700" letter-spacing="3">${xml(fields.note.value.trim() || 'SHOP THE DROP')}</text><text x="1000" y="990" fill="${colors.accent}" text-anchor="end" font-family="Arial,sans-serif" font-size="28">✦</text></svg>`;
-    const blob = new Blob([svg], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = 'ambition-deal-card.svg';
-    document.body.appendChild(anchor); anchor.click(); anchor.remove();
-    URL.revokeObjectURL(url);
-    status.textContent = 'Your deal card has been downloaded as an SVG.';
-  });
-  updatePreview();
-})();
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f5f0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Create a client profile and design polished Ambition Wear sale and Black Friday cards.">
+  <title>Client Studio — AMBITION WEAR</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="Logo_20261111_210043_0000.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="responsive-fix.css">
+  <link rel="stylesheet" href="client-studio.css">
+  <link rel="stylesheet" href="mobile-nav.css">
+  <link rel="stylesheet" href="ui-icons.css">
+  <script src="client-studio.js" defer></script>
+  <script src="ui-icons.js" defer></script>
+  <script src="app-shell.js" defer></script>
+</head>
+<body class="studio-page">
+  <div class="studio-topline"><span>AMBITION WEAR</span><span>CLIENT STUDIO <i>✦</i></span></div>
+  <header class="studio-header">
+    <a class="studio-brand" href="index.html" aria-label="Ambition Wear home"><img src="Logo_20261111_210043_0000.png" alt="Ambition Wear"></a>
+    <nav aria-label="Main navigation"><a href="index.html">Home</a><a href="shop.html">Shop</a><a href="story.html">Our story</a><a class="studio-nav-active" href="client-account.html">Client studio</a><a href="contact.html">Contact</a></nav>
+    <a class="studio-back" href="index.html">Back to the store <span>↗</span></a>
+  </header>
+  <main>
+    <section class="studio-hero">
+      <div class="studio-hero-copy">
+        <p class="studio-eyebrow"><span></span> YOUR CAMPAIGN, YOUR WAY</p>
+        <h1>Make the<br>moment <em>count.</em></h1>
+        <p class="studio-intro">Create your client profile and build a polished sale or Black Friday card in minutes. Made for offers that deserve to be seen.</p>
+        <div class="studio-proof"><span>01 — Create your profile</span><span>02 — Design your card</span><span>03 — Download and share</span></div>
+      </div>
+      <div class="studio-art" aria-label="Promotional card design preview"><div class="art-orbit"></div><div class="art-card"><span class="art-card-brand">AMBITION <b>✦</b></span><span class="art-card-tag">YOUR DROP</span><span class="art-card-headline">Bigger sales,<br>better stories.</span><span class="art-card-offer">UP TO 30% OFF</span></div></div>
+    </section>
+    <section class="studio-workspace" aria-labelledby="workspace-title">
+      <div class="workspace-heading"><div><p class="studio-eyebrow">WELCOME TO YOUR STUDIO</p><h2 id="workspace-title">Start with the details.</h2></div><p>Set up your profile, then shape a deal card that feels clean, premium and ready to send.</p></div>
+      <div class="studio-columns">
+        <div class="studio-panel account-panel" id="account-panel">
+          <div class="panel-number">01 <span>CLIENT PROFILE</span></div><h3>Create your account</h3><p class="panel-copy">A few details help us personalize your campaign workspace.</p>
+          <form id="account-form"><label for="client-name">Your name</label><input id="client-name" name="name" autocomplete="name" placeholder="e.g. Alex Morgan" required><label for="business-name">Business or brand</label><input id="business-name" name="business" autocomplete="organization" placeholder="e.g. Ambition Wear"><label for="client-email">Email</label><input id="client-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></form>
+          <p class="privacy-note"><span>✦</span> This demo keeps your profile in this browser only. Don't enter sensitive information.</p>
+        </div>
+        <div class="studio-panel builder-panel" id="builder-panel">
+          <div class="panel-number">02 <span>DEAL CARD DESIGNER</span></div><h3>Build your offer card</h3><p class="panel-copy">Edit the copy and style. Your preview updates as you go.</p>
+          <div class="builder-layout"><form id="card-form" class="card-controls"><label for="campaign-type">Campaign</label><select id="campaign-type"><option value="SALE">Seasonal sale</option><option value="BLACK FRIDAY">Black Friday</option><option value="DROP">New drop</option></select><label for="offer-title">Headline</label><input id="offer-title" maxlength="32" value="BIG STYLE. BIG SAVINGS."><label for="discount">Offer</label><div class="discount-input"><input id="discount" maxlength="12" value="30% OFF" aria-label="Discount or offer"><span>✦</span></div><label for="promo-code">Promo code <span class="optional">OPTIONAL</span></label><input id="promo-code" maxlength="20" placeholder="e.g. AMBITION30"><label for="card-note">Small print</label><input id="card-note" maxlength="54" value="LIMITED TIME · SHOP THE DROP"><fieldset class="theme-options"><legend>Choose a look</legend><label><input type="radio" name="theme" value="mono" checked><span class="theme-swatch mono"></span>Mono</label><label><input type="radio" name="theme" value="black"><span class="theme-swatch black"></span>Black</label></fieldset><div class="builder-actions"><button class="studio-button" id="download-card" type="button">Download card <span>↓</span></button><button class="save-button" id="save-card" type="button">Save design</button></div><p class="builder-status" id="builder-status" role="status" aria-live="polite"></p></form><div class="preview-wrap"><p class="preview-label">LIVE PREVIEW <span>1080 × 1080</span></p><article class="deal-card theme-mono" id="deal-card" aria-label="Live promotional card preview"></article></div></div>
+        </div>
+      </div>
+    </section>
+    <section class="studio-note"><span>GOOD DEALS DESERVE GOOD DESIGN.</span><a href="shop.html">Explore the collection <b>↗</b></a></section>
+  </main>
+  <footer class="studio-footer"><a href="index.html">AMBITION WEAR</a><span>WEAR WHAT DRIVES YOU. <i>✦</i></span><a href="https://wa.me/27672364114" target="_blank" rel="noopener noreferrer">NEED HELP? MESSAGE US ↗</a></footer>
+</body>
+</html>
