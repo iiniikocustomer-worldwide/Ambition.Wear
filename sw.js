@@ -1,28 +1,46 @@
-const CACHE_NAME = 'ambition-wear-v7';
+const CACHE_NAME = 'ambition-wear-v8';
 const APP_SHELL = [
   './', './index.html', './shop.html', './story.html', './contact.html', './client-account.html',
-  './site.css', './responsive-fix.css', './ui-icons.css', './mobile-nav.css', './site.js',
-  './brand-content.js', './white-space-content.css', './site-features.js', './ui-icons.js',
-  './app-shell.js', './client-studio.js', './manifest.json', './Logo_20261111_210043_0000.png'
+  './site.css', './responsive-fix.css', './editorial-refresh.css', './product-shopping.css',
+  './bag-drawer-fix.css', './story-contact-polish.css', './layout-repair.css',
+  './ui-icons.css', './mobile-nav.css', './site.js', './brand-content.js',
+  './white-space-content.css', './site-features.js', './site-repair.js', './ui-icons.js',
+  './app-shell.js', './client-studio.css', './client-studio.js', './manifest.json',
+  './Logo_20261111_210043_0000.png'
 ];
+
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).catch(() => undefined));
+  event.waitUntil(caches.open(CACHE_NAME)
+    .then((cache) => cache.addAll(APP_SHELL))
+    .catch(() => undefined));
   self.skipWaiting();
 });
+
 self.addEventListener('activate', (event) => {
-  event.waitUntil(caches.keys().then((keys) => Promise.all(keys.filter((key) => key.startsWith('ambition-wear-') && key !== CACHE_NAME).map((key) => caches.delete(key)))).then(() => self.clients.claim()));
+  event.waitUntil(caches.keys()
+    .then((keys) => Promise.all(keys
+      .filter((key) => key.startsWith('ambition-wear-') && key !== CACHE_NAME)
+      .map((key) => caches.delete(key))))
+    .then(() => self.clients.claim()));
 });
+
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+
   if (event.request.mode === 'navigate') {
     event.respondWith(fetch(event.request).then((response) => {
-      if (response?.ok) caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+      if (response?.ok) {
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+      }
       return response;
     }).catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html'))));
     return;
   }
+
   event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {
-    if (response?.status === 200 && response.type === 'basic') caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+    if (response?.status === 200 && response.type === 'basic') {
+      caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone()));
+    }
     return response;
   }).catch(() => caches.match('./index.html'))));
 });
