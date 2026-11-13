@@ -1,0 +1,122 @@
+/* Mobile nav fix + installable app styling */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+.nav {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 30px);
+  margin-left: auto;
+}
+
+.menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid rgba(17, 17, 17, 0.8);
+  background: transparent;
+  color: #111;
+  padding: 9px 12px;
+  font: inherit;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.menu-toggle__icon {
+  position: relative;
+  width: 16px;
+  height: 12px;
+  display: inline-block;
+}
+
+.menu-toggle__icon::before,
+.menu-toggle__icon::after,
+.menu-toggle__icon {
+  background: currentColor;
+}
+
+.menu-toggle__icon::before,
+.menu-toggle__icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.menu-toggle__icon::before { top: 0; }
+.menu-toggle__icon::after { bottom: 0; }
+
+.menu-toggle.is-open .menu-toggle__icon::before {
+  transform: translateY(5px) rotate(45deg);
+}
+
+.menu-toggle.is-open .menu-toggle__icon::after {
+  transform: translateY(-5px) rotate(-45deg);
+}
+
+.menu-toggle.is-open .menu-toggle__icon {
+  background: transparent;
+}
+
+@media (max-width: 820px) {
+  .nav {
+    min-height: 72px;
+  }
+
+  .menu-toggle {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .nav-links {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 10px);
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 12px 18px;
+    background: rgba(247, 246, 242, 0.98);
+    border: 1px solid rgba(17, 17, 17, 0.08);
+    box-shadow: 0 18px 50px rgba(17, 17, 17, 0.08);
+  }
+
+  .site-header.menu-open .nav-links {
+    display: flex;
+  }
+
+  .nav-links a {
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+  }
+
+  .nav-links a:last-child {
+    border-bottom: 0;
+  }
+
+  body.menu-open {
+    overflow: hidden;
+  }
+}

@@ -4,20 +4,26 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f5f0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Create a client profile and design polished Ambition Wear sale and Black Friday cards.">
   <title>Client Studio — AMBITION WEAR</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="Logo_20261111_210043_0000.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="responsive-fix.css">
   <link rel="stylesheet" href="client-studio.css">
+  <link rel="stylesheet" href="mobile-nav.css">
   <script src="client-studio.js" defer></script>
+  <script src="app-shell.js" defer></script>
 </head>
 <body class="studio-page">
   <div class="studio-topline"><span>AMBITION WEAR</span><span>CLIENT STUDIO <i>✦</i></span></div>
   <header class="studio-header">
     <a class="studio-brand" href="index.html" aria-label="Ambition Wear home"><img src="Logo_20261111_210043_0000.png" alt="Ambition Wear"></a>
-    <nav aria-label="Main navigation"><a href="index.html">Home</a><a href="shop.html">Shop</a><a class="studio-nav-active" href="client-account.html">Client studio</a></nav>
+    <nav aria-label="Main navigation"><a href="index.html">Home</a><a href="shop.html">Shop</a><a href="story.html">Our story</a><a class="studio-nav-active" href="client-account.html">Client studio</a><a href="contact.html">Contact</a></nav>
     <a class="studio-back" href="index.html">Back to the store <span>↗</span></a>
   </header>
   <main>
@@ -29,13 +35,12 @@
         <div class="studio-proof"><span>01 — Create your profile</span><span>02 — Design your card</span><span>03 — Download and share</span></div>
       </div>
       <div class="studio-art" aria-label="Promotional card design preview">
-        <div class="art-orbit"></div><div class="art-card"><span class="art-card-brand">AMBITION <b>✦</b></span><span class="art-card-kicker">THE BIG ONE</span><strong>BLACK<br>FRIDAY</strong><span class="art-card-offer">UP TO <b>50%</b> OFF</span><span class="art-card-footer">LIMITED TIME · SHOP THE DROP ↗</span></div>
-        <span class="art-side-note">MADE TO MOVE</span>
+        <div class="art-orbit"></div><div class="art-card"><span class="art-card-brand">AMBITION <b>✦</b></span><span class="art-card-kicker">THE BIG ONE</span><strong>BLACK<br>FRIDAY</strong><span class="art-card-offer">30% OFF</span><span class="art-side-note">MADE TO MOVE</span></div>
       </div>
     </section>
 
     <section class="studio-workspace" aria-labelledby="workspace-title">
-      <div class="workspace-heading"><div><p class="studio-eyebrow">WELCOME TO YOUR STUDIO</p><h2 id="workspace-title">Start with the details.</h2></div><p>Set up your profile, then shape a deal card that feels unmistakably yours.</p></div>
+      <div class="workspace-heading"><div><p class="studio-eyebrow">WELCOME TO YOUR STUDIO</p><h2 id="workspace-title">Start with the details.</h2></div><p>Set up your profile, then shape a deal card your customers will remember.</p></div>
       <div class="studio-columns">
         <div class="studio-panel account-panel" id="account-panel">
           <div class="panel-number">01 <span>CLIENT PROFILE</span></div>
@@ -56,16 +61,16 @@
           <p class="panel-copy">Edit the copy and style. Your preview updates as you go.</p>
           <div class="builder-layout">
             <form id="card-form" class="card-controls">
-              <label for="campaign-type">Campaign</label><select id="campaign-type"><option value="SALE">Seasonal sale</option><option value="BLACK FRIDAY">Black Friday</option><option value="FLASH SALE">Flash sale</option></select>
+              <label for="campaign-type">Campaign</label><select id="campaign-type"><option value="SALE">Seasonal sale</option><option value="BLACK FRIDAY">Black Friday</option><option value="DROP">New drop</option><option value="EVENT">Event offer</option></select>
               <label for="offer-title">Headline</label><input id="offer-title" maxlength="32" value="BIG STYLE. BIG SAVINGS.">
               <label for="discount">Offer</label><div class="discount-input"><input id="discount" maxlength="12" value="30% OFF" aria-label="Discount or offer"><span>✦</span></div>
               <label for="promo-code">Promo code <span class="optional">OPTIONAL</span></label><input id="promo-code" maxlength="20" placeholder="e.g. AMBITION30">
               <label for="card-note">Small print</label><input id="card-note" maxlength="54" value="LIMITED TIME · SHOP THE DROP">
-              <fieldset class="theme-options"><legend>Choose a look</legend><label><input type="radio" name="theme" value="lime" checked><span class="theme-swatch lime"></span>Lime</label><label><input type="radio" name="theme" value="mono"><span class="theme-swatch mono"></span>Mono</label><label><input type="radio" name="theme" value="red"><span class="theme-swatch red"></span>Red</label></fieldset>
-              <div class="builder-actions"><button class="studio-button" id="download-card" type="button">Download card <span>↓</span></button><button class="save-button" id="save-card" type="button">Save draft</button></div>
+              <fieldset class="theme-options"><legend>Choose a look</legend><label><input type="radio" name="theme" value="lime" checked><span class="theme-swatch lime"></span>Lime</label><label><input type="radio" name="theme" value="mono"><span class="theme-swatch mono"></span>Mono</label><label><input type="radio" name="theme" value="ivory"><span class="theme-swatch ivory"></span>Ivory</label></fieldset>
+              <div class="builder-actions"><button class="studio-button" id="download-card" type="button">Download card <span>↓</span></button><button class="save-button" id="save-card" type="button">Save design</button></div>
               <p class="builder-status" id="builder-status" role="status" aria-live="polite"></p>
             </form>
-            <div class="preview-wrap"><p class="preview-label">LIVE PREVIEW <span>1080 × 1080</span></p><article class="deal-card theme-lime" id="deal-card" aria-label="Live promotional card preview"><div class="deal-card-top"><span>AMBITION WEAR</span><span>✦</span></div><div class="deal-card-center"><p class="deal-type">SEASONAL SALE</p><h4 id="preview-headline">BIG STYLE.<br>BIG SAVINGS.</h4><div class="deal-offer" id="preview-discount">30% OFF</div></div><div class="deal-card-bottom"><span id="preview-code"></span><span id="preview-note">LIMITED TIME · SHOP THE DROP</span></div></article><p class="preview-hint">Your card is ready to share once downloaded.</p></div>
+            <div class="preview-wrap"><p class="preview-label">LIVE PREVIEW <span>1080 × 1080</span></p><article class="deal-card theme-lime" id="deal-card" aria-label="Live promotional card preview"><div class="deal-top"><span>AMBITION WEAR</span><span>✦</span></div><p class="deal-kicker">SEASONAL SALE</p><h3>BIG STYLE.<br>BIG SAVINGS.</h3><div class="deal-discount">30% OFF</div><div class="deal-footer"><span>LIMITED TIME · SHOP THE DROP</span><strong>AMBITION30</strong></div></article></div>
           </div>
         </div>
       </div>

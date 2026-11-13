@@ -1,0 +1,19 @@
+{
+  "name": "Ambition Wear",
+  "short_name": "Ambition",
+  "description": "Ambition Wear storefront and brand experience.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f6f2",
+  "theme_color": "#101010",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "Logo_20261111_210043_0000.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
