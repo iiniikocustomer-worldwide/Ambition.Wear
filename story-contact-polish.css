@@ -1,114 +1,41 @@
-/* Editorial layout refinements for the story and contact pages. */
-.story-content::after,
-.contact-content::after { content: none !important; display: none !important; }
+/* Import after the shared/site styles so these page-specific rules are active. */
+@import url("editorial-refresh.css");
+@import url("product-shopping.css");
+@import url("bag-drawer-fix.css");
+@import url("story-contact-polish.css");
 
-.story-hero,
-.contact-hero {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  background: #171714;
-}
-.story-hero::after,
-.contact-hero::after {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(0,0,0,.78), rgba(0,0,0,.28) 72%), linear-gradient(0deg, rgba(0,0,0,.3), transparent 60%);
-  content: "";
-}
-.story-hero .page-hero-copy,
-.contact-hero .page-hero-copy { max-width: 1440px; margin-inline: auto; }
-.story-hero .eyebrow,
-.contact-hero .eyebrow,
-.story-hero h1,
-.contact-hero h1,
-.story-hero .page-hero-copy > p:last-child,
-.contact-hero .page-hero-copy > p:last-child { color: #fff; }
-.story-hero h1 span,
-.contact-hero h1 span { color: #d7ff00; }
+/* Shared responsive layout and Ambition brand styling. */
+html, body { width: 100%; max-width: 100%; overflow-x: clip; }
+img { max-width: 100%; }
+:root { --ink:#111; --paper:#fff; --soft:#f4f4f4; --muted:#666; --line:#e5e5e5; --red:#111; }
+::selection { color:#fff; background:#111; }
+.announcement { background:#111; color:#fff; }
+.announcement span, .announcement a { color:#fff; }
+.hero-copy h1 span, .page-hero h1 span { color:#fff; }
+.button, .button-dark, .primary-action { background:#111; color:#fff; border-color:#111; }
+.button:hover, .button-dark:hover, .primary-action:hover { background:#333; border-color:#333; }
+.nav-links a:hover, .nav-links a.active { text-decoration-color:#111; }
+.brand { width:205px; height:96px; }
+.brand img { width:100%; height:100%; object-fit:contain; }
+.brand-details { margin:28px 0; padding:22px 24px; border:1px solid #e5e5e5; }
+.brand-details p { margin:8px 0; }
+.brand-details .eyebrow { margin-bottom:14px; }
+@media(max-width:850px) { .brand { width:160px; height:78px; } }
+@media(max-width:560px) { .brand { width:135px; height:68px; } }
 
-.story-content,
-.contact-content {
-  display: grid;
-  grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
-  align-items: start;
-  column-gap: clamp(36px, 8vw, 120px);
-  row-gap: 34px;
-  max-width: 1120px;
-  margin-inline: auto;
-  padding-top: clamp(56px, 8vw, 112px);
-  padding-bottom: clamp(56px, 8vw, 112px);
+/* Brand and practical contact details in the existing footer. */
+.site-footer::before {
+  content:"AMBITION WEAR  ·  STREETWEAR | FASHION | OUTFITS\A\AEmail: hello@ambitionwear.co.za\AAddress: 09 Orange Street Blackburn\AContact: 0672364114\AInstagram: @_wear_ambition\ADeliveries: 1–5 business days\A\AOrders through DM · Worldwide support available";
+  display:block; white-space:pre-line; max-width:1320px; margin:0 auto; padding:34px 24px;
+  border-top:1px solid #333; color:#d9d9d9; font-size:13px; line-height:1.9; letter-spacing:.025em;
 }
-.story-content .story-lead,
-.contact-content .contact-intro { max-width: 480px; }
-.story-content h2,
-.contact-content h2 { margin: 12px 0 0; font-size: clamp(40px, 6vw, 76px); line-height: .96; }
-.story-content .story-body,
-.contact-content .contact-cards { min-width: 0; }
-.story-content .story-body > p { max-width: 660px; font-size: clamp(16px, 1.4vw, 19px); line-height: 1.8; }
-.story-content .story-body .large-copy { font-size: clamp(20px, 2.2vw, 29px); line-height: 1.45; font-weight: 600; }
-.story-content .brand-details { margin-top: 30px; background: #efeee9; border: 0; border-left: 3px solid #d7ff00; }
-.story-content .button { margin-top: 24px; }
-.story-image { position: relative; overflow: hidden; min-height: 320px; background: #171714; }
-.story-image img { display: block; width: 100%; max-height: 680px; object-fit: cover; object-position: center 38%; }
-.story-image p { margin: 0; padding: 18px 24px; color: #fff; background: #171714; text-align: center; font-size: 11px; font-weight: 800; letter-spacing: .16em; }
-.story-image p span { color: #d7ff00; }
-
-/* Display the requested Storyline as real, legible content in the story section. */
 .story-content::after {
-  content: "OUR STORYLINE\A\AAMBITION WEAR is more than just a clothing brand, it's a lifestyle built around ambition, individuality and self-expression. Inspired by the mindset of dreamers, creatives and go-getters.";
-  display: block;
-  grid-column: 1 / -1;
-  margin: 4px 0 0;
-  padding: clamp(24px, 4vw, 44px);
-  border-left: 4px solid #d7ff00;
-  background: #efeee9;
-  color: #222;
-  white-space: pre-line;
-  font-size: clamp(16px, 1.6vw, 20px);
-  line-height: 1.8;
+  content:"OUR STORYLINE\AAMBITION WEAR is more than just a clothing brand, it's a lifestyle built around ambition, individuality and self-expression. Inspired by the mindset of dreamers, creatives and go-getters.";
+  display:block; margin:30px 0 42px; padding:clamp(24px,5vw,48px); background:#f4f4f4; color:#222;
+  white-space:pre-line; font-size:clamp(16px,2vw,21px); line-height:1.8;
 }
-
-.contact-content { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); }
-.contact-content .contact-intro > p:last-child { max-width: 420px; color: #666; font-size: 16px; line-height: 1.8; }
-.contact-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
-.contact-card {
-  display: flex;
-  min-height: 220px;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: clamp(20px, 2.6vw, 30px);
-  background: #f0efea;
-  border: 1px solid #e1dfd7;
-  color: #171714;
-  text-decoration: none;
-}
-.contact-card:first-child { grid-column: 1 / -1; min-height: 245px; background: #171714; color: #fff; border-color: #171714; }
-.contact-card .contact-icon { display: grid; width: 42px; height: 42px; margin-bottom: 22px; place-items: center; border: 1px solid currentColor; border-radius: 50%; font-size: 20px; }
-.contact-card .eyebrow { color: #777; }
-.contact-card:first-child .eyebrow { color: #d7ff00; }
-.contact-card h3 { margin: 8px 0; font-family: "Space Grotesk", "DM Sans", sans-serif; font-size: clamp(19px, 2vw, 26px); line-height: 1.15; }
-.contact-card p { margin: 0 0 18px; color: #777; line-height: 1.6; }
-.contact-card:first-child p { color: #c8c8c2; }
-.contact-card strong { margin-top: auto; color: inherit; font-size: 14px; overflow-wrap: anywhere; }
-.contact-card:hover { transform: translateY(-3px); background: #e8e7df; }
-.contact-card:first-child:hover { background: #262620; }
-
-@media (max-width: 760px) {
-  .story-content,
-  .contact-content { grid-template-columns: 1fr; gap: 28px; }
-  .story-content .story-lead,
-  .contact-content .contact-intro { max-width: 620px; }
-  .story-image img { max-height: 560px; }
-}
-@media (max-width: 520px) {
-  .story-content,
-  .contact-content { padding-top: 48px; padding-bottom: 52px; }
-  .contact-cards { grid-template-columns: 1fr; }
-  .contact-card:first-child { grid-column: auto; }
-  .contact-card,
-  .contact-card:first-child { min-height: 0; padding: 22px; }
-  .contact-card .contact-icon { margin-bottom: 16px; }
-  .story-image { min-height: 240px; }
+.contact-content::after {
+  content:"CONTACT AMBITION WEAR\AEmail: hello@ambitionwear.co.za\AAddress: 09 Orange Street Blackburn\APhone: 0672364114\AInstagram: @_wear_ambition\AOrders through DM · Deliveries in 1–5 business days";
+  display:block; margin:32px 0; padding:clamp(24px,5vw,44px); background:#f4f4f4; color:#222;
+  white-space:pre-line; font-size:15px; line-height:2;
 }
