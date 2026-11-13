@@ -37,8 +37,7 @@ The WhatsApp group is linked from the storefront for live stock and drop updates
 
 ## Contact information
 
-- **Instagram (currently linked on the website):** [@ambitionwearza](https://www.instagram.com/ambitionwearza/)
-- **Earlier Instagram link found in repository history:** [@_wear_ambition](https://www.instagram.com/_wear_ambition?obrf=MWYyMDViOXY2MGh3cA==). This is a different profile, so verify which account is official before changing the current website link.
+- **Instagram (official):** [@_wear_ambition](https://www.instagram.com/_wear_ambition/)
 - **WhatsApp:** [+27 67 236 4114](https://wa.me/27672364114)
 - **Email:** [hello@ambitionwear.co.za](mailto:hello@ambitionwear.co.za)
 - **Location:** South Africa
