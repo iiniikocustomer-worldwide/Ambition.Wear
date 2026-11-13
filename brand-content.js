@@ -3,9 +3,13 @@
 
   const INSTAGRAM_URL = 'https://www.instagram.com/_wear_ambition?rpxt=MWYyMDViOXY2MGh3cA==';
   const CSS_PATH = 'white-space-content.css';
+  const SELECT_ALL = (selector, root = document) => [
+    ...(root.matches?.(selector) ? [root] : []),
+    ...root.querySelectorAll(selector)
+  ];
 
   function loadContentStyles() {
-    if (document.querySelector(`link[href$="/${CSS_PATH}"]`)) return;
+    if ([...document.querySelectorAll('link[rel="stylesheet"]')].some((link) => link.href.endsWith(`/${CSS_PATH}`))) return;
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = new URL(CSS_PATH, document.baseURI).href;
@@ -13,16 +17,28 @@
   }
 
   function updateInstagramLinks(root = document) {
-    const links = [...(root.matches?.('a[href*="instagram.com"]') ? [root] : []), ...root.querySelectorAll('a[href*="instagram.com"]')];
-    links.forEach((link) => {
+    SELECT_ALL('a[href*="instagram.com"]', root).forEach((link) => {
       link.href = INSTAGRAM_URL;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
-      if (link.textContent.toLowerCase().includes('instagram') || link.closest('.contact-card')) {
-        const strong = link.querySelector('strong');
-        if (strong) strong.textContent = '@_wear_ambition ↗';
-        else if (link.closest('.footer-links')) link.textContent = 'Instagram ↗';
-      }
+      link.setAttribute('aria-label', 'Follow Ambition Wear on Instagram (@_wear_ambition)');
+      const strong = link.querySelector('strong');
+      if (strong) strong.textContent = '@_wear_ambition ↗';
+      else if (link.closest('.footer-links')) link.textContent = 'Instagram ↗';
+    });
+
+    // Ensure every footer has a visible, direct Instagram icon link as well as its text link.
+    SELECT_ALL('.footer-links', root).forEach((footer) => {
+      if (footer.querySelector('[data-instagram-icon-link]')) return;
+      const iconLink = document.createElement('a');
+      iconLink.href = INSTAGRAM_URL;
+      iconLink.target = '_blank';
+      iconLink.rel = 'noopener noreferrer';
+      iconLink.className = 'brand-instagram-link';
+      iconLink.dataset.instagramIconLink = 'true';
+      iconLink.setAttribute('aria-label', 'Open @_wear_ambition on Instagram');
+      iconLink.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/></svg><span>@_wear_ambition</span>';
+      footer.append(iconLink);
     });
   }
 

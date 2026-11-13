@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ambition-wear-v6';
+const CACHE_NAME = 'ambition-wear-v7';
 const APP_SHELL = [
   './', './index.html', './shop.html', './story.html', './contact.html', './client-account.html',
   './site.css', './responsive-fix.css', './ui-icons.css', './mobile-nav.css', './site.js',
