@@ -1,0 +1,9 @@
+/* Consistent lightweight line icons throughout the storefront and client studio. */
+.ui-icon{display:inline-block;width:1.15em;height:1.15em;flex:0 0 auto;vertical-align:-.2em;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.bag-open,.nav-links a,.studio-header nav a,.announcement a,.footer-links a,.studio-back,.studio-note a,.checkout-options label,#account-form label{display:inline-flex;align-items:center;gap:.55em}
+.bag-open .ui-icon{width:1.1em;height:1.1em}
+.nav-links a .ui-icon,.studio-header nav a .ui-icon{width:1em;height:1em}
+.announcement a .ui-icon{width:1.05em;height:1.05em}
+.footer-links a .ui-icon{width:1em;height:1em}
+.checkout-options label .ui-icon,#account-form label .ui-icon{width:1em;height:1em;color:currentColor}
+@media(max-width:820px){.nav-links a .ui-icon,.studio-header nav a .ui-icon{width:1.1em;height:1.1em}}

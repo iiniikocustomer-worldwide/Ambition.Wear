@@ -22,8 +22,8 @@
 <body>
   <div class="announcement">SOUTH AFRICA, MADE WITH AMBITION <span>✦</span> <a href="https://wa.me/27672364114" target="_blank" rel="noopener noreferrer">CHAT WITH US ON WHATSAPP ↗</a></div>
   <header class="site-header"><div class="wrap nav"><a class="brand" href="index.html" aria-label="Ambition Wear home"><img src="Logo_20261111_210043_0000.png" alt="Ambition Wear"></a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav"><span class="menu-toggle__label">Menu</span><span class="menu-toggle__icon" aria-hidden="true"></span></button><nav id="main-nav" class="nav-links" aria-label="Main navigation"><a href="index.html">Home</a><a class="active" href="shop.html">Shop</a><a href="story.html">Our story</a><a href="client-account.html">Client studio</a><a href="contact.html">Contact</a></nav><button class="bag-open" type="button" aria-label="Open shopping bag">Bag <span class="bag-count">0</span></button></div></header>
-  <main><section class="page-hero shop-hero"><div class="wrap page-hero-copy reveal"><p class="eyebrow light">THE AMBITION COLLECTION</p><h1>Find your<br><span>next favourite.</span></h1><p>Streetwear essentials and head-turning details. Pick your piece, make it yours.</p></div></section><section class="wrap section shop-section" id="headwear"><div class="section-heading"><div><p class="eyebrow">SHOP THE PIECES</p><h2>The collection</h2></div><p class="section-note">Need sizing or stock help? <a href="contact.html">Talk to us ↗</a></p></div><div class="filters" id="product-filters" aria-label="Filter products"></div><div class="product-grid" id="shop-products" aria-live="polite"><p class="loading">Curating the collection…</p></div></section></main>
-  <footer class="site-footer"><div class="wrap footer-inner"><a href="index.html"><img src="Logo_20261111_210043_0000.png" alt="Ambition Wear" class="footer-logo"></a><p>Wear what drives you.<br>South Africa, made with ambition.</p><div class="footer-links"><a href="shop.html">Shop</a><a href="story.html">Our story</a><a href="client-account.html">Client studio</a><a href="contact.html">Contact</a><a href="https://www.instagram.com/ambitionwearza/" target="_blank" rel="noopener noreferrer">Instagram ↗</a></div><small>© <span class="year"></span> Ambition Wear</small></div></footer><div class="toast" role="status" aria-live="polite"></div>
+  <main><section class="page-hero shop-hero"><div class="wrap page-hero-copy reveal"><p class="eyebrow light">THE AMBITION COLLECTION</p><h1>Find your<br><span>next favourite.</span></h1><p>Streetwear and accessories made for people moving with purpose.</p></div></section><section class="wrap section shop-section"><div class="section-heading"><div><p class="eyebrow">SHOP THE DROP</p><h2>Choose your<br><span>next statement.</span></h2></div></div><div id="product-filters" class="catalog-filters" aria-label="Filter collection"></div><div id="shop-grid" class="product-grid"></div></section></main>
+  <footer class="site-footer"><div class="wrap footer-inner"><a href="index.html"><img src="Logo_20261111_210043_0000.png" alt="Ambition Wear" class="footer-logo"></a><p>Wear what drives you.<br>South Africa, made with ambition.</p><div class="footer-links"><a href="shop.html">Shop</a><a href="story.html">Our story</a><a href="client-account.html">Client studio</a><a href="contact.html">Contact</a><a href="https://www.instagram.com/wear_ambition/" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href="mailto:djvocalistbookings@gmail.com">Email ↗</a></div><small>© <span class="year"></span> Ambition Wear</small></div></footer><div class="toast" role="status" aria-live="polite"></div>
   <script>
     (() => {
       const params = new URLSearchParams(window.location.search);
@@ -33,9 +33,7 @@
         const filters = document.querySelector('#product-filters');
         if (!filters) return false;
         const wanted = requested.trim().toLowerCase();
-        const button = [...filters.querySelectorAll('[data-filter]')].find((item) =>
-          String(item.dataset.filter).trim().toLowerCase() === wanted
-        );
+        const button = [...filters.querySelectorAll('[data-filter]')].find((item) => String(item.dataset.filter).trim().toLowerCase() === wanted);
         if (!button) return false;
         button.click();
         return true;
@@ -43,9 +41,7 @@
       if (applyCategory()) return;
       const filters = document.querySelector('#product-filters');
       if (!filters) return;
-      const observer = new MutationObserver(() => {
-        if (applyCategory()) observer.disconnect();
-      });
+      const observer = new MutationObserver(() => { if (applyCategory()) observer.disconnect(); });
       observer.observe(filters, { childList: true, subtree: true });
     })();
   </script>

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ambition-wear-v2';
+const CACHE_NAME = 'ambition-wear-v3';
 const APP_SHELL = [
   './',
   './index.html',
@@ -8,8 +8,10 @@ const APP_SHELL = [
   './client-account.html',
   './site.css',
   './responsive-fix.css',
+  './ui-icons.css',
   './mobile-nav.css',
   './site.js',
+  './ui-icons.js',
   './app-shell.js',
   './manifest.json',
   './Logo_20261111_210043_0000.png'
@@ -33,7 +35,6 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  // Always check the deployed page first so HTML updates are not hidden by an old app-shell cache.
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).then((response) => {
@@ -50,13 +51,12 @@ self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
-
       return fetch(event.request).then((response) => {
         if (!response || response.status !== 200 || response.type !== 'basic') return response;
         const copy = response.clone();
         caches.open(CACHE_NAME).then((cache) => cache.put(event.request, copy));
         return response;
-      }).catch(() => caches.match('./index.html'))
+      }).catch(() => caches.match('./index.html'));
     })
   );
 });
