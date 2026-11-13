@@ -3,9 +3,10 @@
 
   const NS = 'http://www.w3.org/2000/svg';
   const $ = (selector) => document.querySelector(selector);
+  const isFileContext = () => window.location.protocol === 'file:';
 
   function loadStoreFeatures() {
-    if (document.querySelector('script[data-store-features]')) return;
+    if (isFileContext() || document.querySelector('script[data-store-features]')) return;
     const script = document.createElement('script');
     script.src = new URL('site-features.js', document.baseURI).href;
     script.defer = true;
@@ -14,6 +15,7 @@
   }
 
   function loadLayoutRepair() {
+    if (isFileContext()) return;
     if (!document.querySelector('link[data-layout-repair]')) {
       const stylesheet = document.createElement('link');
       stylesheet.rel = 'stylesheet';
@@ -64,7 +66,7 @@
   }
 
   function registerWorker() {
-    if (!('serviceWorker' in navigator) || document.documentElement.dataset.workerBound) return;
+    if (isFileContext() || !('serviceWorker' in navigator) || document.documentElement.dataset.workerBound) return;
     document.documentElement.dataset.workerBound = 'true';
     window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => undefined), { once: true });
   }
