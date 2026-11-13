@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ambition-wear-v9';
+const CACHE_NAME = 'ambition-wear-v10';
 const APP_SHELL = [
   './', './index.html', './shop.html', './story.html', './contact.html', './client-account.html',
   './site.css', './responsive-fix.css', './editorial-refresh.css', './product-shopping.css',
@@ -6,7 +6,7 @@ const APP_SHELL = [
   './ui-icons.css', './mobile-nav.css', './site.js', './brand-content.js',
   './white-space-content.css', './site-features.js', './site-repair.js', './ui-icons.js',
   './app-shell.js', './client-studio.css', './client-studio.js', './manifest.json',
-  './Logo_20261111_210043_0000.png'
+  './app-icon.svg', './Logo_20261111_210043_0000.png'
 ];
 
 self.addEventListener('install', (event) => {
