@@ -28,14 +28,17 @@
     .story-film-section h2{margin:0 0 20px;font-size:clamp(24px,4vw,42px)}
     .story-film-section video{display:block;width:100%;max-height:680px;aspect-ratio:16/9;object-fit:cover;background:#111}
     .story-film-section p{margin:12px 0 0;color:#666;font-size:13px}
-    .story-hero .story-film-background,.story-hero .story-film-shade{display:none!important}
+    .story-hero{position:relative;isolation:isolate;overflow:hidden;background:#111}
+    .story-hero .story-film-background{position:absolute;z-index:-2;inset:0;display:block;width:100%;height:100%;object-fit:cover;object-position:center;opacity:.85}
+    .story-hero .story-film-shade{position:absolute;z-index:-1;inset:0;display:block;background:linear-gradient(90deg,rgba(0,0,0,.78),rgba(0,0,0,.28) 72%),linear-gradient(0deg,rgba(0,0,0,.3),transparent 60%)}
+    .story-hero .page-hero-copy{position:relative;z-index:1}
   </style>
 </head>
 <body>
   <div class="announcement">SOUTH AFRICA, MADE WITH AMBITION <span>✦</span> <a href="https://wa.me/27672364114" target="_blank" rel="noopener noreferrer">CHAT WITH US ON WHATSAPP ↗</a></div>
   <header class="site-header"><div class="wrap nav"><a class="brand" href="index.html" aria-label="AMBITION WEAR home"><img src="Logo_20261111_210043_0000.png" alt="AMBITION WEAR"></a><button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav"><span class="menu-toggle__label">Menu</span><span class="menu-toggle__icon" aria-hidden="true"></span></button><nav id="main-nav" class="nav-links" aria-label="Main navigation"><a href="index.html">Home</a><a href="shop.html">Shop</a><a class="active" href="story.html">Our story</a><a href="client-account.html">Client studio</a><a href="contact.html">Contact</a></nav><button class="bag-open" type="button" aria-label="Open shopping bag">Bag <span class="bag-count">0</span></button></div></header>
   <main>
-    <section class="page-hero story-hero"><div class="wrap page-hero-copy reveal"><p class="eyebrow light">THE AMBITION STATE OF MIND</p><h1>More than clothes.<br><span>A way of life.</span></h1><p>Wear what drives you.</p></div></section>
+    <section class="page-hero story-hero"><img class="story-film-background" src="IMG-20261111-WA0079.jpg" alt="" aria-hidden="true" fetchpriority="high"><div class="story-film-shade" aria-hidden="true"></div><div class="wrap page-hero-copy reveal"><p class="eyebrow light">THE AMBITION STATE OF MIND</p><h1>More than clothes.<br><span>A way of life.</span></h1><p>Wear what drives you.</p></div></section>
     <section class="wrap story-content"><div class="story-lead reveal"><p class="eyebrow">OUR STORY</p><h2>Made for the<br><span>ones in motion.</span></h2></div><div class="story-body reveal"><p>AMBITION WEAR was built for people who move with purpose, create with intent, and are not afraid to stand out. From statement silhouettes to everyday essentials, our pieces are made to carry the energy of those who keep pushing forward.</p><p>We design with attitude, texture and confidence in mind — blending clean streetwear staples with bold details that feel personal, practical and unmistakably ours.</p><p>Every drop is shaped around identity, ambition and movement. Wear the moment. Own the pace. Keep going.</p></div></section>
     <section class="story-film-section" aria-labelledby="lifestyle-film-heading"><h2 id="lifestyle-film-heading">The Ambition Lifestyle</h2><video controls playsinline preload="metadata" poster="IMG-20261111-WA0079.jpg"><source src="https://player.vimeo.com/external/371716312.sd.mp4?s=7d1c7ad7b1d4a0f7f3df7f6a7d9977bfe5752ef1&amp;profile_id=164&amp;oauth2_token_id=57447761" type="video/mp4"></video><p>Built for the ones who keep moving.</p></section>
     <section class="story-image"><img src="IMG-20261111-WA0079.jpg" alt="AMBITION WEAR campaign" loading="lazy"><p>WEAR WHAT DRIVES YOU. <span>✦</span> EVERY DAY.</p></section>
