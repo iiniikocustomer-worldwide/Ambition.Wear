@@ -5,21 +5,39 @@
     ZAR: { label: 'ZAR · South African rand', symbol: 'R', fallback: 1 },
     USD: { label: 'USD · US dollar', symbol: '$', fallback: 0.055 },
     GBP: { label: 'GBP · British pound', symbol: '£', fallback: 0.043 },
-    EUR: { label: 'EUR · Euro', symbol: '€', fallback: 0.050 }
+    EUR: { label: 'EUR · Euro', symbol: '€', fallback: 0.050 },
+    CAD: { label: 'CAD · Canadian dollar', symbol: 'C$', fallback: 0.075 },
+    AUD: { label: 'AUD · Australian dollar', symbol: 'A$', fallback: 0.083 },
+    NZD: { label: 'NZD · New Zealand dollar', symbol: 'NZ$', fallback: 0.092 },
+    BWP: { label: 'BWP · Botswana pula', symbol: 'P', fallback: 0.074 },
+    NAD: { label: 'NAD · Namibian dollar', symbol: 'N$', fallback: 1 },
+    NGN: { label: 'NGN · Nigerian naira', symbol: '₦', fallback: 82 },
+    KES: { label: 'KES · Kenyan shilling', symbol: 'KSh', fallback: 7.1 },
+    JPY: { label: 'JPY · Japanese yen', symbol: '¥', fallback: 8.5 },
+    INR: { label: 'INR · Indian rupee', symbol: '₹', fallback: 4.6 },
+    AED: { label: 'AED · UAE dirham', symbol: 'AED ', fallback: 0.20 }
   };
+
   const currencyKey = 'ambition-display-currency';
   const profileKey = 'ambition-client-profile';
   let rates = Object.fromEntries(Object.entries(currencies).map(([code, value]) => [code, value.fallback]));
   let activeCurrency = 'ZAR';
-  try { if (currencies[localStorage.getItem(currencyKey)]) activeCurrency = localStorage.getItem(currencyKey); } catch (_) { /* storage may be disabled */ }
+
+  try {
+    const saved = localStorage.getItem(currencyKey);
+    if (saved && currencies[saved]) activeCurrency = saved;
+  } catch (_) {
+    // Browser storage may be unavailable.
+  }
 
   const style = document.createElement('style');
   style.textContent = `
-    .currency-control{position:relative;display:inline-flex!important;align-items:center;gap:8px}
-    .currency-label{border:0;background:transparent;color:inherit;font:inherit;cursor:pointer;padding:10px 0}
-    .currency-menu{position:absolute;z-index:200;right:0;bottom:calc(100% + 10px);min-width:220px;padding:8px;background:#fff;color:#161616;border:1px solid #ddd;box-shadow:0 12px 35px #0002}
+    .currency-control{position:relative;display:inline-flex!important;align-items:center;gap:10px}
+    .currency-label{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:inherit;font:700 12px/1.1 'DM Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;padding:10px 0}
+    .currency-label .ui-icon{width:12px;height:12px}
+    .currency-menu{position:absolute;z-index:220;right:0;bottom:calc(100% + 8px);min-width:230px;padding:8px;background:#fff;color:#171714;border:1px solid #ddd;box-shadow:0 16px 36px rgba(0,0,0,.08)}
     .currency-menu[hidden]{display:none}
-    .currency-option{display:flex;width:100%;padding:11px 12px;border:0;background:transparent;color:inherit;text-align:left;font:inherit;cursor:pointer}
+    .currency-option{display:flex;width:100%;padding:10px 12px;border:0;background:transparent;color:inherit;text-align:left;font:600 13px/1.4 'DM Sans',sans-serif;cursor:pointer}
     .currency-option:hover,.currency-option[aria-checked=true]{background:#f0efe9}
     .currency-note{margin:6px 10px 8px;color:#666;font-size:11px;line-height:1.5}
     .profile-editor{margin-top:22px;padding:22px;background:#efeee9;border-left:3px solid #d7ff00}
@@ -44,7 +62,13 @@
   function currencyFormat(amount) {
     const converted = amount * rates[activeCurrency];
     const decimals = activeCurrency === 'ZAR' ? 0 : 2;
-    return `${currencies[activeCurrency].symbol}${converted.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}`;
+    const formatter = new Intl.NumberFormat(undefined, {
+      style: 'currency',
+      currency: activeCurrency,
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
+    return formatter.format(converted);
   }
 
   function decoratePrices(root = document) {
@@ -61,63 +85,109 @@
     });
   }
 
+  function ensureCurrencyWrapper(label) {
+    if (!label) return;
+    const existing = label.closest('.currency-control');
+    if (existing) return existing;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'currency-control';
+    label.replaceWith(wrapper);
+    wrapper.append(label);
+    return wrapper;
+  }
+
   function makeCurrencyControl(label) {
-    if (label.dataset.currencyReady) return;
+    if (!label || label.dataset.currencyReady) return;
     label.dataset.currencyReady = 'true';
+    ensureCurrencyWrapper(label);
     label.classList.add('currency-label');
     label.setAttribute('aria-haspopup', 'listbox');
     label.setAttribute('aria-expanded', 'false');
-    const menu = document.createElement('div');
-    menu.className = 'currency-menu';
-    menu.hidden = true;
-    menu.setAttribute('role', 'listbox');
-    menu.setAttribute('aria-label', 'Choose display currency');
-    Object.entries(currencies).forEach(([code, currency]) => {
-      const option = document.createElement('button');
-      option.type = 'button'; option.className = 'currency-option'; option.dataset.currency = code;
-      option.setAttribute('role', 'option'); option.textContent = currency.label;
-      option.addEventListener('click', () => {
-        activeCurrency = code;
-        try { localStorage.setItem(currencyKey, code); } catch (_) { /* storage may be disabled */ }
-        updateCurrencyUI();
-        menu.hidden = true; label.setAttribute('aria-expanded', 'false');
+
+    const control = label.closest('.currency-control');
+    if (!control) return;
+    const menu = control.querySelector('.currency-menu') || document.createElement('div');
+    if (!menu.classList.contains('currency-menu')) {
+      menu.className = 'currency-menu';
+      menu.hidden = true;
+      menu.setAttribute('role', 'listbox');
+      menu.setAttribute('aria-label', 'Choose display currency');
+    }
+
+    const existingOptions = [...menu.querySelectorAll('.currency-option')];
+    if (!existingOptions.length) {
+      Object.entries(currencies).forEach(([code, currency]) => {
+        const option = document.createElement('button');
+        option.type = 'button';
+        option.className = 'currency-option';
+        option.dataset.currency = code;
+        option.setAttribute('role', 'option');
+        option.textContent = currency.label;
+        option.setAttribute('aria-checked', String(code === activeCurrency));
+        option.addEventListener('click', () => {
+          activeCurrency = code;
+          try { localStorage.setItem(currencyKey, code); } catch (_) { /* storage may be unavailable */ }
+          updateCurrencyUI();
+          menu.hidden = true;
+          label.setAttribute('aria-expanded', 'false');
+        });
+        menu.append(option);
       });
-      menu.append(option);
-    });
-    const note = document.createElement('p');
-    note.className = 'currency-note';
-    note.textContent = 'Display conversion is approximate. Order totals are confirmed in ZAR.';
-    menu.append(note);
-    label.insertAdjacentElement('afterend', menu);
+      const note = document.createElement('p');
+      note.className = 'currency-note';
+      note.textContent = 'Display conversion is approximate. Order totals are confirmed in ZAR.';
+      menu.append(note);
+    }
+
+    if (!control.contains(menu)) control.append(menu);
+
     label.addEventListener('click', () => {
       menu.hidden = !menu.hidden;
       label.setAttribute('aria-expanded', String(!menu.hidden));
     });
     label.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); label.click(); }
-      if (event.key === 'Escape') { menu.hidden = true; label.setAttribute('aria-expanded', 'false'); }
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        label.click();
+      }
+      if (event.key === 'Escape') {
+        menu.hidden = true;
+        label.setAttribute('aria-expanded', 'false');
+      }
     });
   }
 
   function updateCurrencyUI() {
     document.querySelectorAll('.currency-label').forEach((label) => {
+      const text = activeCurrency || 'ZAR';
       label.childNodes.forEach((node) => { if (node.nodeType === Node.TEXT_NODE) node.remove(); });
-      label.prepend(document.createTextNode(activeCurrency));
+      label.prepend(document.createTextNode(text));
       label.setAttribute('aria-label', `Display currency: ${currencies[activeCurrency].label}. Activate to change.`);
-      label.querySelectorAll('.currency-option').forEach((option) => option.setAttribute('aria-checked', String(option.dataset.currency === activeCurrency)));
+      const menu = label.closest('.currency-control')?.querySelector('.currency-menu');
+      if (menu) {
+        menu.querySelectorAll('.currency-option').forEach((option) => {
+          option.setAttribute('aria-checked', String(option.dataset.currency === activeCurrency));
+        });
+      }
     });
     decoratePrices();
   }
 
   function initCurrency() {
-    document.querySelectorAll('.currency-label').forEach(makeCurrencyControl);
+    document.querySelectorAll('.currency-label').forEach((label) => makeCurrencyControl(label));
     updateCurrencyUI();
-    fetch('https://api.frankfurter.app/latest?from=ZAR&to=USD,GBP,EUR', { cache: 'no-store' }).then((response) => {
-      if (!response.ok) throw new Error('Rates unavailable');
-      return response.json();
-    }).then((data) => {
-      if (data.rates) { rates = { ...rates, ...data.rates, ZAR: 1 }; updateCurrencyUI(); }
-    }).catch(() => undefined);
+    fetch('https://api.frankfurter.app/latest?from=ZAR&to=USD,GBP,EUR,CAD,AUD,NZD,JPY,INR,BWP,NAD,NGN,KES,AED', { cache: 'no-store' })
+      .then((response) => {
+        if (!response.ok) throw new Error('Rates unavailable');
+        return response.json();
+      })
+      .then((data) => {
+        if (data.rates) {
+          rates = { ...rates, ...data.rates, ZAR: 1 };
+          updateCurrencyUI();
+        }
+      })
+      .catch(() => undefined);
   }
 
   function compressPhoto(file) {
@@ -145,14 +215,14 @@
     const panel = document.querySelector('#account-panel');
     if (!accountForm || !panel || panel.querySelector('.profile-editor')) return;
     const editor = document.createElement('section');
-    editor.className = 'profile-editor'; editor.hidden = true;
-    editor.innerHTML = '<h4>Customize your client profile</h4><div class="profile-preview"><div class="profile-avatar profile-avatar-placeholder" data-avatar-placeholder aria-hidden="true">A</div><img class="profile-avatar" data-avatar hidden alt="Your profile photo"><div class="profile-preview-copy"><strong data-profile-name>Your name</strong><span data-profile-business>Your business or brand</span></div></div><label for="profile-photo">Profile image</label><input id="profile-photo" type="file" accept="image/*"><label for="profile-bio">Short profile bio</label><textarea id="profile-bio" maxlength="180" placeholder="Tell us a little about your brand"></textarea><div class="profile-actions"><button type="button" data-save-profile>Save profile</button><button type="button" class="profile-remove" data-remove-photo>Remove photo</button></div><p class="profile-status" role="status" aria-live="polite"></p>';
+    editor.className = 'profile-editor';
+    editor.hidden = true;
+    editor.innerHTML = '<h4>Customize your client profile</h4><div class="profile-preview"><div class="profile-avatar profile-avatar-placeholder" data-avatar-placeholder aria-hidden="true">A</div><div class="profile-preview-copy"><strong data-profile-name>Your name</strong><span data-profile-business>Your business or brand</span></div></div><div class="profile-actions"><label class="button" for="profile-photo">Upload photo<input id="profile-photo" type="file" accept="image/*" hidden></label><button type="button" class="profile-remove" data-remove-photo>Remove</button><button type="button" data-save-profile>Save profile</button></div><div class="profile-status" aria-live="polite"></div>';
     accountForm.insertAdjacentElement('afterend', editor);
 
     let profile = null;
     try { profile = JSON.parse(localStorage.getItem(profileKey) || 'null'); } catch (_) { profile = null; }
     const photoInput = editor.querySelector('#profile-photo');
-    const bioInput = editor.querySelector('#profile-bio');
     const status = editor.querySelector('.profile-status');
     const photo = editor.querySelector('[data-avatar]');
     const placeholder = editor.querySelector('[data-avatar-placeholder]');
@@ -161,7 +231,6 @@
       const business = profile?.business || accountForm.elements.business.value.trim() || 'Your business or brand';
       editor.querySelector('[data-profile-name]').textContent = name;
       editor.querySelector('[data-profile-business]').textContent = business;
-      bioInput.value = profile?.bio || '';
       if (profile?.photo) { photo.src = profile.photo; photo.hidden = false; placeholder.hidden = true; }
       else { photo.removeAttribute('src'); photo.hidden = true; placeholder.hidden = false; placeholder.textContent = (name[0] || 'A').toUpperCase(); }
     };
@@ -177,7 +246,6 @@
       catch (_) { status.textContent = 'Profile could not be saved in this browser. Try a smaller image or clear storage.'; }
       renderProfile();
       setTimeout(() => { editor.hidden = false; }, 0);
-      // Do not cancel the existing demo account form handler.
       void event;
     }, true);
 
@@ -191,7 +259,7 @@
       } catch (error) { status.textContent = error.message; }
     });
     editor.querySelector('[data-save-profile]').addEventListener('click', () => {
-      profile = { ...(profile || {}), name: accountForm.elements.name.value.trim(), business: accountForm.elements.business.value.trim(), email: accountForm.elements.email.value.trim(), bio: bioInput.value.trim() };
+      profile = { ...(profile || {}), name: accountForm.elements.name.value.trim(), business: accountForm.elements.business.value.trim(), email: accountForm.elements.email.value.trim() };
       try { localStorage.setItem(profileKey, JSON.stringify(profile)); status.textContent = 'Profile saved on this device.'; }
       catch (_) { status.textContent = 'Could not save profile. Try a smaller image or clear browser storage.'; }
       renderProfile();
@@ -203,14 +271,26 @@
     });
   }
 
-  function init() { initCurrency(); initProfileEditor(); }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
-  else init();
-  const observer = new MutationObserver((records) => records.forEach((record) => record.addedNodes.forEach((node) => {
-    if (node.nodeType !== Node.ELEMENT_NODE) return;
-    if (node.matches?.('.currency-label') || node.querySelector?.('.currency-label')) initCurrency();
-    if (node.matches?.('#account-form') || node.querySelector?.('#account-form')) initProfileEditor();
-    decoratePrices(node);
-  })));
+  function init() {
+    initCurrency();
+    initProfileEditor();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+
+  const observer = new MutationObserver((records) => {
+    records.forEach((record) => {
+      record.addedNodes.forEach((node) => {
+        if (node.nodeType !== Node.ELEMENT_NODE) return;
+        if (node.matches?.('.currency-label') || node.querySelector?.('.currency-label')) initCurrency();
+        if (node.matches?.('#account-form') || node.querySelector?.('#account-form')) initProfileEditor();
+        decoratePrices(node);
+      });
+    });
+  });
   observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
