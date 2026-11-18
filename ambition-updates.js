@@ -15,9 +15,10 @@
       const heading = card.querySelector('h3');
       if (heading?.textContent.trim() !== PRODUCT_NAME) return;
       const price = card.querySelector('.product-card__price');
-      if (price) price.textContent = 'R450 / R350';
+      if (price && price.textContent !== 'R450 / R350') price.textContent = 'R450 / R350';
       const description = card.querySelector('.product-card__info > p');
-      if (description) description.textContent = 'Long Sleeve R450 · Short Sleeve R350. View both product photos.';
+      const copy = 'Long Sleeve R450 · Short Sleeve R350. View both product photos.';
+      if (description && description.textContent !== copy) description.textContent = copy;
     });
   }
 
@@ -55,10 +56,7 @@
     });
     const price = modal.querySelector('.product-modal__price-row strong');
     if (price) price.textContent = shortSleeve ? 'R350' : 'R450';
-
-    const photoIndex = shortSleeve ? 1 : 0;
-    const activeThumb = modal.querySelector(`[data-thumb-index="${photoIndex}"]`);
-    activeThumb?.click();
+    modal.querySelector(`[data-thumb-index="${shortSleeve ? 1 : 0}"]`)?.click();
   }
 
   function addHorseVariant(modal) {
