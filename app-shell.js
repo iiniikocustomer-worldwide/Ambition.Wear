@@ -29,6 +29,15 @@
     }
   }
 
+  function loadAmbitionUpdates() {
+    if (document.querySelector('script[data-ambition-updates]')) return;
+    const script = document.createElement('script');
+    script.src = new URL('ambition-updates.js', document.baseURI).href;
+    script.defer = true;
+    script.dataset.ambitionUpdates = 'true';
+    document.head.append(script);
+  }
+
   function setMenuIcon() {
     const holder = $('.menu-toggle__icon');
     if (!holder || holder.querySelector('[data-menu-svg]')) return;
@@ -71,6 +80,7 @@
 
   loadLayoutRepair();
   loadStoreFeatures();
+  loadAmbitionUpdates();
   setMenuIcon();
   bootNavigation();
   if (document.readyState === 'loading') {
