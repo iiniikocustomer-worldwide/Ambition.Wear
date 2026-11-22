@@ -1,6 +1,14 @@
 (() => {
   'use strict';
 
+  function loadCheckoutFix() {
+    if (document.querySelector('script[data-checkout-fix]')) return;
+    const script = document.createElement('script');
+    script.src = new URL('checkout-fix.js', document.baseURI).href;
+    script.dataset.checkoutFix = 'true';
+    document.head.append(script);
+  }
+
   const NS = 'http://www.w3.org/2000/svg';
   const $ = (selector) => document.querySelector(selector);
 
@@ -81,6 +89,7 @@
   loadLayoutRepair();
   loadStoreFeatures();
   loadAmbitionUpdates();
+  loadCheckoutFix();
   setMenuIcon();
   bootNavigation();
   if (document.readyState === 'loading') {
