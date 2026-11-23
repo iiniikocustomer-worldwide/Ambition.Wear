@@ -9,6 +9,15 @@
     document.head.append(script);
   }
 
+  function loadInvoiceOptions() {
+    if (document.querySelector('script[data-invoice-options]')) return;
+    const script = document.createElement('script');
+    script.src = new URL('invoice-options.js', document.baseURI).href;
+    script.dataset.invoiceOptions = 'true';
+    script.defer = true;
+    document.head.append(script);
+  }
+
   const NS = 'http://www.w3.org/2000/svg';
   const $ = (selector) => document.querySelector(selector);
 
@@ -89,6 +98,7 @@
   loadLayoutRepair();
   loadStoreFeatures();
   loadAmbitionUpdates();
+  loadInvoiceOptions();
   loadCheckoutFix();
   setMenuIcon();
   bootNavigation();

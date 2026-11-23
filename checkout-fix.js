@@ -5,13 +5,22 @@
   const WHATSAPP = '27672364114';
   const money = (value) => `R${Number(value || 0).toLocaleString('en-ZA', { maximumFractionDigits: 0 })}`;
 
-  function toast(message) {
+  const toast = (message) => {
     const node = document.querySelector('.toast');
     if (!node) return;
     node.textContent = message;
     node.classList.add('show');
     clearTimeout(toast.timer);
     toast.timer = setTimeout(() => node.classList.remove('show'), 2600);
+  };
+
+  function getCart() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      return Array.isArray(saved) ? saved.filter((item) => item && Number(item.quantity) > 0) : [];
+    } catch (_) {
+      return [];
+    }
   }
 
   function getCheckout() {
@@ -42,15 +51,6 @@
     }
 
     return { name, email, address, delivery, payment };
-  }
-
-  function getCart() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-      return Array.isArray(saved) ? saved.filter((item) => item && Number(item.quantity) > 0) : [];
-    } catch (_) {
-      return [];
-    }
   }
 
   function loadImage(url) {
@@ -96,9 +96,7 @@
         context.rect(48, y + 16, 132, 132);
         context.clip();
         const scale = Math.max(132 / image.naturalWidth, 132 / image.naturalHeight);
-        const imageWidth = image.naturalWidth * scale;
-        const imageHeight = image.naturalHeight * scale;
-        context.drawImage(image, 48 + (132 - imageWidth) / 2, y + 16 + (132 - imageHeight) / 2, imageWidth, imageHeight);
+        context.drawImage(image, 48 + (132 - image.naturalWidth * scale) / 2, y + 16 + (132 - image.naturalHeight * scale) / 2, image.naturalWidth * scale, image.naturalHeight * scale);
         context.restore();
       }
 
@@ -140,6 +138,7 @@
   document.addEventListener('click', async (event) => {
     const action = event.target.closest('#send-invoice, #download-invoice');
     if (!action) return;
+    event.preventEvent?.();
     event.preventDefault();
     event.stopImmediatePropagation();
 
@@ -171,23 +170,16 @@
     action.disabled = true;
     try {
       const blob = await createInvoice(cart, details, subtotal);
-      const file = new File([blob], 'ambition-wear-invoice.png', { type: 'image/png' });
-
-      if (action.id === 'send-invoice') {
-        if (navigator.canShare?.({ files: [file] }) && navigator.share) {
-          await navigator.share({ files: [file], title: 'Ambition Wear invoice', text: message });
-          toast('Invoice ready to send to Ambition Wear on WhatsApp.');
-        } else {
-          downloadBlob(blob, file.name);
-          window.location.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
-          toast('Invoice downloaded. Attach it in WhatsApp for Ambition Wear.');
-        }
-      } else {
-        downloadBlob(blob, file.name);
+      if (action.id === 'download-invoice') {
+        downloadBlob(blob, 'ambition-wear-invoice.png');
         toast('Invoice downloaded.');
+      } else {
+        downloadBlob(blob, 'ambition-wear-invoice.png');
+        window.location.assign(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`);
+        toast('Invoice downloaded; WhatsApp opened for +27 67 236 4114.');
       }
     } catch (error) {
-      if (error?.name !== 'AbortError') toast(error.message || 'Could not create the invoice image.');
+      toast(error.message || 'Could not create the invoice image.');
     } finally {
       action.disabled = false;
     }
