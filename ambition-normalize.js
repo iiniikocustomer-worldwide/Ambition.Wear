@@ -1,19 +1,6 @@
 (() => {
   'use strict';
 
-  if (!document.querySelector('link[data-ambition-light-theme]')) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = new URL('ambition-light.css', document.baseURI).href;
-    link.dataset.ambitionLightTheme = 'true';
-    document.head.append(link);
-  }
-
-  document.documentElement.style.colorScheme = 'light';
-  const themeMeta = document.querySelector('meta[name="theme-color"]');
-  if (themeMeta) themeMeta.setAttribute('content', '#ffffff');
-
-  // Keep catalog requests on this repository instead of an unrelated fallback.
   const originalFetch = window.fetch.bind(window);
   window.fetch = (input, init) => {
     const url = typeof input === 'string' ? input : input?.url || '';
@@ -37,35 +24,22 @@
 
   function downloadTextInvoice() {
     const cart = readCart();
-    if (!cart.length) {
-      const toast = document.querySelector('.toast');
-      if (toast) {
-        toast.textContent = 'Your bag is empty';
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2600);
-      }
-      return;
-    }
+    if (!cart.length) return;
 
     const checkout = document.querySelector('.checkout-options');
     const get = (name) => checkout?.querySelector(`[name="${name}"]`)?.value?.trim() || '';
-    const delivery = get('delivery-option') || 'Collection';
-    const payment = get('payment-option') || 'To be confirmed';
     const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0), 0);
     const lines = cart.map((item, index) =>
       `${index + 1}. ${item.name}${item.colour ? ` — ${item.colour}` : ''}${item.size ? ` (${item.size})` : ''}\n   Quantity: ${item.quantity} | Total: ${money(Number(item.price) * Number(item.quantity))}`
     );
 
     const content = [
-      'AMBITION WEAR',
-      'ORDER INVOICE',
-      '==============================',
-      '', ...lines, '',
-      `Subtotal: ${money(subtotal)}`,
+      'AMBITION WEAR', 'ORDER INVOICE', '==============================', '',
+      ...lines, '', `Subtotal: ${money(subtotal)}`,
       `Customer name: ${get('customer-name') || 'Not provided'}`,
       `Customer email: ${get('customer-email') || 'Not provided'}`,
-      `Delivery: ${delivery}`,
-      `Payment: ${payment}`,
+      `Delivery: ${get('delivery-option') || 'Collection'}`,
+      `Payment: ${get('payment-option') || 'To be confirmed'}`,
       ...(get('customer-address') ? [`Address: ${get('customer-address')}`] : []),
       '', 'Please confirm availability and arrange payment/delivery.'
     ].join('\n');

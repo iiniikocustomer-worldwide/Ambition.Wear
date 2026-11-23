@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ambition-wear-v14';
+const CACHE_NAME = 'ambition-wear-v15';
 const APP_SHELL = [
   './', './index.html', './shop.html', './story.html', './contact.html', './client-account.html',
   './site.css', './responsive-fix.css', './editorial-refresh.css', './product-shopping.css',
@@ -35,8 +35,9 @@ self.addEventListener('fetch', (event) => {
   }
 
   const url = new URL(event.request.url);
-  const isCode = /\.(js|css|json)(\?|$)/i.test(url.pathname);
-  if (isCode) {
+  const isAppFile = /\.(js|css|json)(\?|$)/i.test(url.pathname);
+
+  if (isAppFile) {
     event.respondWith(fetch(event.request).then((response) => {
       if (response?.status === 200 && response.type === 'basic') {
         event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone())));
@@ -46,5 +47,5 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  event.respondWith(fetch(event.request).catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html'))));
+  event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
 });
