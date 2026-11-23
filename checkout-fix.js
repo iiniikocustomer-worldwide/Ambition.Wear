@@ -14,43 +14,28 @@
     toast.timer = setTimeout(() => node.classList.remove('show'), 2600);
   };
 
-  function ensurePhoneField() {
-    const checkout = document.querySelector('.checkout-options');
-    if (!checkout || checkout.querySelector('[name="customer-phone"]')) return;
-
-    const emailField = checkout.querySelector('[name="customer-email"]')?.closest('label');
-    const phoneField = document.createElement('label');
-    phoneField.innerHTML = `
-      <span>Client phone / WhatsApp</span>
-      <input
-        type="tel"
-        name="customer-phone"
-        inputmode="tel"
-        autocomplete="tel"
-        placeholder="e.g. 067 123 4567"
-        pattern="[0-9+() .-]{7,20}"
-        minlength="7"
-        maxlength="20"
-        required
-        aria-label="Client phone or WhatsApp number"
-      >`;
-
-    if (emailField) emailField.insertAdjacentElement('afterend', phoneField);
-    else checkout.insertAdjacentElement('afterbegin', phoneField);
-  }
-
-  function ensurePhoneFieldObserver() {
-    ensurePhoneField();
-    const observer = new MutationObserver(() => ensurePhoneField());
-    observer.observe(document.documentElement, { childList: true, subtree: true });
+  function getCart() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      return Array.isArray(saved) ? saved.filter((item) => item && Number(item.quantity) > 0) : [];
+    } catch (_) {
+      return [];
+    }
   }
 
   function loadImage(url) {
     return new Promise((resolve) => {
       if (!url) return resolve(null);
       const image = new Image();
-      image.onload = () => resolve(image);
-      image.onerror = () => resolve(null);
+      let done = false;
+      const finish = (value) => {
+        if (done) return;
+        done = true;
+        resolve(value);
+      };
+      image.onload = () => finish(image);
+      image.onerror = () => finish(null);
+      setTimeout(() => finish(null), 2500);
       image.src = url;
     });
   }
@@ -61,7 +46,7 @@
     const top = 210;
     const canvas = document.createElement('canvas');
     canvas.width = width;
-    canvas.height = top + cart.length * rowHeight + 280;
+    canvas.height = top + cart.length * rowHeight + 230;
     const context = canvas.getContext('2d');
     if (!context) throw new Error('Could not create invoice image.');
 
@@ -82,6 +67,7 @@
       context.fillRect(30, y, width - 60, rowHeight - 14);
       context.strokeStyle = '#deded7';
       context.strokeRect(30, y, width - 60, rowHeight - 14);
+
       const image = await loadImage(item.image);
       if (image) {
         context.save();
@@ -89,11 +75,10 @@
         context.rect(48, y + 16, 132, 132);
         context.clip();
         const scale = Math.max(132 / image.naturalWidth, 132 / image.naturalHeight);
-        context.drawImage(image, 48 + (132 - image.naturalWidth * scale) / 2, y + 16 + (132 - image.naturalHeight * scale) / 2, image.naturalWidth * scale, image.naturalHeight * scale);
+        const imageWidth = image.naturalWidth * scale;
+        const imageHeight = image.naturalHeight * scale;
+        context.drawImage(image, 48 + (132 - imageWidth) / 2, y + 16 + (132 - imageHeight) / 2, imageWidth, imageHeight);
         context.restore();
-      } else {
-        context.fillStyle = '#e8e8e1';
-        context.fillRect(48, y + 16, 132, 132);
       }
 
       context.fillStyle = '#171814';
@@ -113,29 +98,28 @@
     context.fillText(`Subtotal: ${money(subtotal)}`, 48, y + 35);
     context.font = '18px Arial';
     context.fillText(`Customer: ${details.name}`, 48, y + 78);
-    context.fillText(`Phone: ${details.phone}`, 48, y + 108);
-    context.fillText(`Email: ${details.email}`, 48, y + 138);
-    context.fillText(`Delivery: ${details.delivery}`, 48, y + 168);
-    context.fillText(`Payment: ${details.payment}`, 48, y + 198);
+    context.fillText(`Email: ${details.email}`, 48, y + 108);
+    context.fillText(`Delivery: ${details.delivery}`, 48, y + 138);
+    context.fillText(`Payment: ${details.payment}`, 48, y + 168);
 
-    return new Promise((resolve, reject) => canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('Could not export invoice image.')), 'image/png'));
+    return new Promise((resolve, reject) => {
+      let settled = false;
+      const timer = setTimeout(() => {
+        if (settled) return;
+        settled = true;
+        reject(new Error('Invoice generation timed out.'));
+      }, 8000);
+      canvas.toBlob((blob) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        blob ? resolve(blob) : reject(new Error('Could not export invoice image.'));
+      }, 'image/png');
+    });
   }
 
-  function openDirectWhatsApp(message) {
-    const text = encodeURIComponent(message);
-    const appUrl = `whatsapp://send?phone=${WHATSAPP}&text=${text}`;
-    const webUrl = `https://wa.me/${WHATSAPP}?text=${text}`;
-
-    const link = document.createElement('a');
-    link.href = appUrl;
-    link.rel = 'noopener noreferrer';
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-
-    window.setTimeout(() => {
-      if (!document.hidden) window.location.href = webUrl;
-    }, 1200);
+  function openWhatsApp(message) {
+    window.location.assign(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`);
   }
 
   document.addEventListener('click', async (event) => {
@@ -144,14 +128,7 @@
     event.preventDefault();
     event.stopImmediatePropagation();
 
-    ensurePhoneField();
-    let cart;
-    try {
-      const saved = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-      cart = Array.isArray(saved) ? saved.filter((item) => item && Number(item.quantity) > 0) : [];
-    } catch (_) {
-      cart = [];
-    }
+    const cart = getCart();
     if (!cart.length) return toast('Your bag is empty');
 
     const checkout = document.querySelector('.checkout-options');
@@ -159,18 +136,16 @@
 
     const field = (name) => checkout.querySelector(`[name="${name}"]`);
     const nameInput = field('customer-name');
-    const phoneInput = field('customer-phone');
     const emailInput = field('customer-email');
     const addressInput = field('customer-address');
     const deliveryInput = field('delivery-option');
     const paymentInput = field('payment-option');
 
-    for (const input of [nameInput, phoneInput, emailInput, deliveryInput, paymentInput]) {
+    for (const input of [nameInput, emailInput, deliveryInput, paymentInput]) {
       if (input && !input.reportValidity()) return;
     }
 
     const name = nameInput?.value.trim() || '';
-    const phone = phoneInput?.value.trim() || '';
     const email = emailInput?.value.trim() || '';
     const address = addressInput?.value.trim() || '';
     const delivery = deliveryInput?.value || 'Collection';
@@ -184,13 +159,12 @@
     }
 
     const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0), 0);
-    const details = { name, phone, email, delivery, payment };
+    const details = { name, email, delivery, payment };
     const orderLines = cart.map((item) => `${item.name}${item.colour ? ` — ${item.colour}` : ''}${item.size ? ` (${item.size})` : ''} x ${item.quantity} — ${money(Number(item.price) * Number(item.quantity))}`);
-    const orderMessage = [
+    const message = [
       'Hello Ambition Wear, I would like to place this order:',
       '', ...orderLines,
-      `Client name: ${name}`,
-      `Client phone: ${phone}`,
+      '', `Client name: ${name}`,
       `Client email: ${email}`,
       `Delivery: ${delivery}`,
       `Payment: ${payment}`,
@@ -200,29 +174,30 @@
     ].join('\n');
 
     button.disabled = true;
+    let blob;
     try {
-      const blob = await makeInvoiceImage(cart, details, subtotal);
+      blob = await makeInvoiceImage(cart, details, subtotal);
       const file = new File([blob], 'ambition-wear-invoice.png', { type: 'image/png' });
 
       if (navigator.canShare?.({ files: [file] }) && navigator.share) {
         try {
-          await navigator.share({ files: [file], title: 'Ambition Wear order invoice', text: orderMessage });
-          toast('Invoice sent using the selected app.');
-          return;
+          await navigator.share({
+            files: [file],
+            title: 'Ambition Wear order invoice',
+            text: message
+          });
+          toast('Invoice shared successfully.');
         } catch (error) {
-          if (error?.name === 'AbortError') return;
+          if (error?.name !== 'AbortError') openWhatsApp(message);
         }
+      } else {
+        openWhatsApp(message);
+        toast('WhatsApp opened for Ambition Wear.');
       }
-
-      openDirectWhatsApp(orderMessage);
-      toast('Opening WhatsApp for Ambition Wear.');
-    } catch (error) {
-      openDirectWhatsApp(orderMessage);
+    } catch (_) {
+      openWhatsApp(message);
     } finally {
       button.disabled = false;
     }
   }, true);
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ensurePhoneFieldObserver, { once: true });
-  else ensurePhoneFieldObserver();
 })();
