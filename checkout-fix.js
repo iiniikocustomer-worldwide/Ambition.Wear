@@ -14,6 +14,37 @@
     toast.timer = setTimeout(() => node.classList.remove('show'), 2600);
   };
 
+  function ensurePhoneField() {
+    const checkout = document.querySelector('.checkout-options');
+    if (!checkout || checkout.querySelector('[name="customer-phone"]')) return;
+
+    const emailField = checkout.querySelector('[name="customer-email"]')?.closest('label');
+    const phoneField = document.createElement('label');
+    phoneField.innerHTML = `
+      <span>Client phone / WhatsApp</span>
+      <input
+        type="tel"
+        name="customer-phone"
+        inputmode="tel"
+        autocomplete="tel"
+        placeholder="e.g. 067 123 4567"
+        pattern="[0-9+() .-]{7,20}"
+        minlength="7"
+        maxlength="20"
+        required
+        aria-label="Client phone or WhatsApp number"
+      >`;
+
+    if (emailField) emailField.insertAdjacentElement('afterend', phoneField);
+    else checkout.insertAdjacentElement('afterbegin', phoneField);
+  }
+
+  function ensurePhoneFieldObserver() {
+    ensurePhoneField();
+    const observer = new MutationObserver(() => ensurePhoneField());
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+  }
+
   function loadImage(url) {
     return new Promise((resolve) => {
       if (!url) return resolve(null);
@@ -30,7 +61,7 @@
     const top = 210;
     const canvas = document.createElement('canvas');
     canvas.width = width;
-    canvas.height = top + cart.length * rowHeight + 230;
+    canvas.height = top + cart.length * rowHeight + 280;
     const context = canvas.getContext('2d');
     if (!context) throw new Error('Could not create invoice image.');
 
@@ -58,22 +89,16 @@
         context.rect(48, y + 16, 132, 132);
         context.clip();
         const scale = Math.max(132 / image.naturalWidth, 132 / image.naturalHeight);
-        const imageWidth = image.naturalWidth * scale;
-        const imageHeight = image.naturalHeight * scale;
-        context.drawImage(image, 48 + (132 - imageWidth) / 2, y + 16 + (132 - imageHeight) / 2, imageWidth, imageHeight);
+        context.drawImage(image, 48 + (132 - image.naturalWidth * scale) / 2, y + 16 + (132 - image.naturalHeight * scale) / 2, image.naturalWidth * scale, image.naturalHeight * scale);
         context.restore();
       } else {
         context.fillStyle = '#e8e8e1';
         context.fillRect(48, y + 16, 132, 132);
-        context.fillStyle = '#555';
-        context.font = '600 14px Arial';
-        context.fillText('Image unavailable', 55, y + 88);
       }
 
-      const title = `${item.name}${item.colour ? ` — ${item.colour}` : ''}${item.size ? ` (${item.size})` : ''}`;
       context.fillStyle = '#171814';
       context.font = '700 22px Arial';
-      context.fillText(title.slice(0, 48), 202, y + 48);
+      context.fillText(`${item.name}${item.colour ? ` — ${item.colour}` : ''}${item.size ? ` (${item.size})` : ''}`.slice(0, 48), 202, y + 48);
       context.font = '18px Arial';
       context.fillStyle = '#555';
       context.fillText(`Quantity: ${item.quantity}`, 202, y + 84);
@@ -88,14 +113,15 @@
     context.fillText(`Subtotal: ${money(subtotal)}`, 48, y + 35);
     context.font = '18px Arial';
     context.fillText(`Customer: ${details.name}`, 48, y + 78);
-    context.fillText(`Email: ${details.email}`, 48, y + 108);
-    context.fillText(`Delivery: ${details.delivery}`, 48, y + 138);
-    context.fillText(`Payment: ${details.payment}`, 48, y + 168);
+    context.fillText(`Phone: ${details.phone}`, 48, y + 108);
+    context.fillText(`Email: ${details.email}`, 48, y + 138);
+    context.fillText(`Delivery: ${details.delivery}`, 48, y + 168);
+    context.fillText(`Payment: ${details.payment}`, 48, y + 198);
 
     return new Promise((resolve, reject) => canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('Could not export invoice image.')), 'image/png'));
   }
 
-  function openAmbitionWhatsApp(message) {
+  function openDirectWhatsApp(message) {
     const text = encodeURIComponent(message);
     const appUrl = `whatsapp://send?phone=${WHATSAPP}&text=${text}`;
     const webUrl = `https://wa.me/${WHATSAPP}?text=${text}`;
@@ -115,10 +141,10 @@
   document.addEventListener('click', async (event) => {
     const button = event.target.closest('#send-invoice');
     if (!button) return;
-    event.preventEvent?.();
     event.preventDefault();
     event.stopImmediatePropagation();
 
+    ensurePhoneField();
     let cart;
     try {
       const saved = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
@@ -133,16 +159,18 @@
 
     const field = (name) => checkout.querySelector(`[name="${name}"]`);
     const nameInput = field('customer-name');
+    const phoneInput = field('customer-phone');
     const emailInput = field('customer-email');
     const addressInput = field('customer-address');
     const deliveryInput = field('delivery-option');
     const paymentInput = field('payment-option');
 
-    for (const input of [nameInput, emailInput, deliveryInput, paymentInput]) {
+    for (const input of [nameInput, phoneInput, emailInput, deliveryInput, paymentInput]) {
       if (input && !input.reportValidity()) return;
     }
 
     const name = nameInput?.value.trim() || '';
+    const phone = phoneInput?.value.trim() || '';
     const email = emailInput?.value.trim() || '';
     const address = addressInput?.value.trim() || '';
     const delivery = deliveryInput?.value || 'Collection';
@@ -156,12 +184,13 @@
     }
 
     const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0), 0);
-    const details = { name, email, delivery, payment };
+    const details = { name, phone, email, delivery, payment };
     const orderLines = cart.map((item) => `${item.name}${item.colour ? ` — ${item.colour}` : ''}${item.size ? ` (${item.size})` : ''} x ${item.quantity} — ${money(Number(item.price) * Number(item.quantity))}`);
     const orderMessage = [
       'Hello Ambition Wear, I would like to place this order:',
       '', ...orderLines,
       `Client name: ${name}`,
+      `Client phone: ${phone}`,
       `Client email: ${email}`,
       `Delivery: ${delivery}`,
       `Payment: ${payment}`,
@@ -176,21 +205,24 @@
       const file = new File([blob], 'ambition-wear-invoice.png', { type: 'image/png' });
 
       if (navigator.canShare?.({ files: [file] }) && navigator.share) {
-        await navigator.share({
-          files: [file],
-          title: 'Ambition Wear order invoice',
-          text: orderMessage
-        });
-        toast('Invoice sent using the selected WhatsApp chat.');
-        return;
+        try {
+          await navigator.share({ files: [file], title: 'Ambition Wear order invoice', text: orderMessage });
+          toast('Invoice sent using the selected app.');
+          return;
+        } catch (error) {
+          if (error?.name === 'AbortError') return;
+        }
       }
 
-      openAmbitionWhatsApp(orderMessage);
+      openDirectWhatsApp(orderMessage);
       toast('Opening WhatsApp for Ambition Wear.');
     } catch (error) {
-      if (error?.name !== 'AbortError') toast(error.message || 'Could not create invoice image.');
+      openDirectWhatsApp(orderMessage);
     } finally {
       button.disabled = false;
     }
   }, true);
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ensurePhoneFieldObserver, { once: true });
+  else ensurePhoneFieldObserver();
 })();
