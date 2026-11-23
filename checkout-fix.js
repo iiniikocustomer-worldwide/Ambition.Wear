@@ -14,45 +14,6 @@
     toast.timer = setTimeout(() => node.classList.remove('show'), 2600);
   };
 
-  function getCart() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
-      return Array.isArray(saved) ? saved.filter((item) => item && Number(item.quantity) > 0) : [];
-    } catch (_) {
-      return [];
-    }
-  }
-
-  function getCheckout() {
-    const checkout = document.querySelector('.checkout-options');
-    if (!checkout) throw new Error('Checkout is unavailable. Please refresh and try again.');
-    const field = (name) => checkout.querySelector(`[name="${name}"]`);
-    const nameInput = field('customer-name');
-    const emailInput = field('customer-email');
-    const addressInput = field('customer-address');
-    const deliveryInput = field('delivery-option');
-    const paymentInput = field('payment-option');
-
-    for (const input of [nameInput, emailInput, deliveryInput, paymentInput]) {
-      if (input && !input.reportValidity()) return null;
-    }
-
-    const name = nameInput?.value.trim() || '';
-    const email = emailInput?.value.trim() || '';
-    const address = addressInput?.value.trim() || '';
-    const delivery = deliveryInput?.value || 'Collection';
-    const payment = paymentInput?.value || 'To be confirmed';
-
-    if (delivery.startsWith('Delivery') && !address) {
-      addressInput?.setCustomValidity('Please enter your delivery address.');
-      addressInput?.reportValidity();
-      addressInput?.setCustomValidity('');
-      return null;
-    }
-
-    return { name, email, address, delivery, payment };
-  }
-
   function loadImage(url) {
     return new Promise((resolve) => {
       if (!url) return resolve(null);
@@ -63,13 +24,15 @@
     });
   }
 
-  async function createInvoice(cart, details, subtotal) {
+  async function makeInvoiceImage(cart, details, subtotal) {
     const width = 900;
     const rowHeight = 170;
+    const top = 210;
     const canvas = document.createElement('canvas');
     canvas.width = width;
-    canvas.height = 210 + cart.length * rowHeight + 230;
+    canvas.height = top + cart.length * rowHeight + 230;
     const context = canvas.getContext('2d');
+    if (!context) throw new Error('Could not create invoice image.');
 
     context.fillStyle = '#f5f4ef';
     context.fillRect(0, 0, canvas.width, canvas.height);
@@ -78,17 +41,16 @@
     context.fillStyle = '#d7ff00';
     context.font = '700 22px Arial';
     context.fillText('AMBITION WEAR', 42, 48);
-    context.fillStyle = '#fff';
+    context.fillStyle = '#ffffff';
     context.font = '700 38px Arial';
     context.fillText('ORDER INVOICE', 42, 105);
 
-    let y = 210;
+    let y = top;
     for (const item of cart) {
-      context.fillStyle = '#fff';
+      context.fillStyle = '#ffffff';
       context.fillRect(30, y, width - 60, rowHeight - 14);
       context.strokeStyle = '#deded7';
       context.strokeRect(30, y, width - 60, rowHeight - 14);
-
       const image = await loadImage(item.image);
       if (image) {
         context.save();
@@ -96,18 +58,27 @@
         context.rect(48, y + 16, 132, 132);
         context.clip();
         const scale = Math.max(132 / image.naturalWidth, 132 / image.naturalHeight);
-        context.drawImage(image, 48 + (132 - image.naturalWidth * scale) / 2, y + 16 + (132 - image.naturalHeight * scale) / 2, image.naturalWidth * scale, image.naturalHeight * scale);
+        const imageWidth = image.naturalWidth * scale;
+        const imageHeight = image.naturalHeight * scale;
+        context.drawImage(image, 48 + (132 - imageWidth) / 2, y + 16 + (132 - imageHeight) / 2, imageWidth, imageHeight);
         context.restore();
+      } else {
+        context.fillStyle = '#e8e8e1';
+        context.fillRect(48, y + 16, 132, 132);
+        context.fillStyle = '#555';
+        context.font = '600 14px Arial';
+        context.fillText('Image unavailable', 55, y + 88);
       }
 
+      const title = `${item.name}${item.colour ? ` — ${item.colour}` : ''}${item.size ? ` (${item.size})` : ''}`;
       context.fillStyle = '#171814';
       context.font = '700 22px Arial';
-      context.fillText(`${item.name}${item.colour ? ` — ${item.colour}` : ''}${item.size ? ` (${item.size})` : ''}`.slice(0, 48), 202, y + 48);
-      context.fillStyle = '#555';
+      context.fillText(title.slice(0, 48), 202, y + 48);
       context.font = '18px Arial';
+      context.fillStyle = '#555';
       context.fillText(`Quantity: ${item.quantity}`, 202, y + 84);
-      context.fillStyle = '#171814';
       context.font = '700 21px Arial';
+      context.fillStyle = '#171814';
       context.fillText(money(Number(item.price) * Number(item.quantity)), 202, y + 124);
       y += rowHeight;
     }
@@ -121,67 +92,105 @@
     context.fillText(`Delivery: ${details.delivery}`, 48, y + 138);
     context.fillText(`Payment: ${details.payment}`, 48, y + 168);
 
-    return new Promise((resolve, reject) => canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('Could not create invoice image')), 'image/png'));
+    return new Promise((resolve, reject) => canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('Could not export invoice image.')), 'image/png'));
   }
 
-  function downloadBlob(blob, filename) {
-    const url = URL.createObjectURL(blob);
+  function openAmbitionWhatsApp(message) {
+    const text = encodeURIComponent(message);
+    const appUrl = `whatsapp://send?phone=${WHATSAPP}&text=${text}`;
+    const webUrl = `https://wa.me/${WHATSAPP}?text=${text}`;
+
     const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
+    link.href = appUrl;
+    link.rel = 'noopener noreferrer';
     document.body.appendChild(link);
     link.click();
     link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 60000);
+
+    window.setTimeout(() => {
+      if (!document.hidden) window.location.href = webUrl;
+    }, 1200);
   }
 
   document.addEventListener('click', async (event) => {
-    const action = event.target.closest('#send-invoice, #download-invoice');
-    if (!action) return;
+    const button = event.target.closest('#send-invoice');
+    if (!button) return;
     event.preventEvent?.();
     event.preventDefault();
     event.stopImmediatePropagation();
 
-    const cart = getCart();
+    let cart;
+    try {
+      const saved = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      cart = Array.isArray(saved) ? saved.filter((item) => item && Number(item.quantity) > 0) : [];
+    } catch (_) {
+      cart = [];
+    }
     if (!cart.length) return toast('Your bag is empty');
 
-    let details;
-    try {
-      details = getCheckout();
-      if (!details) return;
-    } catch (error) {
-      return toast(error.message);
+    const checkout = document.querySelector('.checkout-options');
+    if (!checkout) return toast('Checkout is unavailable. Please refresh and try again.');
+
+    const field = (name) => checkout.querySelector(`[name="${name}"]`);
+    const nameInput = field('customer-name');
+    const emailInput = field('customer-email');
+    const addressInput = field('customer-address');
+    const deliveryInput = field('delivery-option');
+    const paymentInput = field('payment-option');
+
+    for (const input of [nameInput, emailInput, deliveryInput, paymentInput]) {
+      if (input && !input.reportValidity()) return;
+    }
+
+    const name = nameInput?.value.trim() || '';
+    const email = emailInput?.value.trim() || '';
+    const address = addressInput?.value.trim() || '';
+    const delivery = deliveryInput?.value || 'Collection';
+    const payment = paymentInput?.value || 'To be confirmed';
+
+    if (delivery.startsWith('Delivery') && !address) {
+      addressInput?.setCustomValidity('Please enter your delivery address.');
+      addressInput?.reportValidity();
+      addressInput?.setCustomValidity('');
+      return;
     }
 
     const subtotal = cart.reduce((sum, item) => sum + Number(item.price || 0) * Number(item.quantity || 0), 0);
+    const details = { name, email, delivery, payment };
     const orderLines = cart.map((item) => `${item.name}${item.colour ? ` — ${item.colour}` : ''}${item.size ? ` (${item.size})` : ''} x ${item.quantity} — ${money(Number(item.price) * Number(item.quantity))}`);
-    const message = [
+    const orderMessage = [
       'Hello Ambition Wear, I would like to place this order:',
       '', ...orderLines,
-      '', `Client name: ${details.name}`,
-      `Client email: ${details.email}`,
-      `Delivery: ${details.delivery}`,
-      `Payment: ${details.payment}`,
-      ...(details.address ? [`Address: ${details.address}`] : []),
+      `Client name: ${name}`,
+      `Client email: ${email}`,
+      `Delivery: ${delivery}`,
+      `Payment: ${payment}`,
+      ...(address ? [`Address: ${address}`] : []),
       '', `Subtotal: ${money(subtotal)}`,
       'Please confirm availability and arrange payment/delivery. Thank you!'
     ].join('\n');
 
-    action.disabled = true;
+    button.disabled = true;
     try {
-      const blob = await createInvoice(cart, details, subtotal);
-      if (action.id === 'download-invoice') {
-        downloadBlob(blob, 'ambition-wear-invoice.png');
-        toast('Invoice downloaded.');
-      } else {
-        downloadBlob(blob, 'ambition-wear-invoice.png');
-        window.location.assign(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`);
-        toast('Invoice downloaded; WhatsApp opened for +27 67 236 4114.');
+      const blob = await makeInvoiceImage(cart, details, subtotal);
+      const file = new File([blob], 'ambition-wear-invoice.png', { type: 'image/png' });
+
+      if (navigator.canShare?.({ files: [file] }) && navigator.share) {
+        await navigator.share({
+          files: [file],
+          title: 'Ambition Wear order invoice',
+          text: orderMessage
+        });
+        toast('Invoice sent using the selected WhatsApp chat.');
+        return;
       }
+
+      openAmbitionWhatsApp(orderMessage);
+      toast('Opening WhatsApp for Ambition Wear.');
     } catch (error) {
-      toast(error.message || 'Could not create the invoice image.');
+      if (error?.name !== 'AbortError') toast(error.message || 'Could not create invoice image.');
     } finally {
-      action.disabled = false;
+      button.disabled = false;
     }
   }, true);
 })();
