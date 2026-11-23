@@ -1,0 +1,60 @@
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  background: #ffffff !important;
+  color: #111111 !important;
+  color-scheme: light;
+}
+
+.site-header,
+.announcement,
+.bag-drawer,
+.product-modal,
+.toast,
+.currency-menu,
+.profile-editor {
+  color-scheme: light;
+}
+
+.site-header,
+.bag-drawer,
+.product-modal,
+.currency-menu {
+  background: #ffffff !important;
+}
+
+.bag-drawer,
+.product-modal,
+.currency-menu,
+.profile-editor,
+.checkout-options {
+  color: #111111;
+}
+
+.checkout-options input,
+.checkout-options select,
+.checkout-options textarea,
+.profile-editor input,
+.profile-editor textarea {
+  background: #ffffff !important;
+  color: #111111 !important;
+  color-scheme: light;
+}
+
+.primary-action,
+.button-dark,
+.button,
+.size-chip.is-selected,
+.filter-pill.is-active {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border-color: #111111 !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: light; }
+  html, body { background: #ffffff; }
+}

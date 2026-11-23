@@ -1,6 +1,9 @@
 (() => {
   'use strict';
 
+  const NS = 'http://www.w3.org/2000/svg';
+  const $ = (selector) => document.querySelector(selector);
+
   function loadCheckoutFix() {
     if (document.querySelector('script[data-checkout-fix]')) return;
     const script = document.createElement('script');
@@ -17,9 +20,6 @@
     script.defer = true;
     document.head.append(script);
   }
-
-  const NS = 'http://www.w3.org/2000/svg';
-  const $ = (selector) => document.querySelector(selector);
 
   function loadStoreFeatures() {
     if (document.querySelector('script[data-store-features]')) return;
@@ -53,6 +53,16 @@
     script.defer = true;
     script.dataset.ambitionUpdates = 'true';
     document.head.append(script);
+  }
+
+  function loadNormalization() {
+    if (!document.querySelector('script[data-ambition-normalize]')) {
+      const script = document.createElement('script');
+      script.src = new URL('ambition-normalize.js', document.baseURI).href;
+      script.defer = true;
+      script.dataset.ambitionNormalize = 'true';
+      document.head.append(script);
+    }
   }
 
   function setMenuIcon() {
@@ -92,9 +102,10 @@
   function registerWorker() {
     if (!('serviceWorker' in navigator) || document.documentElement.dataset.workerBound) return;
     document.documentElement.dataset.workerBound = 'true';
-    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => undefined), { once: true });
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').then((registration) => registration.update()).catch(() => undefined), { once: true });
   }
 
+  loadNormalization();
   loadLayoutRepair();
   loadStoreFeatures();
   loadAmbitionUpdates();

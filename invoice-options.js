@@ -21,13 +21,12 @@
     if (!document.querySelector(`#${styleId}`)) {
       const style = document.createElement('style');
       style.id = styleId;
-      style.textContent = `.bag-drawer .bag-footer #download-invoice,.bag-drawer .bag-footer #send-invoice{width:100%;min-height:52px;border-radius:28px;font-weight:700}.bag-drawer .bag-footer #download-invoice{margin-bottom:8px;background:#fff;color:#111;border:1.5px solid #111}.bag-drawer .bag-footer #send-invoice{background:#25D366;border:0;color:#111}`;
+      style.textContent = `.bag-drawer .bag-footer #download-invoice,.bag-drawer .bag-footer #send-invoice{width:100%;min-height:52px;border-radius:28px;font-weight:700}.bag-drawer .bag-footer #download-invoice{margin-bottom:8px;background:#fff!important;color:#111!important;border:1.5px solid #111}.bag-drawer .bag-footer #send-invoice{background:#25D366!important;border:0;color:#111!important}`;
       document.head.append(style);
     }
   }
 
   decorateActions();
   document.addEventListener('DOMContentLoaded', decorateActions, { once: true });
-  const observer = new MutationObserver(decorateActions);
-  observer.observe(document.documentElement, { childList: true, subtree: true });
+  new MutationObserver(decorateActions).observe(document.documentElement, { childList: true, subtree: true });
 })();

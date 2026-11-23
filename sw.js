@@ -1,18 +1,17 @@
-const CACHE_NAME = 'ambition-wear-v13';
+const CACHE_NAME = 'ambition-wear-v14';
 const APP_SHELL = [
   './', './index.html', './shop.html', './story.html', './contact.html', './client-account.html',
   './site.css', './responsive-fix.css', './editorial-refresh.css', './product-shopping.css',
   './bag-drawer-fix.css', './story-contact-polish.css', './layout-repair.css',
-  './ui-icons.css', './mobile-nav.css', './site.js', './brand-content.js',
-  './white-space-content.css', './site-features.js', './site-repair.js', './ui-icons.js',
-  './app-shell.js', './checkout-fix.js', './ambition-updates.js', './client-studio.css', './client-studio.js',
+  './ui-icons.css', './mobile-nav.css', './ambition-light.css', './ambition-normalize.js',
+  './site.js', './brand-content.js', './white-space-content.css', './site-features.js',
+  './site-repair.js', './ui-icons.js', './app-shell.js', './checkout-fix.js',
+  './invoice-options.js', './ambition-updates.js', './client-studio.css', './client-studio.js',
   './manifest.json', './app-icon.svg', './Logo_20261111_210043_0000.png', './stock.json'
 ];
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(CACHE_NAME)
-    .then((cache) => cache.addAll(APP_SHELL))
-    .catch(() => undefined));
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).catch(() => undefined));
   self.skipWaiting();
 });
 
@@ -29,18 +28,23 @@ self.addEventListener('fetch', (event) => {
 
   if (event.request.mode === 'navigate') {
     event.respondWith(fetch(event.request).then((response) => {
-      if (response?.ok) {
-        event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone())));
-      }
+      if (response?.ok) event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone())));
       return response;
     }).catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html'))));
     return;
   }
 
-  event.respondWith(fetch(event.request).then((response) => {
-    if (response?.status === 200 && response.type === 'basic') {
-      event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone())));
-    }
-    return response;
-  }).catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html'))));
+  const url = new URL(event.request.url);
+  const isCode = /\.(js|css|json)(\?|$)/i.test(url.pathname);
+  if (isCode) {
+    event.respondWith(fetch(event.request).then((response) => {
+      if (response?.status === 200 && response.type === 'basic') {
+        event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(event.request, response.clone())));
+      }
+      return response;
+    }).catch(() => caches.match(event.request)));
+    return;
+  }
+
+  event.respondWith(fetch(event.request).catch(() => caches.match(event.request).then((cached) => cached || caches.match('./index.html'))));
 });
