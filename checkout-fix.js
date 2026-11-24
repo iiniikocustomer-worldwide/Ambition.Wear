@@ -81,8 +81,11 @@
       'Please confirm availability and arrange payment/delivery. Thank you!'
     ].join('\n');
 
+    const whatsappUrl = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
     button.disabled = true;
-    window.location.assign(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`);
+    const whatsappWindow = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+    // Fall back to same-tab navigation if the browser blocks the new tab.
+    if (!whatsappWindow) window.location.assign(whatsappUrl);
     setTimeout(() => { button.disabled = false; }, 300);
   }, true);
 })();
