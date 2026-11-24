@@ -1,15 +1,6 @@
 (() => {
   'use strict';
 
-  const originalFetch = window.fetch.bind(window);
-  window.fetch = (input, init) => {
-    const url = typeof input === 'string' ? input : input?.url || '';
-    if (url.includes('souldustrecords-byte/Ambition.co/main/stock.json')) {
-      return originalFetch(new URL('stock.json', document.baseURI).href, init);
-    }
-    return originalFetch(input, init);
-  };
-
   const CART_KEY = 'ambition-wear-cart';
   const money = (value) => `R${Number(value || 0).toLocaleString('en-ZA', { maximumFractionDigits: 0 })}`;
 
@@ -55,14 +46,9 @@
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
-  function bindDownload() {
-    const button = document.querySelector('#download-invoice');
-    if (!button || button.dataset.normalizedDownload) return;
-    button.dataset.normalizedDownload = 'true';
-    button.addEventListener('click', downloadTextInvoice);
-  }
-
-  bindDownload();
-  document.addEventListener('DOMContentLoaded', bindDownload, { once: true });
-  new MutationObserver(bindDownload).observe(document.documentElement, { childList: true, subtree: true });
+  // Delegation supports the invoice button being created after this script loads,
+  // without a page-wide MutationObserver.
+  document.addEventListener('click', (event) => {
+    if (event.target.closest?.('#download-invoice')) downloadTextInvoice();
+  });
 })();
